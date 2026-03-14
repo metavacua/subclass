@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+SPDX-License-Identifier: AGPL-3.0-only
+SPDX-FileCopyrightText: 2024 com.github.metavacua
+-->
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog"
+         prefer="public">
+  <!-- DocBook 5.0 DTD -->
+  <public publicId="-//OASIS//DTD DocBook XML 5.0//EN"
+          uri="http://docbook.org/xml/5.0/dtd/docbook.dtd"/>
+  <system systemId="http://docbook.org/xml/5.0/dtd/docbook.dtd"
+          uri="http://docbook.org/xml/5.0/dtd/docbook.dtd"/>
+</catalog>

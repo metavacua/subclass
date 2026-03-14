@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+SPDX-License-Identifier: CC-BY-SA-4.0
+SPDX-FileCopyrightText: 2024 com.github.metavacua
+-->
+<section xmlns="http://docbook.org/ns/docbook"
+         version="5.0"
+         xml:lang="en">
+  <title>Project Structure Fragment</title>
+  <para>
+    This fragment is included via XInclude from the main document. It demonstrates
+    modular documentation practices and proper use of DocBook XInclude functionality.
+  </para>
+  <para>
+    The project follows a strict structure:
+  </para>
+  <orderedlist>
+    <listitem>
+      <formalpara>
+        <title>Source Code</title>
+        <para>Located in <filename>src/main/java</filename> with AGPL-3.0-only licensing.</para>
+      </formalpara>
+    </listitem>
+    <listitem>
+      <formalpara>
+        <title>Documentation</title>
+        <para>Located in <filename>src/main/docbook</filename> with CC-BY-SA-4.0 licensing.</para>
+      </formalpara>
+    </listitem>
+    <listitem>
+      <formalpara>
+        <title>Automation Scripts</title>
+        <para>Located in <filename>scripts/</filename> for environment setup and quality gates.</para>
+      </formalpara>
+    </listitem>
+  </orderedlist>
+</section>

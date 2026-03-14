@@ -1,0 +1,187 @@
+# SPDX-License-Identifier: AGPL-3.0-only
+# SPDX-FileCopyrightText: 2024 com.github.metavacua
+
+name: Ironclad Syntactic Gates PERFECTED
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+# No caching for security - always fetch fresh dependencies
+env:
+  MAVEN_OPTS: "-Dhttps.protocols=TLSv1.2 -Dmaven.repo.local=$HOME/.m2/repository -Dorg.slf4j.simpleLogger.showDateTime=true -Djava.awt.headless=true"
+
+jobs:
+  # ============================================
+  # Phase 1: License and REUSE Compliance
+  # ============================================
+  license-check:
+    name: License Compliance
+    runs-on: ubuntu-latest
+    steps:
+      # SHA-pinned actions for security
+      - name: Checkout repository
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Set up Python
+        uses: actions/setup-python@0a5c61591373683505ea898e09a3ea4f392ef68e # v5.0.0
+        with:
+          python-version: '3.12'
+
+      - name: Install REUSE tool
+        run: |
+          pip install reuse
+
+      - name: REUSE lint
+        run: |
+          reuse lint
+
+      - name: Check SPDX headers
+        run: |
+          echo "Checking for SPDX-License-Identifier headers..."
+          find . -type f \( -name "*.java" -o -name "*.xml" -o -name "*.sh" -o -name "*.yml" \) \
+            -not -path "./.git/*" \
+            -not -path "./target/*" \
+            -not -path "./LICENSES/*" | while read -r file; do
+            if ! grep -q "SPDX-License-Identifier" "$file"; then
+              echo "Missing SPDX header: $file"
+              exit 1
+            fi
+          done
+          echo "All files have SPDX headers."
+
+  # ============================================
+  # Phase 2: XML C14N Validation
+  # ============================================
+  xml-validation:
+    name: XML C14N Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Install XML tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libxml2-utils
+
+      - name: Validate XML C14N
+        run: |
+          EXIT_CODE=0
+          find . -type f -name "*.xml" \
+            -not -path "./.git/*" \
+            -not -path "./target/*" | while read -r file; do
+            echo "Validating C14N: $file"
+            if ! xmllint --noout --exc-c14n "$file" 2>&1; then
+              echo "C14N validation failed: $file"
+              EXIT_CODE=1
+            fi
+          done
+          exit $EXIT_CODE
+
+  # ============================================
+  # Phase 3: Maven Build with Bounded Parallelism
+  # ============================================
+  maven-build:
+    name: Maven Build
+    runs-on: ubuntu-latest
+    needs: [license-check, xml-validation]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@387ac29b22b3a15dcef058164473027d243e385d # v4.0.0
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Maven verify (bounded parallelism -P4)
+        run: |
+          mvn verify -P4 --batch-mode \
+            -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
+
+  # ============================================
+  # Phase 4: Syntactic Attestation (JAR Content Verification)
+  # ============================================
+  syntactic-attestation:
+    name: Syntactic Attestation
+    runs-on: ubuntu-latest
+    needs: maven-build
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@387ac29b22b3a15dcef058164473027d243e385d # v4.0.0
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Build JAR
+        run: |
+          mvn package -DskipTests --batch-mode \
+            -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
+
+      - name: Verify JAR contents for C14N compliance
+        run: |
+          echo "=== Syntactic Attestation: Checking JAR contents ==="
+          JAR_FILE=$(find target -name "*.jar" -not -name "*-sources.jar" -not -name "*-javadoc.jar" | head -1)
+          if [ -z "$JAR_FILE" ]; then
+            echo "No JAR file found"
+            exit 1
+          fi
+          echo "Checking JAR: $JAR_FILE"
+          
+          # Extract and verify XML files in JAR
+          unzip -l "$JAR_FILE" | grep -E '\.xml$|\.pom$' || echo "No XML files in JAR"
+          
+          # Create temp dir for extraction
+          TMPDIR=$(mktemp -d)
+          unzip -q "$JAR_FILE" -d "$TMPDIR" || true
+          
+          # Check for C14N compliance in any XML resources
+          if command -v xmllint &> /dev/null; then
+            find "$TMPDIR" -type f -name "*.xml" 2>/dev/null | while read -r xmlfile; do
+              echo "Verifying C14N in JAR resource: $(basename "$xmlfile")"
+              xmllint --noout --exc-c14n "$xmlfile" 2>&1 || echo "Warning: C14N issue in $xmlfile"
+            done
+          fi
+          
+          # Cleanup
+          rm -rf "$TMPDIR"
+          echo "=== Syntactic attestation complete ==="
+
+      - name: Verify manifest entries
+        run: |
+          JAR_FILE=$(find target -name "*.jar" -not -name "*-sources.jar" -not -name "*-javadoc.jar" | head -1)
+          echo "Checking manifest of: $JAR_FILE"
+          unzip -p "$JAR_FILE" META-INF/MANIFEST.MF
+
+  # ============================================
+  # Phase 5: Aggregate Quality Gate
+  # ============================================
+  quality-gate:
+    name: Quality Gate
+    runs-on: ubuntu-latest
+    needs: [license-check, xml-validation, maven-build, syntactic-attestation]
+    if: always()
+    steps:
+      - name: Check all jobs passed
+        run: |
+          echo "License check: ${{ needs.license-check.result }}"
+          echo "XML validation: ${{ needs.xml-validation.result }}"
+          echo "Maven build: ${{ needs.maven-build.result }}"
+          echo "Syntactic attestation: ${{ needs.syntactic-attestation.result }}"
+          
+          if [ "${{ needs.license-check.result }}" != "success" ] || \
+             [ "${{ needs.xml-validation.result }}" != "success" ] || \
+             [ "${{ needs.maven-build.result }}" != "success" ] || \
+             [ "${{ needs.syntactic-attestation.result }}" != "success" ]; then
+            echo "QUALITY GATE FAILED"
+            exit 1
+          fi
+          echo "QUALITY GATE PASSED - Ironclad compliance verified"

@@ -1,0 +1,12 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: subclass
+Upstream-Contact: com.github.metavacua <https://github.com/metavacacua/subclass>
+Source: https://github.com/metavacacua/subclass
+
+Files: .gitignore
+Copyright: 2024 com.github.metavacua
+License: AGPL-3.0-only
+
+Files: LICENSES/*
+Copyright: See individual license files
+License: LicenseRef-AGPL-3.0-only AND LicenseRef-CC-BY-SA-4.0

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+SPDX-License-Identifier: CC-BY-SA-4.0
+SPDX-FileCopyrightText: 2024 com.github.metavacua
+-->
+<book xmlns="http://docbook.org/ns/docbook"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      version="5.0"
+      xml:lang="en">
+  <info>
+    <title>Subclass Project Documentation</title>
+    <author>
+      <personname>
+        <orgname>com.github.metavacua</orgname>
+      </personname>
+    </author>
+    <copyright>
+      <year>2024</year>
+      <holder>com.github.metavacua</holder>
+    </copyright>
+    <legalnotice>
+      <para>
+        This documentation is licensed under the Creative Commons Attribution-ShareAlike 4.0
+        International License (CC-BY-SA-4.0).
+      </para>
+    </legalnotice>
+  </info>
+
+  <preface>
+    <title>Preface</title>
+    <para>
+      This is the main documentation for the subclass project, an Ironclad licensed
+      Maven archetype demonstrating best practices in software licensing and build automation.
+    </para>
+  </preface>
+
+  <chapter>
+    <title>Introduction</title>
+    <para>
+      The subclass project serves as an archetype for creating new Java/Maven projects
+      with strict licensing compliance, REUSE specification adherence, and automated
+      quality gates.
+    </para>
+
+    <xi:include href="fragment.xml"/>
+  </chapter>
+
+  <chapter>
+    <title>Technical Architecture</title>
+    <para>
+      This project demonstrates the integration of multiple technologies:
+    </para>
+    <itemizedlist>
+      <listitem>
+        <para>Java 21 with modern language features</para>
+      </listitem>
+      <listitem>
+        <para>Apache Jena 5.0.0 for RDF processing</para>
+      </listitem>
+      <listitem>
+        <para>JavaPoet 1.13.0 for code generation</para>
+      </listitem>
+      <listitem>
+        <para>KeY theorem prover integration</para>
+      </listitem>
+    </itemizedlist>
+  </chapter>
+
+  <appendix>
+    <title>Licensing Information</title>
+    <para>
+      All code in this project is licensed under the GNU Affero General Public
+      License v3.0 only (AGPL-3.0-only). Documentation is licensed under
+      CC-BY-SA-4.0.
+    </para>
+  </appendix>
+</book>

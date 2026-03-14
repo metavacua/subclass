@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+SPDX-License-Identifier: AGPL-3.0-only
+SPDX-FileCopyrightText: 2024 com.github.metavacua
+-->
+<additionalHeaders>
+  <java_style>
+    <firstLine>/*</firstLine>
+    <beforeEachLine> * </beforeEachLine>
+    <endLine> */</endLine>
+    <firstLineDetectionPattern>(\s|\t)*/\*.*$</firstLineDetectionPattern>
+    <lastLineDetectionPattern>.*\*/(\s|\t)*$</lastLineDetectionPattern>
+    <allowBlankLines>false</allowBlankLines>
+    <isMultiline>true</isMultiline>
+  </java_style>
+</additionalHeaders>
