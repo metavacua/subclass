@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.github.metavacua</groupId>
+    <artifactId>subclass</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>subclass</name>
+    <description>Maven project for com.github.metavacua:subclass with DocBook documentation support</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <java.version>21</java.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.jena</groupId>
+            <artifactId>apache-jena-libs</artifactId>
+            <version>4.10.0</version>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup</groupId>
+            <artifactId>javapoet</artifactId>
+            <version>1.13.0</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.agilejava.docbkx</groupId>
+                <artifactId>docbkx-maven-plugin</artifactId>
+                <version>2.0.17</version>
+                <configuration>
+                    <xincludeSupported>true</xincludeSupported>
+                    <sourceDirectory>${project.basedir}/src/docbkx</sourceDirectory>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

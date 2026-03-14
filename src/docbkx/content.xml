@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<para xmlns="http://docbook.org/ns/docbook" version="5.0">
+    This is the included content for the subclass project documentation.
+    It demonstrates XInclude functionality with the docbkx-maven-plugin.
+</para>
