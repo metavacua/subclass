@@ -34,6 +34,14 @@
                 </executions>
                 <configuration>
                     <validationSets>
+                        <!-- Self-validation: validate pom.xml itself with XSD -->
+                        <validationSet>
+                            <dir>.</dir>
+                            <includes>
+                                <include>pom.xml</include>
+                            </includes>
+                            <systemId>src/main/resources/xsd/maven.xsd</systemId>
+                        </validationSet>
                         <!-- DTD validation for DocBook files -->
                         <validationSet>
                             <dir>src/main/xml/samples</dir>

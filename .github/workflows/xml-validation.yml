@@ -1,0 +1,19 @@
+name: XML Validation Gate
+
+on: [pull_request, push]
+
+jobs:
+  xml-c14n-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bbef4
+      - run: sudo apt-get install -y libxml2-utils
+      - name: Validate all XML files with exc-c14n
+        run: |
+          set -e
+          # Run exc-c14n on every XML file in the repository
+          # This is the canonical parser gate - if xmllint fails, the build fails
+          find . -name '*.xml' -type f -print0 | while IFS= read -r -d '' file; do
+            echo "Validating: $file"
+            xmllint --exc-c14n --noout "$file"
+          done
