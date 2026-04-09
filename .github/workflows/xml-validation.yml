@@ -6,7 +6,7 @@ jobs:
   xml-c14n-gate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11bbef4
+      - uses: actions/checkout@v4
       - run: sudo apt-get install -y libxml2-utils
       - name: Validate all XML files with exc-c14n
         run: |
