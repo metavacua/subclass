@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="http://maven.apache.org/POM/4.0.0"
+           targetNamespace="http://maven.apache.org/POM/4.0.0"
+           elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+
+    <!-- Root element: project -->
+    <xs:element name="project" type="ProjectType"/>
+
+    <!-- Project Type -->
+    <xs:complexType name="ProjectType">
+        <xs:sequence>
+            <xs:element name="modelVersion" type="xs:string" minOccurs="0"/>
+            <xs:element name="groupId" type="xs:string" minOccurs="0"/>
+            <xs:element name="artifactId" type="xs:string" minOccurs="0"/>
+            <xs:element name="version" type="xs:string" minOccurs="0"/>
+            <xs:element name="packaging" type="xs:string" minOccurs="0"/>
+            <xs:element name="name" type="xs:string" minOccurs="0"/>
+            <xs:element name="description" type="xs:string" minOccurs="0"/>
+            <xs:element name="properties" type="PropertiesType" minOccurs="0"/>
+            <xs:element name="dependencies" type="DependenciesType" minOccurs="0"/>
+            <xs:element name="build" type="BuildType" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Properties Type -->
+    <xs:complexType name="PropertiesType">
+        <xs:sequence>
+            <xs:element name="project.build.sourceEncoding" type="xs:string" minOccurs="0"/>
+            <xs:element name="maven.compiler.source" type="xs:string" minOccurs="0"/>
+            <xs:element name="maven.compiler.target" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Dependencies Type -->
+    <xs:complexType name="DependenciesType">
+        <xs:sequence>
+            <xs:element name="dependency" type="DependencyType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Dependency Type -->
+    <xs:complexType name="DependencyType">
+        <xs:sequence>
+            <xs:element name="groupId" type="xs:string" minOccurs="0"/>
+            <xs:element name="artifactId" type="xs:string" minOccurs="0"/>
+            <xs:element name="version" type="xs:string" minOccurs="0"/>
+            <xs:element name="scope" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Build Type -->
+    <xs:complexType name="BuildType">
+        <xs:sequence>
+            <xs:element name="plugins" type="PluginsType" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Plugins Type -->
+    <xs:complexType name="PluginsType">
+        <xs:sequence>
+            <xs:element name="plugin" type="PluginType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Plugin Type -->
+    <xs:complexType name="PluginType">
+        <xs:sequence>
+            <xs:element name="groupId" type="xs:string" minOccurs="0"/>
+            <xs:element name="artifactId" type="xs:string" minOccurs="0"/>
+            <xs:element name="version" type="xs:string" minOccurs="0"/>
+            <xs:element name="configuration" type="xs:any" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

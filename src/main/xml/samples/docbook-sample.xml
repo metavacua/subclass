@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN" "docbook.dtd">
+<article xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="sample-article">
+    <info>
+        <title>Sample DocBook 5.0 Document</title>
+        <author>
+            <personname>
+                <firstname>John</firstname>
+                <surname>Doe</surname>
+            </personname>
+        </author>
+        <pubdate>2024-01-15</pubdate>
+    </info>
+    <section xml:id="introduction">
+        <title>Introduction</title>
+        <para>
+            This is a sample DocBook 5.0 document for testing the multi-layer XML validation pipeline.
+            It demonstrates the use of DTD validation for structural integrity.
+        </para>
+    </section>
+    <section xml:id="features">
+        <title>Features</title>
+        <para>
+            The validation pipeline includes multiple layers:
+        </para>
+        <itemizedlist>
+            <listitem>
+                <para>DTD validation (this layer)</para>
+            </listitem>
+            <listitem>
+                <para>XSD validation</para>
+            </listitem>
+            <listitem>
+                <para>RelaxNG validation</para>
+            </listitem>
+            <listitem>
+                <para>Schematron validation</para>
+            </listitem>
+            <listitem>
+                <para>NVDL validation</para>
+            </listitem>
+            <listitem>
+                <para>Canonicalization (exc-c14n)</para>
+            </listitem>
+            <listitem>
+                <para>Digital signature verification</para>
+            </listitem>
+        </itemizedlist>
+    </section>
+</article>

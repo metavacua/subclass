@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Simplified DocBook 5.0 DTD for validation testing -->
+<!-- This is a minimal DTD for demonstrating DTD validation layer -->
+
+<!-- Article is the root element -->
+<!ELEMENT article (info?, section+)>
+<!ATTLIST article 
+    xmlns CDATA #FIXED "http://docbook.org/ns/docbook"
+    version CDATA #FIXED "5.0"
+    xml:id ID #IMPLIED>
+
+<!-- Info element contains metadata -->
+<!ELEMENT info (title, author?, pubdate?)>
+
+<!-- Title -->
+<!ELEMENT title (#PCDATA)>
+
+<!-- Author with personname -->
+<!ELEMENT author (personname)>
+<!ELEMENT personname (firstname?, surname?)>
+<!ELEMENT firstname (#PCDATA)>
+<!ELEMENT surname (#PCDATA)>
+
+<!-- Pubdate -->
+<!ELEMENT pubdate (#PCDATA)>
+
+<!-- Section -->
+<!ELEMENT section (title, para | itemizedlist)+>
+<!ATTLIST section xml:id ID #IMPLIED>
+
+<!-- Paragraph -->
+<!ELEMENT para (#PCDATA | emphasis)*>
+
+<!-- Emphasis -->
+<!ELEMENT emphasis (#PCDATA)>
+
+<!-- Itemized list -->
+<!ELEMENT itemizedlist (listitem+)>
+
+<!-- List item -->
+<!ELEMENT listitem (para+)>
