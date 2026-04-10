@@ -8,6 +8,9 @@
 #  DocBook 5.2: https://docbook.org/specs/docbook-5.2-spec.html
 
 # ==================== NAMESPACE ====================
+# Datatype libraries must be declared before use
+datatypes xsd = "http://www.w3.org/2001/XMLSchema-datatypes"
+
 namespace db = "http://docbook.org/ns/docbook"
 namespace dbx = "http://docbook.org/ns/docbook/internal"
 namespace xi = "http://www.w3.org/2001/XInclude"

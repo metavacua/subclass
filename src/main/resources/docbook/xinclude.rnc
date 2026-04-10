@@ -1,6 +1,9 @@
 #  Minimal RELAX NG Compact Syntax for XInclude
 #  XInclude 1.0 and 1.1 Support
 
+# Datatype library for XSD types
+datatypes xsd = "http://www.w3.org/2001/XMLSchema-datatypes"
+
 namespace xi = "http://www.w3.org/2001/XInclude"
 
 ## XInclude include element

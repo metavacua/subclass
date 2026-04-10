@@ -14,18 +14,12 @@
          PUBLIC IDENTIFIERS - DocBook 5.2 DTD
          ========================================================================= -->
 
-    <!-- DocBook 5.2 modular DTD public identifiers -->
+    <!-- DocBook 5.2 DTD - offline path (preferred with prefer="public") -->
     <public publicId="-//OASIS//DTD DocBook XML 5.2//EN"
             uri="docbook/docbook-5.2-dtd.zip"/>
 
-    <public publicId="-//OASIS//DTD DocBook XML 5.2//EN"
-            uri="https://docbook.org/xml/5.2/dtd/docbook.dtd"/>
-
     <!-- DocBook 5.2 module public identifiers -->
     <public publicId="-//OASIS//DTD DocBook XML 5.2 DocBook Document Hierarchy Module//EN"
-            uri="docbook/dbhierx.mod"/>
-
-    <public publicId="-OASIS//DTD DocBook XML 5.2 Document Hierarchy Module//EN"
             uri="docbook/dbhierx.mod"/>
 
     <public publicId="-//OASIS//DTD DocBook XML 5.2 Bibliographic Module//EN"
@@ -38,24 +32,18 @@
          SYSTEM IDENTIFIERS - Schema and DTD Locations
          ========================================================================= -->
 
-    <!-- DocBook 5.2 XSD Schemas -->
+    <!-- DocBook 5.2 XSD Schemas - offline path -->
     <system systemId="https://docbook.org/xml/5.2/xsd/docbook.xsd"
-            uri="docbook/docbook-5.2-schemas.zip"/>
-
-    <system systemId="https://docbook.org/xml/5.2/xsd/dbnotnx.xsd"
             uri="docbook/docbook-5.2-schemas.zip"/>
 
     <system systemId="https://docbook.org/xml/5.2/xsd/xlink.xsd"
             uri="docbook/xlink.xsd"/>
 
-    <!-- DocBook 5.2 RELAX NG Schemas -->
+    <!-- DocBook 5.2 RELAX NG Schema - offline path -->
     <system systemId="https://docbook.org/xml/5.2/rng/docbook.rng"
             uri="docbook/docbook-5.2-rnc.rnc"/>
 
-    <system systemId="https://docbook.org/xml/5.2/rng/docbook.rng"
-            uri="docbook/docbook-5.2-schemas.zip"/>
-
-    <!-- DocBook 5.2 NVDL Schema -->
+    <!-- DocBook 5.2 NVDL Schema - offline path -->
     <system systemId="https://docbook.org/xml/5.2/nvdl/docbook.nvdl"
             uri="docbook/docbook-5.2-nvdl.xml"/>
 
@@ -83,7 +71,7 @@
          REWRITE RULES - URL Normalization
          ========================================================================= -->
 
-    <!-- DocBook.org rewrite rules -->
+    <!-- DocBook.org rewrite rules - prefer offline resources -->
     <rewriteURI uriStartString="https://docbook.org/xml/5.2/"
                 rewritePrefix="docbook/"/>
 
@@ -96,19 +84,12 @@
                 rewritePrefix="xinclude/"/>
 
     <!-- =========================================================================
-         DELEGATION RULES - Chain to Public Catalog
+         DELEGATION RULES - Chain to Online Resources
          ========================================================================= -->
 
-    <!-- Delegate public identifiers not in this catalog -->
-    <public publicId="-//OASIS//DTD DocBook XML"
-            uri="https://docbook.org/xml/5.2/dtd/docbook.dtd"/>
-
-    <public publicId="-//OASIS//DTD DocBook XML"
-            uri="https://docbook.org/xml/5.2/dtd/docbook.dtd"/>
-
-    <!-- Delegate system identifiers not in this catalog -->
+    <!-- Delegate to online resources if local not found -->
     <systemSuffix systemIdSuffix="docbook.org/xml/5.2/"
-                  uri="docbook/"/>
+                  uri="https://docbook.org/xml/5.2/"/>
 
     <!-- =========================================================================
          NEXT CATALOG - Fallback Catalog

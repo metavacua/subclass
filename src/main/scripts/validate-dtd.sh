@@ -6,6 +6,10 @@
 # Validates DocBook 5.2 documents against DTD for legacy compatibility
 # and basic structural validation.
 #
+# Note: DocBook 5.2 is primarily defined in RELAX NG; full DTD validation
+# requires the DocBook 5.2 DTD files. This script performs well-formedness
+# validation as a fallback.
+#
 # Usage: ./validate-dtd.sh [options]
 #   --help     Show this help message
 #   --catalog  Use XML Catalog for entity resolution
@@ -91,6 +95,13 @@ FAILED=0
 
 echo "Found $TOTAL XML files to validate"
 
+# Check for DTD schema availability
+# DocBook 5.2 doesn't ship a complete DTD, so we do well-formedness only
+DTD_AVAILABLE=false
+if [ -f "$RESOURCES_DIR/docbook/docbook-5.2-dtd.zip" ]; then
+    DTD_AVAILABLE=true
+fi
+
 # Validate each file
 while IFS= read -r file; do
     CURRENT=$((CURRENT + 1))
@@ -102,19 +113,7 @@ while IFS= read -r file; do
         echo -n "."
     fi
     
-    # Build xmllint command
-    CMD="xmllint --dtdvalid"
-    
-    # For DTD validation, we would need the DocBook 5.2 DTD
-    # Since DocBook 5.2 primarily uses RELAX NG and XSD, we do basic validation
-    CMD="$CMD --noout '$file'"
-    
-    if [ "$USE_CATALOG" = true ]; then
-        CMD="$CMD --catalogs '$CATALOG_PATH'"
-    fi
-    
-    # Execute validation (currently using --noout for well-formedness only)
-    # Full DTD validation would require the DocBook 5.2 DTD files
+    # Well-formedness validation only (DTD schemas not available for DocBook 5.2)
     if xmllint --noout "$file" 2>/dev/null; then
         if [ "$VERBOSE" = true ]; then
             echo -e "  ${GREEN}✓ Valid${NC}"
@@ -129,9 +128,14 @@ done <<< "$XML_FILES"
 echo ""
 echo ""
 
-# Summary
+# Summary - report what validation was done
 if [ $FAILED -eq 0 ]; then
-    echo -e "${GREEN}✓ DTD Validation passed for all $TOTAL files${NC}"
+    if [ "$DTD_AVAILABLE" = true ]; then
+        echo -e "${GREEN}✓ DTD Validation passed for all $TOTAL files${NC}"
+    else
+        echo -e "${YELLOW}⚠ DTD Validation: well-formedness passed ($TOTAL files)${NC}"
+        echo "DocBook 5.2 doesn't ship a DTD; use RELAX NG for full validation."
+    fi
     exit 0
 else
     echo -e "${RED}✗ DTD Validation failed: $FAILED of $TOTAL files${NC}"

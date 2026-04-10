@@ -209,9 +209,18 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
-                        <configuration>
-                            <executable>${basedir}/src/main/scripts/validate-dtd.sh</executable>
-                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>run-dtd-validation</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>${basedir}/src/main/scripts/validate-dtd.sh</executable>
+                                </configuration>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>
@@ -226,6 +235,26 @@
                     <value>xsd</value>
                 </property>
             </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>run-xsd-validation</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>${basedir}/src/main/scripts/validate-xsd.sh</executable>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
 
         <!-- Profile: Layer 3 - RELAX NG Validation -->
@@ -242,9 +271,18 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
-                        <configuration>
-                            <executable>${basedir}/src/main/scripts/validate-relaxng.sh</executable>
-                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>run-relaxng-validation</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>${basedir}/src/main/scripts/validate-relaxng.sh</executable>
+                                </configuration>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>
@@ -259,6 +297,26 @@
                     <value>schematron</value>
                 </property>
             </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>run-schematron-validation</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>${basedir}/src/main/scripts/validate-schematron.sh</executable>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
 
         <!-- Profile: Layer 5 - Exclusive C14N Validation -->
@@ -270,6 +328,26 @@
                     <value>c14n</value>
                 </property>
             </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>run-c14n-validation</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>${basedir}/src/main/scripts/validate-c14n.sh</executable>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
 
         <!-- Profile: Layer 6 - XML Catalog Validation -->
@@ -281,6 +359,26 @@
                     <value>catalog</value>
                 </property>
             </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>run-catalog-validation</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>${basedir}/src/main/scripts/validate-catalog.sh</executable>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
 
         <!-- Profile: Layer 7 - NVDL Validation -->
@@ -292,6 +390,26 @@
                     <value>nvdl</value>
                 </property>
             </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>run-nvdl-validation</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>${basedir}/src/main/scripts/validate-nvdl.sh</executable>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
 
         <!-- Profile: Full Tiered Validation -->
@@ -308,9 +426,18 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
-                        <configuration>
-                            <executable>${basedir}/src/main/scripts/validate-all.sh</executable>
-                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>run-all-validation</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>${basedir}/src/main/scripts/validate-all.sh</executable>
+                                </configuration>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>
