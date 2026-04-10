@@ -21,18 +21,14 @@ jobs:
             xmllint --exc-c14n --noout "$file"
           done
 
-      # Tier 1b: DTD Syntax Validation - FIX: use unquoted heredoc for variable expansion
+      # Tier 1b: DTD Syntax Validation
       - name: "Tier 1b: Validate DTD syntax"
         run: |
           set -e
           find . -name '*.dtd' -type f -print0 | while IFS= read -r -d '' dtd; do
             echo "Validating DTD: $dtd"
-            # Create a minimal XML that references the DTD - use unquoted EOF for variable expansion
-            xmllint --dtdvalid "$dtd" --noout - <<EOF
-<?xml version="1.0"?>
-<!DOCTYPE root SYSTEM "$dtd">
-<root/>
-EOF
+            # Create a minimal XML that references the DTD
+            printf '%s\n' '<?xml version="1.0"?>' "<!DOCTYPE root SYSTEM \"$dtd\">" "<root/>" | xmllint --dtdvalid "$dtd" --noout -
           done
 
       # Tier 1c: XSD Self-Validation - FIX: validate the XSD against XSD spec, not the other way
