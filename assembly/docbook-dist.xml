@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.1.1"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.1.1 http://maven.apache.org/xsd/assembly-2.1.1.xsd">
+
+    <!--
+        DocBook Distribution Assembly Descriptor
+        Layer 0: Assembly driver for packaging validation artifacts
+    -->
+
+    <id>docbook-validation-dist</id>
+    <formats>
+        <format>zip</format>
+        <format>tar.gz</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+
+    <!-- Include project base files -->
+    <fileSets>
+        <!-- Include POM files -->
+        <fileSet>
+            <directory>${project.basedir}</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>pom.xml</include>
+                <include>README.md</include>
+                <include>LICENSE</include>
+            </includes>
+        </fileSet>
+
+        <!-- Include validation resources -->
+        <fileSet>
+            <directory>${project.basedir}/src/main/resources</directory>
+            <outputDirectory>/resources</outputDirectory>
+            <includes>
+                <include>**/*.xml</include>
+                <include>**/*.xsd</include>
+                <include>**/*.rnc</include>
+                <include>**/*.rng</include>
+                <include>**/*.sch</include>
+                <include>**/*.xsl</include>
+            </includes>
+        </fileSet>
+
+        <!-- Include validation scripts -->
+        <fileSet>
+            <directory>${project.basedir}/src/main/scripts</directory>
+            <outputDirectory>/scripts</outputDirectory>
+            <fileMode>0755</fileMode>
+            <includes>
+                <include>*.sh</include>
+            </includes>
+        </fileSet>
+
+        <!-- Include assembly descriptors -->
+        <fileSet>
+            <directory>${project.basedir}/assembly</directory>
+            <outputDirectory>/assembly</outputDirectory>
+            <includes>
+                <include>*.xml</include>
+            </includes>
+        </fileSet>
+
+        <!-- Include documentation -->
+        <fileSet>
+            <directory>${project.basedir}/docs</directory>
+            <outputDirectory>/docs</outputDirectory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+
+    <!-- Include dependency JARs -->
+    <dependencySets>
+        <dependencySet>
+            <outputDirectory>/lib</outputDirectory>
+            <unpack>false</unpack>
+            <scope>runtime</scope>
+        </dependencySet>
+    </dependencySets>
+
+    <!-- Create a directory for schema files -->
+    <files>
+        <file>
+            <source>${project.basedir}/src/main/resources/catalog.xml</source>
+            <outputDirectory>/resources</outputDirectory>
+        </file>
+    </files>
+
+</assembly>

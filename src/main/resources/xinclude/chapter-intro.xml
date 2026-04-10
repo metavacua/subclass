@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Chapter: Introduction
+    XInclude Fragment for DocBook 5.2 Validation Guide
+-->
+<intro xmlns="http://docbook.org/ns/docbook"
+       xmlns:xi="http://www.w3.org/2001/XInclude"
+       xmlns:xlink="http://www.w3.org/1999/xlink"
+       version="5.2"
+       xml:id="introduction"
+       status="draft">
+
+    <title>Introduction</title>
+
+    <para>DocBook is a semantic markup language for technical documentation.
+    Originally designed for software documentation, it has evolved into a
+    comprehensive schema suitable for many types of technical and business
+    documentation.</para>
+
+    <section xml:id="intro-what-is-docbook" version="5.2">
+        <title>What is DocBook 5.2?</title>
+        <para>DocBook 5.2 is the latest version of the DocBook schema, published
+        by OASIS in 2021. It introduces several important features:</para>
+        <itemizedlist mark="bullet">
+            <listitem>
+                <para><emphasis>Modular design</emphasis> - The schema is organized
+                into modules that can be combined in various ways</para>
+            </listitem>
+            <listitem>
+                <para><emphasis>XML Namespace</emphasis> - All elements are in
+                the <uri>http://docbook.org/ns/docbook</uri> namespace</para>
+            </listitem>
+            <listitem>
+                <para><emphasis>Schema independence</emphasis> - Available in
+                DTD, W3C XSD, RELAX NG, and NVDL formats</para>
+            </listitem>
+            <listitem>
+                <para><emphasis>Rich semantic elements</emphasis> - Support for
+                detailed semantic markup including annotations, task elements,
+                and improved glossary support</para>
+            </listitem>
+        </itemizedlist>
+    </section>
+
+    <section xml:id="intro-validation-importance" version="5.2">
+        <title>Why Validation Matters</title>
+        <para>Validation is critical for technical documentation because it:</para>
+        <orderedlist numeration="arabic">
+            <listitem>
+                <para><emphasis>Ensures consistency</emphasis> - Enforces document
+                structure and content rules</para>
+            </listitem>
+            <listitem>
+                <para><emphasis>Catches errors early</emphasis> - Identifies issues
+                during the writing process, not after publication</para>
+            </listitem>
+            <listitem>
+                <para><emphasis>Enables automation</emphasis> - Validation enables
+                automated quality checks in CI/CD pipelines</para>
+            </listitem>
+            <listitem>
+                <para><emphasis>Improves accessibility</emphasis> - Valid documents
+                work better with assistive technologies</para>
+            </listitem>
+            <listitem>
+                <para><emphasis>Supports transformation</emphasis> - Many output
+                formats require valid input</para>
+            </listitem>
+        </orderedlist>
+    </section>
+
+    <section xml:id="intro-validation-approach" version="5.2">
+        <title>Tiered Validation Approach</title>
+        <para>This guide implements a <emphasis>tiered validation</emphasis>
+        approach, where each layer validates a specific aspect of the document:</para>
+        <table xml:id="validation-layers-table">
+            <title>Validation Layers</title>
+            <tgroup cols="3">
+                <thead>
+                    <row>
+                        <entry>Layer</entry>
+                        <entry>Technology</entry>
+                        <entry>Purpose</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry>Layer 0</entry>
+                        <entry>Maven POM</entry>
+                        <entry>Project foundation and build configuration</entry>
+                    </row>
+                    <row>
+                        <entry>Layer 1</entry>
+                        <entry>DTD</entry>
+                        <entry>Legacy compatibility and basic structure</entry>
+                    </row>
+                    <row>
+                        <entry>Layer 2</entry>
+                        <entry>W3C XSD</entry>
+                        <entry>W3C standard schema validation</entry>
+                    </row>
+                    <row>
+                        <entry>Layer 3</entry>
+                        <entry>RELAX NG</entry>
+                        <entry>ISO standard validation with expressive patterns</entry>
+                    </row>
+                    <row>
+                        <entry>Layer 4</entry>
+                        <entry>Schematron</entry>
+                        <entry>ISO standard for rule-based validation</entry>
+                    </row>
+                    <row>
+                        <entry>Layer 5</entry>
+                        <entry>Exclusive C14N</entry>
+                        <entry>Canonicalization for digital signatures</entry>
+                    </row>
+                    <row>
+                        <entry>Layer 6</entry>
+                        <entry>XML Catalogs</entry>
+                        <entry>Entity resolution and system ID mapping</entry>
+                    </row>
+                    <row>
+                        <entry>Layer 7</entry>
+                        <entry>NVDL</entry>
+                        <entry>Namespace-based validation dispatching</entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+        <para>Each layer builds upon the previous, providing increasingly
+        sophisticated validation while maintaining the ability to catch
+        different types of errors.</para>
+    </section>
+
+    <section xml:id="intro-xinclude" version="5.2">
+        <title>XInclude and Document Composition</title>
+        <para>DocBook 5.2 documents can be composed from multiple files using
+        <emphasis>XInclude</emphasis>. This allows:</para>
+        <itemizedlist mark="circle">
+            <listitem>
+                <para>Modular chapter organization</para>
+            </listitem>
+            <listitem>
+                <para>Reusable content fragments</para>
+            </listitem>
+            <listitem>
+                <para>Parallel authoring workflows</para>
+            </listitem>
+            <listitem>
+                <para>Content reuse across documents</para>
+            </listitem>
+        </itemizedlist>
+        <para>Our validation pipeline validates both the individual fragments
+        and the composed document, ensuring consistency at all levels.</para>
+    </section>
+
+</intro>

@@ -1,0 +1,53 @@
+#  Minimal RELAX NG Compact Syntax for XInclude
+#  XInclude 1.0 and 1.1 Support
+
+namespace xi = "http://www.w3.org/2001/XInclude"
+
+## XInclude include element
+div {
+    ## Include element
+    Xi-include =
+        element xi:include {
+            attribute href { xsd:anyURI },
+            attribute parse { "xml" | "text" }?,
+            attribute xpointer { text }?,
+            attribute encoding { text }?,
+            attribute accept { text }?,
+            attribute accept-language { text }?,
+            attribute include-annotation { text }?,
+            (Xi-fallback | empty)
+        }
+
+    ## Fallback element (required when include might fail)
+    Xi-fallback =
+        element xi:fallback {
+            any-element
+        }
+
+    ## Any element for fallback content
+    any-element =
+        (element * { text | any-element } | text)*
+}
+
+# ==================== ATTRIBUTE PATTERNS ====================
+
+## href attribute (required)
+attribute href { xsd:anyURI }
+
+## parse attribute (optional)
+div {
+    parse-value = "xml" | "text"
+    attribute parse { parse-value }?
+}
+
+## encoding attribute for text include
+attribute encoding { text }?
+
+## accept header for HTTP
+attribute accept { text }?
+
+## accept-language header
+attribute accept-language { text }?
+
+## XPointer attribute
+attribute xpointer { text }?

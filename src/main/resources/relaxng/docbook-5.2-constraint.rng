@@ -1,0 +1,1004 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    DocBook 5.2 RELAX NG XML Syntax Schema (Generated from RNC)
+    Layer 3: RELAX NG Validation (ISO Standard 19757-2)
+
+    This is the XML syntax version of the RELAX NG constraint schema.
+    Use this for validation with tools that don't support RNC syntax.
+-->
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:dbx="http://docbook.org/ns/docbook/internal"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+
+    <!-- ==================== NAMESPACE DECLARATIONS ==================== -->
+    <start>
+        <choice>
+            <ref name="Book"/>
+            <ref name="Chapter"/>
+            <ref name="Section"/>
+            <ref name="Simplesect"/>
+            <ref name="Para"/>
+            <ref name="Itemizedlist"/>
+            <ref name="Orderedlist"/>
+        </choice>
+    </start>
+
+    <!-- ==================== COMMON ATTRIBUTES ==================== -->
+
+    <!-- Common attributes -->
+    <define name="common-attributes">
+        <optional>
+            <attribute name="xml:id" type="ID"/>
+        </optional>
+        <optional>
+            <attribute name="version"/>
+        </optional>
+        <optional>
+            <attribute name="xlink:href" type="anyURI"/>
+        </optional>
+        <optional>
+            <attribute name="xlink:type">
+                <choice>
+                    <value>simple</value>
+                    <value>extended</value>
+                    <value>title</value>
+                    <value>arc</value>
+                    <value>resource</value>
+                    <value>locator</value>
+                    <value>none</value>
+                </choice>
+            </attribute>
+        </optional>
+        <optional>
+            <attribute name="xml:base" type="anyURI"/>
+        </optional>
+        <optional>
+            <attribute name="xml:lang" type="language"/>
+        </optional>
+        <optional>
+            <attribute name="xml:space">
+                <choice>
+                    <value>default</value>
+                    <value>preserve</value>
+                </choice>
+            </attribute>
+        </optional>
+    </define>
+
+    <!-- XInclude attributes -->
+    <define name="xinclude-attributes">
+        <optional>
+            <attribute name="xi:include"/>
+        </optional>
+        <optional>
+            <attribute name="xi:fallback"/>
+        </optional>
+        <optional>
+            <attribute name="xi:href" type="anyURI"/>
+        </optional>
+        <optional>
+            <attribute name="xi:parse">
+                <choice>
+                    <value>xml</value>
+                    <value>text</value>
+                </choice>
+            </attribute>
+        </optional>
+        <optional>
+            <attribute name="xi:xpointer"/>
+        </optional>
+    </define>
+
+    <!-- Title attributes -->
+    <define name="title-attributes">
+        <optional>
+            <attribute name="xml:title"/>
+        </optional>
+        <optional>
+            <attribute name="keep-together.within-line">
+                <choice>
+                    <value>always</value>
+                    <value>auto</value>
+                </choice>
+            </attribute>
+        </optional>
+    </define>
+
+    <!-- ==================== BOOK STRUCTURE ==================== -->
+
+    <define name="Book">
+        <element name="db:book">
+            <ref name="common-attributes"/>
+            <optional>
+                <attribute name="version">
+                    <value>5.2</value>
+                </attribute>
+            </optional>
+            <optional>
+                <attribute name="status">
+                    <choice>
+                        <value>draft</value>
+                        <value>review</value>
+                        <value>final</value>
+                    </choice>
+                </attribute>
+            </optional>
+            <ref name="Book-info"/>
+            <zeroOrMore>
+                <choice>
+                    <ref name="Book"/>
+                    <ref name="Chapter"/>
+                    <ref name="Part"/>
+                    <ref name="Reference"/>
+                </choice>
+            </zeroOrMore>
+        </element>
+    </define>
+
+    <define name="Book-info">
+        <optional>
+            <ref name="Bookmeta"/>
+        </optional>
+        <oneOrMore>
+            <ref name="Booktitle"/>
+        </oneOrMore>
+        <optional>
+            <ref name="Booksubtitle"/>
+        </optional>
+    </define>
+
+    <define name="Booktitle">
+        <element name="db:booktitle">
+            <ref name="title-attributes"/>
+            <ref name="Inline-basic"/>
+        </element>
+    </define>
+
+    <define name="Booksubtitle">
+        <element name="db:booksubtitle">
+            <ref name="common-attributes"/>
+            <ref name="Inline-basic"/>
+        </element>
+    </define>
+
+    <define name="Bookmeta">
+        <element name="db:bookmeta">
+            <ref name="common-attributes"/>
+            <zeroOrMore>
+                <ref name="Authorgroup"/>
+            </zeroOrMore>
+            <zeroOrMore>
+                <ref name="Author"/>
+            </zeroOrMore>
+            <zeroOrMore>
+                <ref name="Copyright"/>
+            </zeroOrMore>
+            <optional>
+                <ref name="Edition"/>
+            </optional>
+            <optional>
+                <ref name="Pubdate"/>
+            </optional>
+            <optional>
+                <ref name="Publisher"/>
+            </optional>
+        </element>
+    </define>
+
+    <!-- ==================== CHAPTER STRUCTURE ==================== -->
+
+    <define name="Chapter">
+        <element name="db:chapter">
+            <ref name="common-attributes"/>
+            <optional>
+                <attribute name="version">
+                    <value>5.2</value>
+                </attribute>
+            </optional>
+            <ref name="Chapter-title"/>
+            <optional>
+                <ref name="Info"/>
+            </optional>
+            <zeroOrMore>
+                <choice>
+                    <ref name="Chapter"/>
+                    <ref name="Section"/>
+                    <ref name="Simplesect"/>
+                    <ref name="Para"/>
+                    <ref name="Xi-include"/>
+                </choice>
+            </zeroOrMore>
+        </element>
+    </define>
+
+    <define name="Chapter-title">
+        <element name="db:title">
+            <ref name="title-attributes"/>
+            <ref name="Inline-basic"/>
+        </element>
+    </define>
+
+    <!-- ==================== SECTION STRUCTURE ==================== -->
+
+    <define name="Section">
+        <element name="db:section">
+            <ref name="common-attributes"/>
+            <optional>
+                <attribute name="version">
+                    <value>5.2</value>
+                </attribute>
+            </optional>
+            <optional>
+                <attribute name="label"/>
+            </optional>
+            <optional>
+                <attribute name="xreflabel"/>
+            </optional>
+            <ref name="Section-title"/>
+            <zeroOrMore>
+                <choice>
+                    <ref name="Section"/>
+                    <ref name="Simplesect"/>
+                    <ref name="Para"/>
+                    <ref name="Xi-include"/>
+                </choice>
+            </zeroOrMore>
+        </element>
+    </define>
+
+    <define name="Section-title">
+        <element name="db:title">
+            <ref name="title-attributes"/>
+            <ref name="Inline-basic"/>
+        </element>
+    </define>
+
+    <define name="Simplesect">
+        <element name="db:simplesect">
+            <ref name="common-attributes"/>
+            <optional>
+                <attribute name="label"/>
+            </optional>
+            <optional>
+                <ref name="Section-title"/>
+            </optional>
+            <zeroOrMore>
+                <choice>
+                    <ref name="Para"/>
+                    <ref name="Itemizedlist"/>
+                    <ref name="Orderedlist"/>
+                    <ref name="Xi-include"/>
+                </choice>
+            </zeroOrMore>
+        </element>
+    </define>
+
+    <define name="Section-title">
+        <element name="db:title">
+            <ref name="title-attributes"/>
+            <ref name="Inline-basic"/>
+        </element>
+    </define>
+
+    <!-- ==================== PARAGRAPH ==================== -->
+
+    <define name="Para">
+        <element name="db:para">
+            <ref name="common-attributes"/>
+            <optional>
+                <attribute name="role"/>
+            </optional>
+            <optional>
+                <attribute name="revisionflag">
+                    <choice>
+                        <value>changed</value>
+                        <value>added</value>
+                        <value>deleted</value>
+                        <value>none</value>
+                    </choice>
+                </attribute>
+            </optional>
+            <zeroOrMore>
+                <choice>
+                    <text/>
+                    <ref name="Phrase"/>
+                    <ref name="Replaceable"/>
+                    <ref name="Link"/>
+                    <ref name="Xref"/>
+                    <ref name="Ulink"/>
+                    <ref name="Email"/>
+                    <ref name="Filename"/>
+                    <ref name="Command"/>
+                    <ref name="Option"/>
+                    <ref name="Parameter"/>
+                    <ref name="Code"/>
+                    <ref name="Literal"/>
+                    <ref name="Constant"/>
+                    <ref name="Function"/>
+                    <ref name="Term"/>
+                    <ref name="Abbrev"/>
+                    <ref name="Acronym"/>
+                    <ref name="Quote"/>
+                    <ref name="Subscript"/>
+                    <ref name="Superscript"/>
+                    <ref name="Emphasis"/>
+                    <ref name="Bold"/>
+                    <ref name="Italic"/>
+                    <ref name="Monospace"/>
+                    <ref name="Firstterm"/>
+                    <ref name="Glossterm"/>
+                    <ref name="Xi-include"/>
+                </choice>
+            </zeroOrMore>
+        </element>
+    </define>
+
+    <!-- ==================== INLINE ELEMENTS ==================== -->
+
+    <define name="Inline-basic">
+        <choice>
+            <text/>
+            <ref name="Phrase"/>
+            <ref name="Replaceable"/>
+            <ref name="Quote"/>
+        </choice>
+    </define>
+
+    <define name="Phrase">
+        <element name="db:phrase">
+            <ref name="common-attributes"/>
+            <text/>
+        </element>
+    </define>
+
+    <define name="Replaceable">
+        <element name="db:replaceable">
+            <ref name="common-attributes"/>
+            <text/>
+        </element>
+    </define>
+
+    <define name="Quote">
+        <element name="db:quote">
+            <ref name="common-attributes"/>
+            <text/>
+        </element>
+    </define>
+
+    <define name="Emphasis">
+        <element name="db:emphasis">
+            <ref name="common-attributes"/>
+            <optional>
+                <attribute name="role"/>
+            </optional>
+            <zeroOrMore>
+                <ref name="Inline-basic"/>
+            </zeroOrMore>
+        </element>
+    </define>
+
+    <define name="Bold">
+        <element name="db:bold">
+            <ref name="common-attributes"/>
+            <zeroOrMore>
+                <ref name="Inline-basic"/>
+            </zeroOrMore>
+        </element>
+    </define>
+
+    <define name="Italic">
+        <element name="db:italic">
+            <ref name="common-attributes"/>
+            <zeroOrMore>
+                <ref name="Inline-basic"/>
+            </zeroOrMore>
+        </element>
+    </define>
+
+    <define name="Monospace">
+        <element name="db:monospace">
+            <ref name="common-attributes"/>
+            <zeroOrMore>
+                <ref name="Inline-basic"/>
+            </zeroOrMore>
+        </element>
+    </define>
+
+    <!-- ==================== LINKING ==================== -->
+
+    <define name="Link">
+        <element name="db:link">
+            <ref name="common-attributes"/>
+            <optional>
+                <attribute name="xlink:href" type="anyURI"/>
+            </optional>
+            <zeroOrMore>
+                <ref name="Inline-basic"/>
+            </zeroOrMore>
+        </element>
+    </define>
+
+    <define name="Xref">
+        <element name="db:xref">
+            <ref name="common-attributes"/>
+            <attribute name="linkend" type="IDREF"/>
+            <empty/>
+        </element>
+    </define>
+
+    <define name="Ulink">
+        <element name="db:ulink">
+            <ref name="common-attributes"/>
+            <optional>
+                <attribute name="url" type="anyURI"/>
+            </optional>
+            <zeroOrMore>
+                <ref name="Inline-basic"/>
+            </zeroOrMore>
+        </element>
+    </define>
+
+    <define name="Email">
+        <element name="db:email">
+            <ref name="common-attributes"/>
+            <ref name="Inline-basic"/>
+        </element>
+    </define>
+
+    <!-- ==================== CODE ELEMENTS ==================== -->
+
+    <define name="Code">
+        <element name="db:code">
+            <ref name="common-attributes"/>
+            <optional>
+                <attribute name="language"/>
+            </optional>
+            <zeroOrMore>
+                <ref name="Inline-basic"/>
+            </zeroOrMore>
+        </element>
+    </define>
+
+    <define name="Literal">
+        <element name="db:literal">
+            <ref name="common-attributes"/>
+            <ref name="Inline-basic"/>
+        </element>
+    </define>
+
+    <define name="Constant">
+        <element name="db:constant">
+            <ref name="common-attributes"/>
+            <ref name="Inline-basic"/>
+        </element>
+    </define>
+
+    <define name="Function">
+        <element name="db:function">
+            <ref name="common-attributes"/>
+            <ref name="Inline-basic"/>
+        </element>
+    </define>
+
+    <define name="Parameter">
+        <element name="db:parameter">
+            <ref name="common-attributes"/>
+            <ref name="Inline-basic"/>
+        </element>
+    </define>
+
+    <define name="Command">
+        <element name="db:command">
+            <ref name="common-attributes"/>
+            <ref name="Inline-basic"/>
+        </element>
+    </define>
+
+    <define name="Option">
+        <element name="db:option">
+            <ref name="common-attributes"/>
+            <ref name="Inline-basic"/>
+        </element>
+    </define>
+
+    <define name="Filename">
+        <element name="db:filename">
+            <ref name="common-attributes"/>
+            <optional>
+                <attribute name="class">
+                    <choice>
+                        <value>directory</value>
+                        <value>regular</value>
+                        <value>device</value>
+                    </choice>
+                </attribute>
+            </optional>
+            <ref name="Inline-basic"/>
+        </element>
+    </define>
+
+    <!-- ==================== SEMANTIC INLINE ==================== -->
+
+    <define name="Term">
+        <element name="db:term">
+            <ref name="common-attributes"/>
+            <ref name="Inline-basic"/>
+        </element>
+    </define>
+
+    <define name="Firstterm">
+        <element name="db:firstterm">
+            <ref name="common-attributes"/>
+            <optional>
+                <attribute name="glosssee" type="IDREF"/>
+            </optional>
+            <ref name="Inline-basic"/>
+        </element>
+    </define>
+
+    <define name="Glossterm">
+        <element name="db:glossterm">
+            <ref name="common-attributes"/>
+            <ref name="Inline-basic"/>
+        </element>
+    </define>
+
+    <define name="Abbrev">
+        <element name="db:abbrev">
+            <ref name="common-attributes"/>
+            <ref name="Inline-basic"/>
+        </element>
+    </define>
+
+    <define name="Acronym">
+        <element name="db:acronym">
+            <ref name="common-attributes"/>
+            <optional>
+                <attribute name="pronunciation"/>
+            </optional>
+            <ref name="Inline-basic"/>
+        </element>
+    </define>
+
+    <define name="Subscript">
+        <element name="db:subscript">
+            <ref name="common-attributes"/>
+            <ref name="Inline-basic"/>
+        </element>
+    </define>
+
+    <define name="Superscript">
+        <element name="db:superscript">
+            <ref name="common-attributes"/>
+            <ref name="Inline-basic"/>
+        </element>
+    </define>
+
+    <!-- ==================== LISTS ==================== -->
+
+    <define name="Itemizedlist">
+        <element name="db:itemizedlist">
+            <ref name="common-attributes"/>
+            <optional>
+                <attribute name="mark">
+                    <choice>
+                        <value>bullet</value>
+                        <value>circle</value>
+                        <value>disc</value>
+                        <value>square</value>
+                        <value>none</value>
+                    </choice>
+                </attribute>
+            </optional>
+            <optional>
+                <attribute name="spacing">
+                    <choice>
+                        <value>compact</value>
+                        <value>normal</value>
+                    </choice>
+                </attribute>
+            </optional>
+            <optional>
+                <attribute name="role"/>
+            </optional>
+            <optional>
+                <ref name="Info"/>
+            </optional>
+            <optional>
+                <ref name="Section-title"/>
+            </optional>
+            <oneOrMore>
+                <ref name="Listitem"/>
+            </oneOrMore>
+        </element>
+    </define>
+
+    <define name="Orderedlist">
+        <element name="db:orderedlist">
+            <ref name="common-attributes"/>
+            <optional>
+                <attribute name="numeration">
+                    <choice>
+                        <value>arabic</value>
+                        <value>upperalpha</value>
+                        <value>loweralpha</value>
+                        <value>upperroman</value>
+                        <value>lowerroman</value>
+                    </choice>
+                </attribute>
+            </optional>
+            <optional>
+                <attribute name="continuation">
+                    <choice>
+                        <value>continues</value>
+                        <value>restarts</value>
+                    </choice>
+                </attribute>
+            </optional>
+            <optional>
+                <attribute name="spacing">
+                    <choice>
+                        <value>compact</value>
+                        <value>normal</value>
+                    </choice>
+                </attribute>
+            </optional>
+            <optional>
+                <attribute name="startingnumber" type="integer"/>
+            </optional>
+            <optional>
+                <attribute name="role"/>
+            </optional>
+            <optional>
+                <ref name="Info"/>
+            </optional>
+            <optional>
+                <ref name="Section-title"/>
+            </optional>
+            <oneOrMore>
+                <ref name="Listitem"/>
+            </oneOrMore>
+        </element>
+    </define>
+
+    <define name="Listitem">
+        <element name="db:listitem">
+            <ref name="common-attributes"/>
+            <optional>
+                <attribute name="override"/>
+            </optional>
+            <zeroOrMore>
+                <choice>
+                    <ref name="Para"/>
+                    <ref name="Simplesect"/>
+                    <ref name="Itemizedlist"/>
+                    <ref name="Orderedlist"/>
+                    <ref name="Xi-include"/>
+                </choice>
+            </zeroOrMore>
+        </element>
+    </define>
+
+    <!-- ==================== XINCLUDE ==================== -->
+
+    <define name="Xi-include">
+        <element name="xi:include">
+            <attribute name="href" type="anyURI"/>
+            <optional>
+                <attribute name="parse">
+                    <choice>
+                        <value>xml</value>
+                        <value>text</value>
+                    </choice>
+                </attribute>
+            </optional>
+            <optional>
+                <attribute name="xpointer"/>
+            </optional>
+            <optional>
+                <attribute name="encoding"/>
+            </optional>
+            <optional>
+                <attribute name="accept"/>
+            </optional>
+            <optional>
+                <attribute name="accept-language"/>
+            </optional>
+            <optional>
+                <element name="xi:fallback">
+                    <ref name="Any-element"/>
+                </element>
+            </optional>
+        </element>
+    </define>
+
+    <define name="Any-element">
+        <zeroOrMore>
+            <choice>
+                <element>
+                    <anyName/>
+                    <zeroOrMore>
+                        <choice>
+                            <text/>
+                            <ref name="Any-element"/>
+                        </choice>
+                    </zeroOrMore>
+                </element>
+                <text/>
+            </choice>
+        </zeroOrMore>
+    </define>
+
+    <!-- ==================== METADATA ==================== -->
+
+    <define name="Info">
+        <element name="db:info">
+            <ref name="common-attributes"/>
+            <zeroOrMore>
+                <ref name="Author"/>
+            </zeroOrMore>
+        </element>
+    </define>
+
+    <define name="Authorgroup">
+        <element name="db:authorgroup">
+            <ref name="common-attributes"/>
+            <zeroOrMore>
+                <ref name="Author"/>
+            </zeroOrMore>
+        </element>
+    </define>
+
+    <define name="Author">
+        <element name="db:author">
+            <ref name="common-attributes"/>
+            <optional>
+                <ref name="Personname"/>
+            </optional>
+            <zeroOrMore>
+                <ref name="Affiliation"/>
+            </zeroOrMore>
+            <zeroOrMore>
+                <ref name="Email"/>
+            </zeroOrMore>
+        </element>
+    </define>
+
+    <define name="Personname">
+        <element name="db:personname">
+            <ref name="common-attributes"/>
+            <zeroOrMore>
+                <ref name="Honorific"/>
+            </zeroOrMore>
+            <zeroOrMore>
+                <ref name="Firstname"/>
+            </zeroOrMore>
+            <zeroOrMore>
+                <ref name="Surname"/>
+            </zeroOrMore>
+        </element>
+    </define>
+
+    <define name="Affiliation">
+        <element name="db:affiliation">
+            <ref name="common-attributes"/>
+            <zeroOrMore>
+                <ref name="Orgname"/>
+            </zeroOrMore>
+            <zeroOrMore>
+                <ref name="Address"/>
+            </zeroOrMore>
+        </element>
+    </define>
+
+    <!-- ==================== LEGAL ==================== -->
+
+    <define name="Copyright">
+        <element name="db:copyright">
+            <ref name="common-attributes"/>
+            <oneOrMore>
+                <ref name="Year"/>
+            </oneOrMore>
+            <zeroOrMore>
+                <ref name="Holder"/>
+            </zeroOrMore>
+        </element>
+    </define>
+
+    <define name="Year">
+        <element name="db:year">
+            <text/>
+        </element>
+    </define>
+
+    <define name="Holder">
+        <element name="db:holder">
+            <text/>
+        </element>
+    </define>
+
+    <define name="Edition">
+        <element name="db:edition">
+            <text/>
+        </element>
+    </define>
+
+    <define name="Pubdate">
+        <element name="db:pubdate">
+            <text/>
+        </element>
+    </define>
+
+    <define name="Publisher">
+        <element name="db:publisher">
+            <ref name="common-attributes"/>
+            <oneOrMore>
+                <ref name="Publishername"/>
+            </oneOrMore>
+            <optional>
+                <ref name="Address"/>
+            </optional>
+        </element>
+    </define>
+
+    <define name="Publishername">
+        <element name="db:publishername">
+            <text/>
+        </element>
+    </define>
+
+    <define name="Address">
+        <element name="db:address">
+            <ref name="common-attributes"/>
+            <zeroOrMore>
+                <ref name="Street"/>
+            </zeroOrMore>
+            <zeroOrMore>
+                <ref name="City"/>
+            </zeroOrMore>
+            <zeroOrMore>
+                <ref name="Country"/>
+            </zeroOrMore>
+            <zeroOrMore>
+                <ref name="Email"/>
+            </zeroOrMore>
+        </element>
+    </define>
+
+    <define name="Street">
+        <element name="db:street">
+            <text/>
+        </element>
+    </define>
+
+    <define name="City">
+        <element name="db:city">
+            <text/>
+        </element>
+    </define>
+
+    <define name="Country">
+        <element name="db:country">
+            <text/>
+        </element>
+    </define>
+
+    <!-- ==================== STRUCTURAL PLACEHOLDERS ==================== -->
+    <!-- These are simplified definitions for compilation -->
+
+    <define name="Part">
+        <element name="db:part">
+            <ref name="common-attributes"/>
+            <ref name="Section-title"/>
+            <zeroOrMore>
+                <ref name="Chapter"/>
+            </zeroOrMore>
+        </element>
+    </define>
+
+    <define name="Reference">
+        <element name="db:reference">
+            <ref name="common-attributes"/>
+            <ref name="Section-title"/>
+            <zeroOrMore>
+                <ref name="Refentry"/>
+            </zeroOrMore>
+        </element>
+    </define>
+
+    <define name="Refentry">
+        <element name="db:refentry">
+            <ref name="common-attributes"/>
+            <ref name="Refmeta"/>
+            <ref name="Refentrytitle"/>
+            <ref name="Refnamediv"/>
+            <zeroOrMore>
+                <ref name="Refsect"/>
+            </zeroOrMore>
+        </element>
+    </define>
+
+    <define name="Refmeta">
+        <element name="db:refmeta">
+            <ref name="common-attributes"/>
+            <optional>
+                <ref name="Manvolnum"/>
+            </optional>
+            <ref name="Refentrytitle"/>
+        </element>
+    </define>
+
+    <define name="Refentrytitle">
+        <element name="db:refentrytitle">
+            <text/>
+        </element>
+    </define>
+
+    <define name="Manvolnum">
+        <element name="db:manvolnum">
+            <text/>
+        </element>
+    </define>
+
+    <define name="Refnamediv">
+        <element name="db:refnamediv">
+            <ref name="common-attributes"/>
+            <ref name="Refname"/>
+            <optional>
+                <ref name="Refpurpose"/>
+            </optional>
+        </element>
+    </define>
+
+    <define name="Refname">
+        <element name="db:refname">
+            <text/>
+        </element>
+    </define>
+
+    <define name="Refpurpose">
+        <element name="db:refpurpose">
+            <text/>
+        </element>
+    </define>
+
+    <define name="Refsect">
+        <element name="db:refsect">
+            <ref name="common-attributes"/>
+            <ref name="Section-title"/>
+            <zeroOrMore>
+                <ref name="Para"/>
+            </zeroOrMore>
+        </element>
+    </define>
+
+    <!-- Additional simple elements -->
+    <define name="Honorific">
+        <element name="db:honorific">
+            <text/>
+        </element>
+    </define>
+
+    <define name="Firstname">
+        <element name="db:firstname">
+            <text/>
+        </element>
+    </define>
+
+    <define name="Surname">
+        <element name="db:surname">
+            <text/>
+        </element>
+    </define>
+
+    <define name="Orgname">
+        <element name="db:orgname">
+            <text/>
+        </element>
+    </define>
+
+</grammar>

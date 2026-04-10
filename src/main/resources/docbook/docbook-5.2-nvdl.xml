@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    DocBook 5.2 NVDL Schema (Namespace-based Validation Dispatching Language)
+    Layer 7: NVDL Validation (ISO Standard 19757-4)
+
+    NVDL validates different parts of a document using different schemas
+    based on namespace. This is useful for validating DocBook documents
+    that contain multiple vocabularies (XInclude, XHTML, etc.).
+
+    ISO NVDL: https://www.iso.org/standard/43085.html
+    DocBook 5.2: https://docbook.org/specs/docbook-5.2-spec.html
+-->
+<nvdl xmlns="http://purl.oclc.org/dsdl/nvdl"
+       xmlns:db="http://docbook.org/ns/docbook"
+       xmlns:xi="http://www.w3.org/2001/XInclude"
+       xmlns:xlink="http://www.w3.org/1999/xlink"
+       xmlns:html="http://www.w3.org/1999/xhtml"
+       startMode="docbook-mode">
+
+    <!-- ==================== MODES ==================== -->
+
+    <!-- Main DocBook mode -->
+    <mode name="docbook-mode">
+        <!-- Validate DocBook 5.2 elements -->
+        <namespace ns="http://docbook.org/ns/docbook">
+            <validate schema="src/main/resources/relaxng/docbook-5.2-constraint.rng">
+                <modeRules>
+                    <include path="relaxng-docbook-mode"/>
+                </modeRules>
+            </validate>
+        </namespace>
+
+        <!-- Validate XInclude -->
+        <namespace ns="http://www.w3.org/2001/XInclude">
+            <validate schema="src/main/resources/relaxng/xinclude.rng">
+                <modeRules>
+                    <include path="xinclude-mode"/>
+                </modeRules>
+            </validate>
+        </namespace>
+
+        <!-- Validate XLink -->
+        <namespace ns="http://www.w3.org/1999/xlink">
+            <validate schema="src/main/resources/xlink/xlink.xsd">
+                <modeRules>
+                    <include path="xlink-mode"/>
+                </modeRules>
+            </validate>
+        </namespace>
+
+        <!-- Validate XHTML (embedded) -->
+        <namespace ns="http://www.w3.org/1999/xhtml">
+            <validate schema="src/main/resources/xhtml/xhtml.rng">
+                <modeRules>
+                    <include path="xhtml-mode"/>
+                </modeRules>
+            </validate>
+        </namespace>
+
+        <!-- Default validation for other namespaces -->
+        <anyNamespace>
+            <validate>
+                <modeRules>
+                    <include path="any-mode"/>
+                </modeRules>
+            </validate>
+        </anyNamespace>
+    </mode>
+
+    <!-- ==================== RELAX NG DOCBOOK MODE ==================== -->
+
+    <mode name="relaxng-docbook-mode">
+        <!-- Section validation -->
+        <validate schema="src/main/resources/relaxng/docbook-section.rng"
+                   useForSubtree="true">
+            <context path="db:section"/>
+        </validate>
+
+        <!-- Chapter validation -->
+        <validate schema="src/main/resources/relaxng/docbook-chapter.rng"
+                   useForSubtree="true">
+            <context path="db:chapter"/>
+        </validate>
+
+        <!-- Book validation -->
+        <validate schema="src/main/resources/relaxng/docbook-book.rng"
+                   useForSubtree="true">
+            <context path="db:book"/>
+        </validate>
+    </mode>
+
+    <!-- ==================== XINCLUDE MODE ==================== -->
+
+    <mode name="xinclude-mode">
+        <!-- XInclude validation -->
+        <validate schema="src/main/resources/relaxng/xinclude.rng">
+            <context path="xi:include"/>
+        </validate>
+        <validate schema="src/main/resources/relaxng/xinclude.rng">
+            <context path="xi:fallback"/>
+        </validate>
+    </mode>
+
+    <!-- ==================== XLINK MODE ==================== -->
+
+    <mode name="xlink-mode">
+        <!-- XLink attributes validation -->
+        <validate schema="src/main/resources/xlink/xlink.xsd">
+            <context path="@xlink:*"/>
+        </validate>
+    </mode>
+
+    <!-- ==================== XHTML MODE ==================== -->
+
+    <mode name="xhtml-mode">
+        <!-- XHTML validation -->
+        <validate schema="src/main/resources/xhtml/xhtml.rng">
+            <context path="html:*"/>
+        </validate>
+    </mode>
+
+    <!-- ==================== ANY MODE ==================== -->
+
+    <mode name="any-mode">
+        <!-- Default: allow any elements with no validation -->
+        <allow>
+            <anyNamespace>
+                <anyElement/>
+            </anyNamespace>
+        </allow>
+    </mode>
+
+    <!-- ==================== ATTACH MODE ==================== -->
+    <!-- Defines how to handle sections by section level -->
+
+    <attachMode mode="docbook-mode">
+        <context path="db:section[@level]">
+            <validate schema="src/main/resources/relaxng/docbook-section-level.rng"/>
+        </context>
+    </attachMode>
+
+    <!-- ==================== VALIDATION RULES ==================== -->
+
+    <!-- Custom validation rules for mixed content -->
+    <validate schema="src/main/resources/schematron/docbook-5.2-rules.sch"
+              useForSubtree="true">
+        <validate schema="src/main/resources/relaxng/docbook-5.2-constraint.rng"/>
+    </validate>
+
+</nvdl>

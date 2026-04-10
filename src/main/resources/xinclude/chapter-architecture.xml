@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Chapter: Validation Architecture
+    XInclude Fragment for DocBook 5.2 Validation Guide
+-->
+<arch xmlns="http://docbook.org/ns/docbook"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      version="5.2"
+      xml:id="architecture"
+      status="draft">
+
+    <title>Validation Architecture</title>
+
+    <para>This chapter describes the seven-layer validation architecture
+    implemented in this project. Each layer serves a specific purpose
+    and builds upon the previous layers.</para>
+
+    <section xml:id="arch-layer0" version="5.2">
+        <title>Layer 0: Maven POM</title>
+        <para>The Maven POM (Project Object Model) is the foundation of our
+        validation architecture. It defines:</para>
+        <itemizedlist mark="disc">
+            <listitem>
+                <para>Project metadata and dependencies</para>
+            </listitem>
+            <listitem>
+                <para>Build plugins including xml-maven-plugin</para>
+            </listitem>
+            <listitem>
+                <para>Validation profiles for each layer</para>
+            </listitem>
+            <listitem>
+                <para>Resource paths for schemas and catalogs</para>
+            </listitem>
+        </itemizedlist>
+        <para>The pom.xml is always validated first, ensuring the foundation
+        is sound before any other validation proceeds.</para>
+        <example xml:id="arch-pom-example">
+            <title>Maven POM Validation Configuration</title>
+            <programlisting language="xml"><![CDATA[
+<plugin>
+    <groupId>org.codehaus.mojo</groupId>
+    <artifactId>xml-maven-plugin</artifactId>
+    <version>1.10.0</version>
+    <executions>
+        <execution>
+            <id>validate-docbook</id>
+            <phase>validate</phase>
+            <goals>
+                <goal>validate</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+            ]]></programlisting>
+        </example>
+    </section>
+
+    <section xml:id="arch-layer1" version="5.2">
+        <title>Layer 1: DTD Validation</title>
+        <para>Document Type Definition (DTD) validation provides legacy
+        compatibility and basic structural validation. While older than
+        other schema languages, DTD validation remains important for:</para>
+        <itemizedlist mark="bullet">
+            <listitem>
+                <para>Backward compatibility with existing DocBook 4.x documents</para>
+            </listitem>
+            <listitem>
+                <para>Entity definition and resolution</para>
+            </listitem>
+            <listitem>
+                <para>ID/IDREF functionality for cross-referencing</para>
+            </listitem>
+        </itemizedlist>
+    </section>
+
+    <section xml:id="arch-layer2" version="5.2">
+        <title>Layer 2: W3C XSD Validation</title>
+        <para>XML Schema (XSD) is the W3C standard for schema validation.
+        It provides:</para>
+        <itemizedlist mark="bullet">
+            <listitem>
+                <para>Strong typing for content</para>
+            </listitem>
+            <listitem>
+                <para>Attribute and element constraints</para>
+            </listitem>
+            <listitem>
+                <para>Namespace-aware validation</para>
+            </listitem>
+        </itemizedlist>
+    </section>
+
+    <section xml:id="arch-layer3" version="5.2">
+        <title>Layer 3: RELAX NG Validation</title>
+        <para>RELAX NG (Regular Language Description for XML New Generation)
+        is an ISO standard (19757-2) that provides expressive pattern-based
+        validation. Key features include:</para>
+        <itemizedlist mark="bullet">
+            <listitem>
+                <para>Both compact and XML syntax</para>
+            </listitem>
+            <listitem>
+                <para>Powerful pattern matching with named patterns</para>
+            </listitem>
+            <listitem>
+                <para>Interleaving and choice operators</para>
+            </listitem>
+            <listitem>
+                <para>External reference and inclusion</para>
+            </listitem>
+        </itemizedlist>
+        <para>Our constraint schemas add project-specific validation rules
+        on top of the base DocBook 5.2 schema.</para>
+    </section>
+
+    <section xml:id="arch-layer4" version="5.2">
+        <title>Layer 4: Schematron Validation</title>
+        <para>Schematron is an ISO standard (19757-3) for rule-based validation.
+        Unlike other schema languages that describe structure, Schematron
+        describes rules that content must satisfy. This makes it ideal for:</para>
+        <itemizedlist mark="bullet">
+            <listitem>
+                <para>Business rules validation</para>
+            </listitem>
+            <listitem>
+                <para>Cross-element constraints</para>
+            </listitem>
+            <listitem>
+                <para>Conditional requirements</para>
+            </listitem>
+            <listitem>
+                <para>Accessibility guidelines</para>
+            </listitem>
+        </itemizedlist>
+        <example xml:id="arch-schematron-example">
+            <title>Schematron Rule Example</title>
+            <programlisting language="xml"><![CDATA[
+<pattern id="chapter-title-required">
+    <title>Chapter must have a title</title>
+    <rule context="db:chapter">
+        <assert test="db:title" severity="error">
+            Chapter must have a title element
+        </assert>
+    </rule>
+</pattern>
+            ]]></programlisting>
+        </example>
+    </section>
+
+    <section xml:id="arch-layer5" version="5.2">
+        <title>Layer 5: Exclusive C14N</title>
+        <para>Exclusive XML Canonicalization (C14N) is essential for digital
+        signatures and content comparison. It transforms XML documents into
+        a canonical form that eliminates variation caused by:</para>
+        <itemizedlist mark="bullet">
+            <listitem>
+                <para>Whitespace formatting differences</para>
+            </listitem>
+            <listitem>
+                <para>Attribute ordering</para>
+            </listitem>
+            <listitem>
+                <para>Namespace prefix variations</para>
+            </listitem>
+            <listitem>
+                <para>XML declaration presence</para>
+            </listitem>
+        </itemizedlist>
+        <para>Validating canonical form ensures documents can be reliably
+        compared and digitally signed.</para>
+    </section>
+
+    <section xml:id="arch-layer6" version="5.2">
+        <title>Layer 6: XML Catalogs</title>
+        <para>XML Catalogs (OASIS standard) provide entity resolution and
+        system ID mapping. They enable:</para>
+        <itemizedlist mark="bullet">
+            <listitem>
+                <para>Offline validation without internet access</para>
+            </listitem>
+            <listitem>
+                <para>Local schema caching</para>
+            </listitem>
+            <listitem>
+                <para>URI rewriting for different environments</para>
+            </listitem>
+            <listitem>
+                <para>Public/System ID mapping</para>
+            </listitem>
+        </itemizedlist>
+    </section>
+
+    <section xml:id="arch-layer7" version="5.2">
+        <title>Layer 7: NVDL Validation</title>
+        <para>Namespace-based Validation Dispatching Language (NVDL) is an
+        ISO standard (19757-4) that validates different parts of a
+        document using different schemas based on namespace. This enables:</para>
+        <itemizedlist mark="bullet">
+            <listitem>
+                <para>Mixed-namespace document validation</para>
+            </listitem>
+            <listitem>
+                <para>Modular validation rules</para>
+            </listitem>
+            <listitem>
+                <para>XInclude fragment validation</para>
+            </listitem>
+            <listitem>
+                <para>Context-sensitive validation</para>
+            </listitem>
+        </itemizedlist>
+    </section>
+
+    <section xml:id="arch-integration" version="5.2">
+        <title>Integration with CI/CD</title>
+        <para>The validation architecture integrates with GitHub Actions
+        for automated validation on every push and pull request. The CI
+        pipeline:</para>
+        <orderedlist numeration="arabic">
+            <listitem>
+                <para>Runs Maven validate phase</para>
+            </listitem>
+            <listitem>
+                <para>Executes all validation layers</para>
+            </listitem>
+            <listitem>
+                <para>Reports results with detailed error messages</para>
+            </listitem>
+            <listitem>
+                <para>Blocks merges on validation failures</para>
+            </listitem>
+        </orderedlist>
+    </section>
+
+</arch>

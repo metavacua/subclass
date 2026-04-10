@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Layer 0: Foundation - POM must always be valid first -->
+    <groupId>com.subclass</groupId>
+    <artifactId>docbook-validation</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <!-- Project Metadata -->
+    <name>DocBook 5.2 Validation Pipeline</name>
+    <description>
+        Comprehensive DocBook 5.2 + XInclude validation architecture with tiered validation:
+        DTD, XSD, RELAX NG, Schematron, Exclusive C14N, XML Catalogs, and NVDL.
+        This is the foundational Layer 0 for all subsequent validation layers.
+    </description>
+    <url>https://github.com/subclass/docbook-validation</url>
+
+    <!-- Properties -->
+    <properties>
+        <!-- DocBook Version -->
+        <docbook.version>5.2</docbook.version>
+
+        <!-- Maven -->
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- XML Validation -->
+        <xml.plugin.version>1.10.0</xml.plugin.version>
+        <jing.version>20230628</jing.version>
+        <saxon.he.version>12.4</saxon.he.version>
+        <xmlresolver.version>1.5.1</xmlresolver.version>
+
+        <!-- Resource Paths -->
+        <catalog.path>src/main/resources/catalog.xml</catalog.path>
+        <docbook.schema.path>src/main/resources/docbook</docbook.schema.path>
+        <relaxng.schema.path>src/main/resources/relaxng</relaxng.schema.path>
+        <schematron.schema.path>src/main/resources/schematron</schematron.schema.path>
+        <xinclude.path>src/main/resources/xinclude</xinclude.path>
+    </properties>
+
+    <!-- Dependency Management -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- XML Resolver for Catalog Resolution -->
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>xml resolver</artifactId>
+                <version>${xmlresolver.version}</version>
+            </dependency>
+
+            <!-- JING for RELAX NG Validation -->
+            <dependency>
+                <groupId>com.thaiopensource</groupId>
+                <artifactId>jing</artifactId>
+                <version>${jing.version}</version>
+            </dependency>
+
+            <!-- Saxon HE for XSLT/Schematron -->
+            <dependency>
+                <groupId>net.java.saxon</groupId>
+                <artifactId>Saxon-HE</artifactId>
+                <version>${saxon.he.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <!-- Dependencies -->
+    <dependencies>
+        <!-- XML Resolver -->
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>xmlresolver</artifactId>
+        </dependency>
+
+        <!-- JING -->
+        <dependency>
+            <groupId>com.thaiopensource</groupId>
+            <artifactId>jing</artifactId>
+        </dependency>
+
+        <!-- Saxon HE -->
+        <dependency>
+            <groupId>net.java.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+        </dependency>
+
+        <!-- XML Commons API -->
+        <dependency>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
+            <version>1.4.01</version>
+        </dependency>
+    </dependencies>
+
+    <!-- Build -->
+    <build>
+        <resources>
+            <!-- Main resources -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                    <include>**/*.xsd</include>
+                    <include>**/*.rnc</include>
+                    <include>**/*.rng</include>
+                    <include>**/*.sch</include>
+                    <include>**/*.xsl</include>
+                </includes>
+            </resource>
+        </resources>
+
+        <plugins>
+            <!-- XML Maven Plugin: Binds validation to Maven lifecycle -->
+            <!-- Layer 0: Well-formedness and basic validation -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>xml-maven-plugin</artifactId>
+                <version>${xml.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>validate-docbook</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>validate</goal>
+                        </goals>
+                        <configuration>
+                            <validationSets>
+                                <!-- Layer 1: Well-formedness -->
+                                <validationSet>
+                                    <name>well-formedness</name>
+                                    <directory>${xinclude.path}</directory>
+                                    <includes>
+                                        <include>**/*.xml</include>
+                                    </includes>
+                                    <validatingSchema/>
+                                </validationSet>
+                            </validationSets>
+                            <catalog>${catalog.path}</catalog>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Maven Resources Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.1</version>
+            </plugin>
+
+            <!-- Maven Assembly Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.6.0</version>
+                <configuration>
+                    <descriptors>
+                        <descriptor>assembly/docbook-dist.xml</descriptor>
+                    </descriptors>
+                </configuration>
+            </plugin>
+
+            <!-- Exec Plugin for shell scripts -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.1</version>
+            </plugin>
+
+            <!-- ANTRL Plugin (if needed for complex parsing) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+            </plugin>
+        </plugins>
+    </build>
+
+    <!-- Profiles for Tiered Validation -->
+    <profiles>
+        <!-- Profile: Layer 1 - DTD Validation -->
+        <profile>
+            <id>validate-dtd</id>
+            <activation>
+                <property>
+                    <name>validation.layer</name>
+                    <value>dtd</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <configuration>
+                            <executable>${basedir}/src/main/scripts/validate-dtd.sh</executable>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- Profile: Layer 2 - XSD Validation -->
+        <profile>
+            <id>validate-xsd</id>
+            <activation>
+                <property>
+                    <name>validation.layer</name>
+                    <value>xsd</value>
+                </property>
+            </activation>
+        </profile>
+
+        <!-- Profile: Layer 3 - RELAX NG Validation -->
+        <profile>
+            <id>validate-relaxng</id>
+            <activation>
+                <property>
+                    <name>validation.layer</name>
+                    <value>relaxng</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <configuration>
+                            <executable>${basedir}/src/main/scripts/validate-relaxng.sh</executable>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- Profile: Layer 4 - Schematron Validation -->
+        <profile>
+            <id>validate-schematron</id>
+            <activation>
+                <property>
+                    <name>validation.layer</name>
+                    <value>schematron</value>
+                </property>
+            </activation>
+        </profile>
+
+        <!-- Profile: Layer 5 - Exclusive C14N Validation -->
+        <profile>
+            <id>validate-c14n</id>
+            <activation>
+                <property>
+                    <name>validation.layer</name>
+                    <value>c14n</value>
+                </property>
+            </activation>
+        </profile>
+
+        <!-- Profile: Layer 6 - XML Catalog Validation -->
+        <profile>
+            <id>validate-catalog</id>
+            <activation>
+                <property>
+                    <name>validation.layer</name>
+                    <value>catalog</value>
+                </property>
+            </activation>
+        </profile>
+
+        <!-- Profile: Layer 7 - NVDL Validation -->
+        <profile>
+            <id>validate-nvdl</id>
+            <activation>
+                <property>
+                    <name>validation.layer</name>
+                    <value>nvdl</value>
+                </property>
+            </activation>
+        </profile>
+
+        <!-- Profile: Full Tiered Validation -->
+        <profile>
+            <id>validate-all</id>
+            <activation>
+                <property>
+                    <name>validation.layer</name>
+                    <value>all</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <configuration>
+                            <executable>${basedir}/src/main/scripts/validate-all.sh</executable>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

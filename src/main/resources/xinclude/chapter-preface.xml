@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Chapter: Preface
+    XInclude Fragment for DocBook 5.2 Validation Guide
+-->
+<pref xmlns="http://docbook.org/ns/docbook"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      version="5.2"
+      xml:id="preface"
+      status="draft">
+
+    <title>Preface</title>
+
+    <para>This guide provides comprehensive coverage of DocBook 5.2 validation
+    using the tiered validation approach. It covers all seven validation layers
+    from basic well-formedness to advanced business rule validation.</para>
+
+    <section xml:id="preface-audience" version="5.2">
+        <title>Intended Audience</title>
+        <para>This guide is intended for:</para>
+        <itemizedlist>
+            <listitem>
+                <para>Technical writers using DocBook 5.2 for documentation</para>
+            </listitem>
+            <listitem>
+                <para>Developers building DocBook validation pipelines</para>
+            </listitem>
+            <listitem>
+                <para>Documentation architects designing validation strategies</para>
+            </listitem>
+            <listitem>
+                <para>Quality assurance teams implementing automated validation</para>
+            </listitem>
+        </itemizedlist>
+    </section>
+
+    <section xml:id="preface-structure" version="5.2">
+        <title>Document Structure</title>
+        <para>The guide is organized into the following chapters:</para>
+        <orderedlist numeration="arabic">
+            <listitem>
+                <para><link linkend="introduction">Introduction</link> - Overview of DocBook 5.2 and validation</para>
+            </listitem>
+            <listitem>
+                <para><link linkend="architecture">Validation Architecture</link> - The tiered validation approach</para>
+            </listitem>
+        </orderedlist>
+    </section>
+
+    <section xml:id="preface-conventions" version="5.2">
+        <title>Document Conventions</title>
+        <para>This guide uses the following typographic conventions:</para>
+        <variablelist>
+            <varlistentry>
+                <term><code>monospace</code></term>
+                <listitem>
+                    <para>Code snippets, file names, and command-line examples</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><emphasis>italic</emphasis></term>
+                <listitem>
+                    <para>New terms and emphasis</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><bold>bold</bold></term>
+                <listitem>
+                    <para>UI elements and important warnings</para>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </section>
+
+    <section xml:id="preface-acknowledgments" version="5.2">
+        <title>Acknowledgments</title>
+        <para>The authors would like to thank the OASIS DocBook Technical Committee
+        for their continued work on the DocBook standard, and the open-source
+        community for tools like JING, Saxon, and the xml-maven-plugin.</para>
+    </section>
+
+    <remark author="validation-team" status="draft">
+        Add acknowledgment section for specific contributors
+    </remark>
+
+</pref>

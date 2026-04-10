@@ -1,0 +1,183 @@
+name: DocBook 5.2 Validation CI
+
+on:
+  push:
+    branches: [ main, develop, 'feature/**', 'fix/**' ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+env:
+  JAVA_VERSION: '17'
+  MAVEN_VERSION: '3.9'
+
+jobs:
+  validate:
+    name: DocBook 5.2 Validation Pipeline
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin'
+          cache: 'maven'
+          
+      - name: Set up Maven
+        run: |
+          wget -q https://archive.apache.org/dist/maven/maven-3/3.9.9/binaries/apache-maven-3.9.9-bin.tar.gz
+          tar -xzf apache-maven-3.9.9-bin.tar.gz
+          echo "$GITHUB_WORKSPACE/apache-maven-3.9.9/bin" >> $GITHUB_PATH
+          
+      - name: Install XML tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libxml2-utils libxslt1.1
+            
+      - name: Display environment
+        run: |
+          echo "Java version:"
+          java -version
+          echo "Maven version:"
+          mvn --version
+          echo "xmllint version:"
+          xmllint --version 2>&1 | head -1
+
+      # Layer 0: Validate POM
+      - name: Layer 0 - Validate POM
+        run: |
+          echo "=== Layer 0: Maven POM Validation ==="
+          mvn validate
+          
+      # Layer 1: DTD Validation
+      - name: Layer 1 - DTD Validation
+        run: |
+          echo "=== Layer 1: DTD Validation ==="
+          chmod +x src/main/scripts/validate-dtd.sh
+          src/main/scripts/validate-dtd.sh --verbose
+          
+      # Layer 2: XSD Validation  
+      - name: Layer 2 - XSD Validation
+        run: |
+          echo "=== Layer 2: XSD Validation ==="
+          chmod +x src/main/scripts/validate-xsd.sh
+          src/main/scripts/validate-xsd.sh --verbose
+          
+      # Layer 3: RELAX NG Validation
+      - name: Layer 3 - RELAX NG Validation
+        run: |
+          echo "=== Layer 3: RELAX NG Validation ==="
+          chmod +x src/main/scripts/validate-relaxng.sh
+          src/main/scripts/validate-relaxng.sh --verbose
+          
+      # Layer 4: Schematron Validation
+      - name: Layer 4 - Schematron Validation
+        run: |
+          echo "=== Layer 4: Schematron Validation ==="
+          chmod +x src/main/scripts/validate-schematron.sh
+          src/main/scripts/validate-schematron.sh --verbose
+          
+      # Layer 5: Exclusive C14N Validation
+      - name: Layer 5 - C14N Validation
+        run: |
+          echo "=== Layer 5: Exclusive C14N Validation ==="
+          chmod +x src/main/scripts/validate-c14n.sh
+          src/main/scripts/validate-c14n.sh --verbose
+          
+      # Layer 6: XML Catalog Validation
+      - name: Layer 6 - XML Catalog Validation
+        run: |
+          echo "=== Layer 6: XML Catalog Validation ==="
+          chmod +x src/main/scripts/validate-catalog.sh
+          src/main/scripts/validate-catalog.sh --verbose --resolve
+          
+      # Layer 7: NVDL Validation
+      - name: Layer 7 - NVDL Validation
+        run: |
+          echo "=== Layer 7: NVDL Validation ==="
+          chmod +x src/main/scripts/validate-nvdl.sh
+          src/main/scripts/validate-nvdl.sh --verbose
+          
+      # Full Pipeline
+      - name: Full Validation Pipeline
+        run: |
+          echo "=== Full Tiered Validation ==="
+          chmod +x src/main/scripts/validate-all.sh
+          src/main/scripts/validate-all.sh --verbose
+          
+  build:
+    name: Maven Build
+    needs: validate
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin'
+          cache: 'maven'
+          
+      - name: Build with Maven
+        run: mvn clean compile
+        
+      - name: Run Maven tests
+        run: mvn test
+        
+  package:
+    name: Package Distribution
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin'
+          cache: 'maven'
+          
+      - name: Build assembly
+        run: mvn package -DskipTests
+        
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: docbook-validation-artifacts
+          path: target/*.zip
+          retention-days: 30
+          
+  report:
+    name: Validation Report
+    needs: [validate, build, package]
+    if: always()
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Generate validation report
+        run: |
+          echo "# DocBook 5.2 Validation Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Job Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Job | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Validate | ${{ needs.validate.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Build | ${{ needs.build.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Package | ${{ needs.package.result }} |" >> $GITHUB_STEP_SUMMARY
+          
+      - name: Summary
+        if: failure()
+        run: |
+          echo "## Validation Failed" >> $GITHUB_STEP_SUMMARY
+          echo "One or more validation layers failed. Please review the logs above."

@@ -1,0 +1,549 @@
+#  DocBook 5.2 RELAX NG Compact Syntax Schema
+#  Layer 3: RELAX NG Validation (ISO Standard 19757-2)
+#
+#  This is a constraint schema that extends the base DocBook 5.2
+#  schema with additional validation rules specific to this project.
+#
+#  RelaxNG ISO Standard: https://relaxng.org/
+#  DocBook 5.2: https://docbook.org/specs/docbook-5.2-spec.html
+
+# ==================== NAMESPACE ====================
+namespace db = "http://docbook.org/ns/docbook"
+namespace dbx = "http://docbook.org/ns/docbook/internal"
+namespace xi = "http://www.w3.org/2001/XInclude"
+namespace xlink = "http://www.w3.org/1999/xlink"
+namespace html = "http://www.w3.org/1999/xhtml"
+namespace rng = "http://relaxng.org/ns/structure/1.0"
+
+# ==================== INCLUDES ====================
+# Include base DocBook 5.2 patterns (referenced via catalog)
+
+# ==================== COMMON ATTRIBUTES ====================
+
+## Common attributes with XInclude support
+div {
+    ## Core attributes
+    common-attributes =
+        attribute xml:id { xsd:ID }?,
+        attribute version { text }?,
+        attribute xlink:href { xsd:anyURI }?,
+        attribute xlink:type { "simple" | "extended" | "title" | "arc" | "resource" | "locator" | "none" }?,
+        attribute xml:base { xsd:anyURI }?,
+        attribute xml:lang { xsd:language }?,
+        attribute xml:space { "default" | "preserve" }?
+
+    ## XInclude attributes
+    xinclude-attributes =
+        attribute xi:include { empty }?,
+        attribute xi:fallback { empty }?,
+        attribute xi:href { xsd:anyURI }?,
+        attribute xi:parse { "xml" | "text" }?,
+        attribute xi:xpointer { text }?
+
+    ## Title attributes
+    title-attributes =
+        attribute xml:title { text }?,
+        attribute keep-together.within-line { "always" | "auto" }?
+}
+
+# ==================== DOCUMENT STRUCTURE ====================
+
+## Book element with XInclude support
+div {
+    ## Book
+    Book =
+        element db:book {
+            common-attributes,
+            attribute version { "5.2" },
+            attribute status { "draft" | "review" | "final" }?,
+            Book-info,
+            (db:book* | db:chapter* | db:part* | db:reference*)
+        }
+
+    ## Book Info
+    Book-info =
+        (db:bookmeta?,
+         db:booktitle+,
+         db:booksubtitle*,
+         db:bookaggrettion*,
+         db:bookpartnum*,
+         db:abtract*,
+         db:authorgroup*,
+         db:author*)
+}
+
+# ==================== STRUCTURAL ELEMENTS ====================
+
+## Chapter element with XInclude support
+div {
+    ## Chapter with optional XInclude
+    Chapter =
+        element db:chapter {
+            common-attributes,
+            attribute version { "5.2" },
+            Chapter-title,
+            (db:info?,
+             db:chapter* | db:section* | db:simplesect* | db:para* | db:xi:include*)
+        }
+
+    Chapter-title =
+        element db:title {
+            title-attributes,
+            text | db:phrase | db:replaceable
+        }
+
+    ## Section
+    Section =
+        element db:section {
+            common-attributes,
+            attribute version { "5.2" },
+            attribute label { text }?,
+            attribute xreflabel { text }?,
+            Section-title,
+            (db:section* | db:simplesect* | db:para* | db:xi:include*)
+        }
+
+    Section-title =
+        element db:title {
+            title-attributes,
+            text | db:phrase | db:replaceable
+        }
+
+    ## Simple Section
+    Simplesect =
+        element db:simplesect {
+            common-attributes,
+            attribute label { text }?,
+            (db:title?,
+             db:para* | db:itemizedlist* | db:orderedlist* | db:xi:include*)
+        }
+}
+
+# ==================== BLOCK ELEMENTS ====================
+
+## Paragraph with XInclude support
+div {
+    Para =
+        element db:para {
+            common-attributes,
+            attribute role { text }?,
+            attribute revisionflag { "changed" | "added" | "deleted" | "none" }?,
+            (text
+             | db:phrase
+             | db:replaceable
+             | db:link
+             | db:xref
+             | db:ulink
+             | db:email
+             | db:filename
+             | db:command
+             | db:option
+             | db:parameter
+             | db:code
+             | db:literal
+             | db:constant
+             | db:function
+             | db:term
+             | db:abbrev
+             | db:acronym
+             | db:quote
+             | db:subscript
+             | db:superscript
+             | db:emphasis
+             | db:bold
+             | db:italic
+             | db:monospace
+             | db:firstterm
+             | db:glossterm
+             | db:xi:include
+             | db:inlineqa)*
+        }
+}
+
+# ==================== INLINE ELEMENTS ====================
+
+## Common inline elements
+div {
+    Inline-basic =
+        text
+        | element db:phrase { common-attributes, text }
+        | element db:replaceable { common-attributes, text }
+        | element db:quote { common-attributes, text }
+
+    Inline-formatting =
+        | element db:emphasis { common-attributes, attribute role { text }?, Inline-basic* }
+        | element db:bold { common-attributes, Inline-basic* }
+        | element db:italic { common-attributes, Inline-basic* }
+        | element db:monospace { common-attributes, Inline-basic* }
+
+    Inline-link =
+        | element db:link { common-attributes, attribute xlink:href { xsd:anyURI }, Inline-basic* }
+        | element db:xref { common-attributes, attribute linkend { xsd:IDREF }, empty }
+        | element db:ulink { common-attributes, attribute url { xsd:anyURI }, Inline-basic* }
+        | element db:email { common-attributes, Inline-basic* }
+
+    Inline-code =
+        | element db:code { common-attributes, attribute language { text }?, Inline-basic* }
+        | element db:literal { common-attributes, Inline-basic* }
+        | element db:constant { common-attributes, Inline-basic* }
+        | element db:function { common-attributes, Inline-basic* }
+        | element db:parameter { common-attributes, Inline-basic* }
+        | element db:command { common-attributes, Inline-basic* }
+        | element db:option { common-attributes, Inline-basic* }
+        | element db:filename { common-attributes, attribute class { "directory" | "regular" | "device" }?, Inline-basic* }
+
+    Inline-semantic =
+        | element db:term { common-attributes, Inline-basic* }
+        | element db:firstterm { common-attributes, attribute glosssee { xsd:IDREF }?, Inline-basic* }
+        | element db:glossterm { common-attributes, Inline-basic* }
+        | element db:abbrev { common-attributes, Inline-basic* }
+        | element db:acronym { common-attributes, attribute pronunciation { text }?, Inline-basic* }
+        | element db:subscript { common-attributes, Inline-basic* }
+        | element db:superscript { common-attributes, Inline-basic* }
+}
+
+# ==================== LIST ELEMENTS ====================
+
+## List elements with XInclude support
+div {
+    ## Itemized List
+    Itemizedlist =
+        element db:itemizedlist {
+            common-attributes,
+            attribute mark { "bullet" | "circle" | "disc" | "square" | "none" }?,
+            attribute spacing { "compact" | "normal" }?,
+            attribute role { text }?,
+            (db:info?,
+             db:title?,
+             db:listitem+)
+        }
+
+    ## Ordered List
+    Orderedlist =
+        element db:orderedlist {
+            common-attributes,
+            attribute numeration { "arabic" | "upperalpha" | "loweralpha" | "upperroman" | "lowerroman" }?,
+            attribute continuation { "continues" | "restarts" }?,
+            attribute spacing { "compact" | "normal" }?,
+            attribute startingnumber { xsd:integer }?,
+            attribute role { text }?,
+            (db:info?,
+             db:title?,
+             db:listitem+)
+        }
+
+    ## List Item
+    Listitem =
+        element db:listitem {
+            common-attributes,
+            attribute override { text }?,
+            (db:para* | db:simplesect* | db:itemizedlist* | db:orderedlist* | db:xi:include*)
+        }
+}
+
+# ==================== XINCLUDE ELEMENTS ====================
+
+## XInclude elements
+div {
+    ## XInclude include element
+    Xi-include =
+        element xi:include {
+            attribute href { xsd:anyURI },
+            attribute parse { "xml" | "text" }?,
+            attribute xpointer { text }?,
+            attribute encoding { text }?,
+            attribute accept { text }?,
+            attribute accept-language { text }?,
+            attribute db:parse { "xml" | "text" }?,
+            element xi:fallback { any-element }?
+        }
+
+    ## XInclude fallback element (must be inside xi:include)
+    Xi-fallback =
+        element xi:fallback {
+            any-element
+        }
+
+    ## Any element for XInclude fallback content
+    any-element =
+        (element * { text | any-element } | text)*
+}
+
+# ==================== METADATA ELEMENTS ====================
+
+## Book/Chapter metadata
+div {
+    ## Book Meta
+    Bookmeta =
+        element db:bookmeta {
+            common-attributes,
+            (db:authorgroup*,
+             db:author*,
+             db:copyright*,
+             db:edition*,
+             db:isbn*,
+             db:pubdate*,
+             db:publisher*,
+             db:publishername*,
+             db:revhistory*,
+             db:abstract*)
+        }
+
+    ## Abstract
+    Abstract =
+        element db:abstract {
+            common-attributes,
+            attribute role { text }?,
+            (db:title?,
+             db:para*)
+        }
+}
+
+# ==================== LINKING ELEMENTS ====================
+
+## Cross-referencing elements
+div {
+    ## Link
+    Link =
+        element db:link {
+            common-attributes,
+            attribute xlink:href { xsd:anyURI }?,
+            attribute xlink:role { text }?,
+            attribute xlink:title { text }?,
+            attribute xlink:show { "new" | "replace" | "embed" | "other" | "none" }?,
+            attribute xlink:actuate { "onLoad" | "onRequest" | "other" | "none" }?,
+            attribute linkend { xsd:IDREF }?,
+            text*
+        }
+
+    ## Cross Reference
+    Xref =
+        element db:xref {
+            common-attributes,
+            attribute linkend { xsd:IDREF },
+            attribute endterm { xsd:IDREF }?,
+            attribute xrefstyle { text }?,
+            attribute xreflabel { text }?,
+            empty
+        }
+}
+
+# ==================== VALIDATION CONSTRAINTS ====================
+
+## Custom validation constraints for this project
+div {
+    ## Title is required for sections
+    constraint-section-title =
+        element db:section > element db:title { not { . = "" } }
+
+    ## Chapter must have title
+    constraint-chapter-title =
+        element db:chapter > element db:title { not { . = "" } }
+
+    ## ID uniqueness - handled by XML ID type
+    constraint-id-uniqueness =
+        externalRef "docbook/patterns/id uniqueness.rnc"
+
+    ## Para content must not be empty
+    constraint-para-not-empty =
+        element db:para { not { . = "" } }
+}
+
+# ==================== ANNOTATION ELEMENTS ====================
+
+## Annotation and remark elements
+div {
+    ## Remark (for review comments)
+    Remark =
+        element db:remark {
+            common-attributes,
+            attribute author { text }?,
+            attribute revisionflag { "changed" | "added" | "deleted" | "none" }?,
+            attribute status { "draft" | "final" }?,
+            text
+        }
+
+    ## Annotation
+    Annotation =
+        element db:annotation {
+            common-attributes,
+            attribute id { xsd:ID },
+            (db:para*)
+        }
+}
+
+# ==================== CALL OUT ELEMENTS ====================
+
+## Callout elements for code examples
+div {
+    ## Callout List
+    Calloutlist =
+        element db:calloutlist {
+            common-attributes,
+            (db:title?,
+             db:callout+)
+        }
+
+    ## Callout
+    Callout =
+        element db:callout {
+            common-attributes,
+            attribute arearefs { xsd:IDREFS },
+            attribute targetptr { xsd:IDREF }?,
+            (db:para*)
+        }
+}
+
+# ==================== PROGRAMMING ELEMENTS ====================
+
+## Program listing elements
+div {
+    ## Program Listing
+    Programlisting =
+        element db:programlisting {
+            common-attributes,
+            attribute language { text }?,
+            attribute linenumbering { "numbered" | "unnumbered" }?,
+            attribute startingline { xsd:positiveInteger }?,
+            attribute continuation { "continues" | "restarts" }?,
+            (text | db:emphasis | db:bold | db:italic | db:monospace | db:replaceable)*
+        }
+
+    ## Screen
+    Screen =
+        element db:screen {
+            common-attributes,
+            (text | db:emphasis | db:bold | db:italic | db:monospace | db:replaceable)*
+        }
+
+    ## Syntax Reference
+    Synopfragment =
+        element db:synopfragment {
+            common-attributes,
+            attribute refid { xsd:IDREF },
+            (db:synopfragmentref, db:para*)
+        }
+
+    Synopfragmentref =
+        element db:synopfragmentref {
+            common-attributes,
+            attribute linkend { xsd:IDREF },
+            empty
+        }
+}
+
+# ==================== ADMONITION ELEMENTS ====================
+
+## Admonition elements
+div {
+    ## Generic Admonition
+    Admonition =
+        element db:note { common-attributes, Admonition-content }
+        | element db:warning { common-attributes, Admonition-content }
+        | element db:caution { common-attributes, Admonition-content }
+        | element db:important { common-attributes, Admonition-content }
+        | element db:tip { common-attributes, Admonition-content }
+
+    Admonition-content =
+        (db:info?,
+         db:title?,
+         db:para* | db:itemizedlist* | db:orderedlist*)
+}
+
+# ==================== INFO ELEMENTS ====================
+
+## Information elements
+div {
+    ## Author
+    Author =
+        element db:author {
+            common-attributes,
+            (db:personname?,
+             db:affiliation*,
+             db:email*)
+        }
+
+    ## Person Name
+    Personname =
+        element db:personname {
+            common-attributes,
+            (db:honorific*,
+             db:firstname*,
+             db:surname*,
+             db:lineage*,
+             db:othername*,
+             db:generation*,
+             db:alias*)
+        }
+
+    ## Affiliation
+    Affiliation =
+        element db:affiliation {
+            common-attributes,
+            (db:orgname*,
+             db:orgdiv*,
+             db:address*)
+        }
+
+    ## Email
+    Email =
+        element db:email {
+            common-attributes,
+            text
+        }
+
+    ## Address
+    Address =
+        element db:address {
+            common-attributes,
+            (db:street*,
+             db:pob*,
+             db:postcode*,
+             db:city*,
+             db:state*,
+             db:country*,
+             db:phone*,
+             db:fax*,
+             db:email*,
+             db:uri*)
+        }
+}
+
+# ==================== LEGAL ELEMENTS ====================
+
+## Legal and bibliographic elements
+div {
+    ## Copyright
+    Copyright =
+        element db:copyright {
+            common-attributes,
+            (db:year+,
+             db:holder*)
+        }
+
+    ## Publisher
+    Publisher =
+        element db:publisher {
+            common-attributes,
+            (db:publishername+,
+             db:address*)
+        }
+
+    ## Revision History
+    Revhistory =
+        element db:revhistory {
+            common-attributes,
+            db:revision+
+        }
+
+    ## Revision
+    Revision =
+        element db:revision {
+            common-attributes,
+            (db:revnumber?,
+             db:date?,
+             db:authorinitials?,
+             db:revremark*,
+             db:revdescription?)
+        }
+}

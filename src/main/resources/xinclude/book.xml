@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    XInclude Sample Document
+    This is a main DocBook 5.2 book document that uses XInclude
+    to compose chapters from separate files.
+
+    XInclude 1.0: https://www.w3.org/TR/xinclude/
+    XInclude 1.1: https://www.w3.org/TR/xinclude-11/
+-->
+<book xmlns="http://docbook.org/ns/docbook"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:db="http://docbook.org/ns/docbook/internal"
+      version="5.2"
+      status="draft"
+      xml:id="docbook-validation-guide"
+      xml:lang="en">
+
+    <!-- Book Metadata -->
+    <info>
+        <db:book-id>docbook-validation-guide</db:book-id>
+        <author>
+            <personname>
+                <firstname>DocBook</firstname>
+                <surname>Validation Team</surname>
+            </personname>
+            <affiliation>
+                <orgname>Subclass Project</orgname>
+                <orgdiv>Documentation</orgdiv>
+            </affiliation>
+            <email>docbook@example.com</email>
+        </author>
+        <copyright>
+            <year>2024</year>
+            <holder>Subclass Project</holder>
+        </copyright>
+        <pubdate>2024-01-01</pubdate>
+        <edition>1.0</edition>
+        <isbn>978-3-123456-78-9</isbn>
+    </info>
+
+    <!-- Book Title -->
+    <title>DocBook 5.2 Validation Guide</title>
+    <subtitle>A Comprehensive Guide to DocBook 5.2, XInclude, and Tiered Validation</subtitle>
+
+    <!-- Preface Chapter -->
+    <xi:include href="chapter-preface.xml"
+                xpointer="element(pref)"
+                parse="xml">
+        <xi:fallback>
+            <chapter xml:id="preface" version="5.2">
+                <title>Preface</title>
+                <para>Preface content unavailable.</para>
+            </chapter>
+        </xi:fallback>
+    </xi:include>
+
+    <!-- Introduction Chapter -->
+    <xi:include href="chapter-intro.xml"
+                xpointer="element(intro)"
+                parse="xml">
+        <xi:fallback>
+            <chapter xml:id="introduction" version="5.2">
+                <title>Introduction</title>
+                <para>Introduction content unavailable.</para>
+            </chapter>
+        </xi:fallback>
+    </xi:include>
+
+    <!-- Architecture Chapter -->
+    <xi:include href="chapter-architecture.xml"
+                xpointer="element(arch)"
+                parse="xml">
+        <xi:fallback>
+            <chapter xml:id="architecture" version="5.2">
+                <title>Validation Architecture</title>
+                <para>Architecture content unavailable.</para>
+            </chapter>
+        </xi:fallback>
+    </xi:include>
+
+    <!-- References Section -->
+    <bibliography xml:id="references" version="5.2">
+        <title>References</title>
+        <biblioentry xml:id="ref-docbook52">
+            <abbrev>DocBook 5.2</abbrev>
+            <authorgroup>
+                <author>
+                    <personname>
+                        <surname>OASIS</surname>
+                    </personname>
+                </author>
+            </authorgroup>
+            <title>DocBook 5.2 Specification</title>
+            <publisher>
+                <publishername>OASIS</publishername>
+            </publisher>
+            <pubdate>2021</pubdate>
+            <para>https://docbook.org/specs/docbook-5.2-spec.html</para>
+        </biblioentry>
+        <biblioentry xml:id="ref-xinclude">
+            <abbrev>XInclude 1.1</abbrev>
+            <authorgroup>
+                <author>
+                    <personname>
+                        <surname>W3C</surname>
+                    </personname>
+                </author>
+            </authorgroup>
+            <title>XML Inclusions 1.1 (XInclude)</title>
+            <publisher>
+                <publishername>W3C</publishername>
+            </publisher>
+            <pubdate>2021</pubdate>
+            <para>https://www.w3.org/TR/xinclude-11/</para>
+        </biblioentry>
+        <biblioentry xml:id="ref-relaxng">
+            <abbrev>RELAX NG</abbrev>
+            <authorgroup>
+                <author>
+                    <personname>
+                        <surname>OASIS</surname>
+                    </personname>
+                </author>
+            </authorgroup>
+            <title>RELAX NG DTD Compatibility</title>
+            <publisher>
+                <publishername>OASIS</publishername>
+            </publisher>
+            <pubdate>2003</pubdate>
+            <para>https://relaxng.org/</para>
+        </biblioentry>
+        <biblioentry xml:id="ref-schematron">
+            <abbrev>Schematron</abbrev>
+            <authorgroup>
+                <author>
+                    <personname>
+                        <surname>ISO</surname>
+                    </personname>
+                </author>
+            </authorgroup>
+            <title>ISO/IEC 19757-3:2006</title>
+            <publisher>
+                <publishername>ISO</publishername>
+            </publisher>
+            <pubdate>2006</pubdate>
+            <para>https://schematron.com/</para>
+        </biblioentry>
+    </bibliography>
+
+</book>

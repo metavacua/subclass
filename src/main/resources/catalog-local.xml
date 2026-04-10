@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Local XML Catalog Additions
+    Extends the main catalog with local-specific overrides
+-->
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog"
+         prefer="public">
+
+    <!-- Additional local overrides can be added here -->
+
+</catalog>

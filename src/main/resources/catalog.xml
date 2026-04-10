@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    XML Catalog for DocBook 5.2 + XInclude Validation
+    Layer 6: Provides entity resolution and system ID mapping
+    for offline validation without requiring internet access.
+
+    Oasis XML Catalog Specification:
+    https://www.oasis-open.org/specs/tm9901.htm
+-->
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog"
+         prefer="public">
+
+    <!-- =========================================================================
+         PUBLIC IDENTIFIERS - DocBook 5.2 DTD
+         ========================================================================= -->
+
+    <!-- DocBook 5.2 modular DTD public identifiers -->
+    <public publicId="-//OASIS//DTD DocBook XML 5.2//EN"
+            uri="docbook/docbook-5.2-dtd.zip"/>
+
+    <public publicId="-//OASIS//DTD DocBook XML 5.2//EN"
+            uri="https://docbook.org/xml/5.2/dtd/docbook.dtd"/>
+
+    <!-- DocBook 5.2 module public identifiers -->
+    <public publicId="-//OASIS//DTD DocBook XML 5.2 DocBook Document Hierarchy Module//EN"
+            uri="docbook/dbhierx.mod"/>
+
+    <public publicId="-OASIS//DTD DocBook XML 5.2 Document Hierarchy Module//EN"
+            uri="docbook/dbhierx.mod"/>
+
+    <public publicId="-//OASIS//DTD DocBook XML 5.2 Bibliographic Module//EN"
+            uri="docbook/dbgenent.mod"/>
+
+    <public publicId="-//OASIS//DTD DocBook XML 5.2 Highlight Module//EN"
+            uri="docbook/dbhlmix.mod"/>
+
+    <!-- =========================================================================
+         SYSTEM IDENTIFIERS - Schema and DTD Locations
+         ========================================================================= -->
+
+    <!-- DocBook 5.2 XSD Schemas -->
+    <system systemId="https://docbook.org/xml/5.2/xsd/docbook.xsd"
+            uri="docbook/docbook-5.2-schemas.zip"/>
+
+    <system systemId="https://docbook.org/xml/5.2/xsd/dbnotnx.xsd"
+            uri="docbook/docbook-5.2-schemas.zip"/>
+
+    <system systemId="https://docbook.org/xml/5.2/xsd/xlink.xsd"
+            uri="docbook/xlink.xsd"/>
+
+    <!-- DocBook 5.2 RELAX NG Schemas -->
+    <system systemId="https://docbook.org/xml/5.2/rng/docbook.rng"
+            uri="docbook/docbook-5.2-rnc.rnc"/>
+
+    <system systemId="https://docbook.org/xml/5.2/rng/docbook.rng"
+            uri="docbook/docbook-5.2-schemas.zip"/>
+
+    <!-- DocBook 5.2 NVDL Schema -->
+    <system systemId="https://docbook.org/xml/5.2/nvdl/docbook.nvdl"
+            uri="docbook/docbook-5.2-nvdl.xml"/>
+
+    <!-- =========================================================================
+         URI MAPPINGS - Namespace and Schema References
+         ========================================================================= -->
+
+    <!-- DocBook 5.2 namespace -->
+    <uri name="http://docbook.org/ns/docbook"
+         uri="docbook/docbook-5.2-rnc.rnc"/>
+
+    <!-- XInclude namespace -->
+    <uri name="http://www.w3.org/2001/XInclude"
+         uri="xinclude/xinclude.xsd"/>
+
+    <!-- XLink namespace -->
+    <uri name="http://www.w3.org/1999/xlink"
+         uri="docbook/xlink.xsd"/>
+
+    <!-- XML namespace -->
+    <uri name="http://www.w3.org/XML/1998/namespace"
+         uri="docbook/xml-1998-namespaces.xml"/>
+
+    <!-- =========================================================================
+         REWRITE RULES - URL Normalization
+         ========================================================================= -->
+
+    <!-- DocBook.org rewrite rules -->
+    <rewriteURI uriStartString="https://docbook.org/xml/5.2/"
+                rewritePrefix="docbook/"/>
+
+    <!-- OASIS rewrite rules -->
+    <rewriteURI uriStartString="https://www.oasis-open.org/docbook/"
+                rewritePrefix="docbook/"/>
+
+    <!-- W3C XInclude -->
+    <rewriteURI uriStartString="https://www.w3.org/2001/XInclude"
+                rewritePrefix="xinclude/"/>
+
+    <!-- =========================================================================
+         DELEGATION RULES - Chain to Public Catalog
+         ========================================================================= -->
+
+    <!-- Delegate public identifiers not in this catalog -->
+    <public publicId="-//OASIS//DTD DocBook XML"
+            uri="https://docbook.org/xml/5.2/dtd/docbook.dtd"/>
+
+    <public publicId="-//OASIS//DTD DocBook XML"
+            uri="https://docbook.org/xml/5.2/dtd/docbook.dtd"/>
+
+    <!-- Delegate system identifiers not in this catalog -->
+    <systemSuffix systemIdSuffix="docbook.org/xml/5.2/"
+                  uri="docbook/"/>
+
+    <!-- =========================================================================
+         NEXT CATALOG - Fallback Catalog
+         ========================================================================= -->
+
+    <!-- Fallback to system catalog for additional mappings -->
+    <nextCatalog catalog="src/main/resources/catalog-local.xml"/>
+
+</catalog>
