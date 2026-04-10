@@ -24,8 +24,8 @@
 <!-- Pubdate -->
 <!ELEMENT pubdate (#PCDATA)>
 
-<!-- Section -->
-<!ELEMENT section (title, para | itemizedlist)+>
+<!-- Section - fixed grouping for mixed content model -->
+<!ELEMENT section (title, (para | itemizedlist)+)>
 <!ATTLIST section xml:id ID #IMPLIED>
 
 <!-- Paragraph -->
