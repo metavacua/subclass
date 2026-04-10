@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<para xmlns="http://docbook.org/ns/docbook"
+       xmlns:xi="http://www.w3.org/2001/XInclude"
+       xml:id="para-conclusion">
+  This concluding paragraph summarizes the key points discussed in the document.
+  It may include references to earlier sections using <xref linkend="para-intro"/> 
+  and <xref linkend="para-main"/>, providing a cohesive narrative flow.
+</para>

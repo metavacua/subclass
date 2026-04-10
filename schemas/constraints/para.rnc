@@ -1,0 +1,38 @@
+# Paragraph constraint schema - LLM-safe subset for paragraph-level validation
+# Only allows inline elements, no block elements (sections, chapters, etc.)
+
+namespace db = "http://docbook.org/ns/docbook"
+namespace xi = "http://www.w3.org/2001/XInclude"
+
+# Base inline content model for paragraphs
+db.para.content &= db._Space.char*
+db.para.content |= db._text
+db.para.content |= db.emphasis
+db.para.content |= db.strong
+db.para.content |= db.code
+db.para.content |= db.literal
+db.para.content |= db.quote
+db.para.content |= db.ulink
+db.para.content |= db.link
+db.para.content |= db.footnote
+db.para.content |= db.anchor
+db.para.content |= db.xref
+db.para.content |= db.abbrev
+db.para.content |= db.acronym
+db.para.content |= db.trademark
+db.para.content |= db.wordasword
+db.para.content |= db.firstterm
+db.para.content |= db.glosssee
+db.para.content |= db.glossseealso
+db.para.content |= db.subscript
+db.para.content |= db.superscript
+
+# Paragraph must have content
+db.para = element para {
+    attribute id { xsd:ID }?,
+    (db._text | db.emphasis | db.strong | db.code | db.literal | 
+     db.quote | db.ulink | db.link | db.footnote | db.anchor | 
+     db.xref | db.abbrev | db.acronym | db.trademark | db.wordasword |
+     db.firstterm | db.glosssee | db.glossseealso | db.subscript | 
+     db.superscript)+
+}
