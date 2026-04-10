@@ -160,8 +160,8 @@ while IFS= read -r file; do
             java -jar "$JING_JAR" "$SCHEMA_FILE" "$file" 2>&1 || true
         fi
     else
-        # Fallback: basic well-formedness check
-        if xmllint --noout --noent "$file" 2>/dev/null; then
+        # Fallback: basic well-formedness check (no entity expansion)
+        if xmllint --noout "$file" 2>/dev/null; then
             if [ "$VERBOSE" = true ]; then
                 echo -e "  ${GREEN}✓ Well-formed (JING not available for full validation)${NC}"
             fi

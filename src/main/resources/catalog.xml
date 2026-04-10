@@ -114,7 +114,8 @@
          NEXT CATALOG - Fallback Catalog
          ========================================================================= -->
 
-    <!-- Fallback to system catalog for additional mappings -->
-    <nextCatalog catalog="src/main/resources/catalog-local.xml"/>
+    <!-- Fallback to local catalog for additional mappings -->
+    <!-- Path is relative to the catalog file location -->
+    <nextCatalog catalog="catalog-local.xml"/>
 
 </catalog>

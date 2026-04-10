@@ -9,7 +9,6 @@ on:
 
 env:
   JAVA_VERSION: '17'
-  MAVEN_VERSION: '3.9'
 
 jobs:
   validate:
@@ -27,17 +26,11 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
           
-      - name: Set up Maven
-        run: |
-          wget -q https://archive.apache.org/dist/maven/maven-3/3.9.9/binaries/apache-maven-3.9.9-bin.tar.gz
-          tar -xzf apache-maven-3.9.9-bin.tar.gz
-          echo "$GITHUB_WORKSPACE/apache-maven-3.9.9/bin" >> $GITHUB_PATH
-          
       - name: Install XML tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y libxml2-utils libxslt1.1
-            
+          sudo apt-get install -y libxml2-utils
+          
       - name: Display environment
         run: |
           echo "Java version:"
@@ -147,7 +140,7 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
           
-      - name: Build assembly
+      - name: Build and package
         run: mvn package -DskipTests
         
       - name: Upload artifacts

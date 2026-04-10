@@ -115,14 +115,14 @@ while IFS= read -r file; do
     
     # Execute validation (currently using --noout for well-formedness only)
     # Full DTD validation would require the DocBook 5.2 DTD files
-    if xmllint --noout --noent "$file" 2>/dev/null; then
+    if xmllint --noout "$file" 2>/dev/null; then
         if [ "$VERBOSE" = true ]; then
             echo -e "  ${GREEN}✓ Valid${NC}"
         fi
     else
         FAILED=$((FAILED + 1))
         echo -e "\n${RED}Error: $BASENAME failed validation${NC}"
-        xmllint --noout --noent "$file" 2>&1 || true
+        xmllint --noout "$file" 2>&1 || true
     fi
 done <<< "$XML_FILES"
 

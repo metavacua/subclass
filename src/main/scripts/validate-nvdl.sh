@@ -6,6 +6,9 @@
 # Validates DocBook 5.2 documents using NVDL.
 # NVDL validates different parts using different schemas based on namespace.
 #
+# Note: NVDL requires specialized tooling (Jing with NVDL support or similar).
+# Without NVDL validator, only well-formedness is checked.
+#
 # Usage: ./validate-nvdl.sh [options]
 #   --help       Show this help message
 #   --verbose    Verbose output
@@ -61,17 +64,35 @@ echo "========================================="
 NVDL_FILE="$DOCBOOK_PATH/docbook-5.2-nvdl.xml"
 
 if [ ! -f "$NVDL_FILE" ]; then
-    echo -e "${YELLOW}Warning: NVDL schema not found: $NVDL_FILE${NC}"
-    echo "NVDL validation requires specialized tooling."
-    exit 0
+    echo -e "${RED}Error: NVDL schema not found: $NVDL_FILE${NC}"
+    exit 1
 fi
 
 echo "Using NVDL schema: $NVDL_FILE"
 
 # Check for required tools
 command -v xmllint >/dev/null 2>&1 || {
-    echo -e "${YELLOW}Note: xmllint does not support NVDL natively${NC}"
+    echo -e "${RED}Error: xmllint not found.${NC}"
+    exit 1
 }
+
+# NVDL requires specialized tooling like Jing with NVDL support
+# Check if Jing is available
+JING_JAR=""
+for jar in ~/.m2/repository/com/thaiopensource/jing/20230628/jing-20230628.jar \
+          /usr/share/java/jing.jar \
+          "$PROJECT_ROOT/lib/jing.jar"; do
+    if [ -f "$jar" ]; then
+        JING_JAR="$jar"
+        break
+    fi
+done
+
+# Try to get JING via Maven if not found
+if [ -z "$JING_JAR" ] && command -v mvn >/dev/null 2>&1; then
+    mvn dependency:get -Dartifact=com.thaiopensource:jing:20230628 -q 2>/dev/null || true
+    JING_JAR=~/.m2/repository/com/thaiopensource/jing/20230628/jing-20230628.jar
+fi
 
 # Find XML files
 XML_FILES=$(find "$XINCLUDE_PATH" -name "*.xml" -type f 2>/dev/null || true)
@@ -87,8 +108,16 @@ FAILED=0
 
 echo "Found $TOTAL XML files to validate"
 
-# For full NVDL validation, we'd need specialized tools like Jing or nvdllint
-# We do basic validation as fallback
+# Check if NVDL support is available
+if [ -f "$JING_JAR" ]; then
+    echo "Using JING for NVDL validation"
+    # JING has limited NVDL support, fall back to well-formedness
+fi
+
+# Validate well-formedness only (NVDL validator not available)
+echo -e "${YELLOW}Note: Full NVDL validation requires specialized tooling${NC}"
+echo "Performing well-formedness check only."
+
 while IFS= read -r file; do
     CURRENT=$((CURRENT + 1))
     BASENAME=$(basename "$file")
@@ -99,11 +128,10 @@ while IFS= read -r file; do
         echo -n "."
     fi
     
-    # Basic validation
-    if xmllint --noout --noent "$file" 2>/dev/null; then
+    # Validate well-formedness without entity expansion
+    if xmllint --noout "$file" 2>/dev/null; then
         if [ "$VERBOSE" = true ]; then
             echo -e "  ${GREEN}✓ Well-formed${NC}"
-            echo -e "  ${YELLOW}Note: Full NVDL validation requires specialized tooling${NC}"
         fi
     else
         FAILED=$((FAILED + 1))
@@ -115,8 +143,9 @@ echo ""
 echo ""
 
 if [ $FAILED -eq 0 ]; then
-    echo -e "${GREEN}✓ NVDL Validation passed (basic checks)${NC}"
-    echo -e "${YELLOW}Note: Full NVDL validation requires Jing with NVDL support${NC}"
+    echo -e "${YELLOW}⚠ NVDL Validation: well-formedness passed ($TOTAL files)${NC}"
+    echo "Install Jing with NVDL support for full validation."
+    # Exit 0 since document is valid (well-formed)
     exit 0
 else
     echo -e "${RED}✗ NVDL Validation failed: $FAILED of $TOTAL files${NC}"

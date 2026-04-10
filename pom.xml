@@ -49,7 +49,7 @@
             <!-- XML Resolver for Catalog Resolution -->
             <dependency>
                 <groupId>org.apache.xmlgraphics</groupId>
-                <artifactId>xml resolver</artifactId>
+                <artifactId>xmlresolver</artifactId>
                 <version>${xmlresolver.version}</version>
             </dependency>
 
@@ -75,18 +75,21 @@
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>xmlresolver</artifactId>
+            <version>${xmlresolver.version}</version>
         </dependency>
 
         <!-- JING -->
         <dependency>
             <groupId>com.thaiopensource</groupId>
             <artifactId>jing</artifactId>
+            <version>${jing.version}</version>
         </dependency>
 
         <!-- Saxon HE -->
         <dependency>
             <groupId>net.java.saxon</groupId>
             <artifactId>Saxon-HE</artifactId>
+            <version>${saxon.he.version}</version>
         </dependency>
 
         <!-- XML Commons API -->
@@ -163,6 +166,15 @@
                         <descriptor>assembly/docbook-dist.xml</descriptor>
                     </descriptors>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <!-- Exec Plugin for shell scripts -->
