@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xml:id="chapter-2">
+  <title>Chapter Two: Advanced Topics</title>
+  <info>
+    <abstract>
+      <para>This chapter covers advanced topics and best practices.</para>
+    </abstract>
+  </info>
+  <section xml:id="section-advanced-1">
+    <title>Advanced Section One</title>
+    <para>This section explores more complex scenarios and techniques.</para>
+  </section>
+  <section xml:id="section-advanced-2">
+    <title>Advanced Section Two</title>
+    <para>This section provides practical examples and use cases.</para>
+  </section>
+</chapter>

@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:db="http://docbook.org/ns/docbook"
+         ns="http://docbook.org/ns/docbook"
+         datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+
+  <!-- Include external modules -->
+  <include href="docbook-5.2.rng"/>
+
+  <!-- Document root patterns -->
+  <start>
+    <choice>
+      <ref name="db.book"/>
+      <ref name="db.chapter"/>
+      <ref name="db.section"/>
+      <ref name="db.para"/>
+    </choice>
+  </start>
+
+  <!-- Book element -->
+  <define name="db.book">
+    <element name="book">
+      <zeroOrMore>
+        <choice>
+          <ref name="db.book.title"/>
+          <ref name="db.info"/>
+          <ref name="db.part"/>
+          <ref name="db.chapter"/>
+          <ref name="db.para"/>
+          <ref name="db.section"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+
+  <define name="db.book.title">
+    <element name="title">
+      <ref name="db.title.content"/>
+    </element>
+  </define>
+
+  <!-- Part element -->
+  <define name="db.part">
+    <element name="part">
+      <zeroOrMore>
+        <choice>
+          <ref name="db.part.title"/>
+          <ref name="db.info"/>
+          <ref name="db.chapter"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+
+  <define name="db.part.title">
+    <element name="title">
+      <ref name="db.title.content"/>
+    </element>
+  </define>
+
+  <!-- Chapter element -->
+  <define name="db.chapter">
+    <element name="chapter">
+      <zeroOrMore>
+        <choice>
+          <ref name="db.chapter.title"/>
+          <ref name="db.info"/>
+          <ref name="db.section"/>
+          <ref name="db.para"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+
+  <define name="db.chapter.title">
+    <element name="title">
+      <ref name="db.title.content"/>
+    </element>
+  </define>
+
+  <!-- Section element -->
+  <define name="db.section">
+    <element name="section">
+      <zeroOrMore>
+        <choice>
+          <ref name="db.section.title"/>
+          <ref name="db.section"/>
+          <ref name="db.para"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+
+  <define name="db.section.title">
+    <element name="title">
+      <ref name="db.title.content"/>
+    </element>
+  </define>
+
+  <!-- Paragraph element -->
+  <define name="db.para">
+    <element name="para">
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="db.emphasis"/>
+          <ref name="db.strong"/>
+          <ref name="db.code"/>
+          <ref name="db.literal"/>
+          <ref name="db.quote"/>
+          <ref name="db.ulink"/>
+          <ref name="db.link"/>
+          <ref name="db.xref"/>
+          <ref name="db.footnote"/>
+          <ref name="db.anchor"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+
+  <!-- Inline elements -->
+  <define name="db.emphasis">
+    <element name="emphasis">
+      <text/>
+    </element>
+  </define>
+
+  <define name="db.strong">
+    <element name="strong">
+      <text/>
+    </element>
+  </define>
+
+  <define name="db.code">
+    <element name="code">
+      <text/>
+    </element>
+  </define>
+
+  <define name="db.literal">
+    <element name="literal">
+      <text/>
+    </element>
+  </define>
+
+  <define name="db.quote">
+    <element name="quote">
+      <text/>
+    </element>
+  </define>
+
+  <define name="db.ulink">
+    <element name="ulink">
+      <attribute name="url">
+        <data type="anyURI"/>
+      </attribute>
+      <text/>
+    </element>
+  </define>
+
+  <define name="db.link">
+    <element name="link">
+      <optional>
+        <attribute name="linkend">
+          <data type="IDREF"/>
+        </attribute>
+      </optional>
+      <text/>
+    </element>
+  </define>
+
+  <define name="db.xref">
+    <element name="xref">
+      <attribute name="linkend">
+        <data type="IDREF"/>
+      </attribute>
+      <empty/>
+    </element>
+  </define>
+
+  <define name="db.footnote">
+    <element name="footnote">
+      <ref name="db.para"/>
+    </element>
+  </define>
+
+  <define name="db.anchor">
+    <element name="anchor">
+      <optional>
+        <attribute name="id">
+          <data type="ID"/>
+        </attribute>
+      </optional>
+      <empty/>
+    </element>
+  </define>
+
+  <!-- Title content -->
+  <define name="db.title.content">
+    <oneOrMore>
+      <choice>
+        <text/>
+        <ref name="db.emphasis"/>
+        <ref name="db.strong"/>
+        <ref name="db.emphasis"/>
+      </choice>
+    </oneOrMore>
+  </define>
+
+  <!-- Info element -->
+  <define name="db.info">
+    <element name="info">
+      <zeroOrMore>
+        <choice>
+          <ref name="db.info.title"/>
+          <ref name="db.author"/>
+          <ref name="db.pubdate"/>
+          <ref name="db.abstract"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+
+  <define name="db.info.title">
+    <element name="title">
+      <ref name="db.title.content"/>
+    </element>
+  </define>
+
+  <define name="db.author">
+    <element name="author">
+      <ref name="db.personname"/>
+    </element>
+  </define>
+
+  <define name="db.personname">
+    <element name="personname">
+      <zeroOrMore>
+        <choice>
+          <ref name="db.firstname"/>
+          <ref name="db.surname"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+
+  <define name="db.firstname">
+    <element name="firstname">
+      <text/>
+    </element>
+  </define>
+
+  <define name="db.surname">
+    <element name="surname">
+      <text/>
+    </element>
+  </define>
+
+  <define name="db.pubdate">
+    <element name="pubdate">
+      <text/>
+    </element>
+  </define>
+
+  <define name="db.abstract">
+    <element name="abstract">
+      <ref name="db.para"/>
+    </element>
+  </define>
+
+  <!-- XInclude support -->
+  <define name="db.xi.include">
+    <element name="include">
+      <attribute name="href">
+        <data type="anyURI"/>
+      </attribute>
+      <optional>
+        <attribute name="xpointer"/>
+      </optional>
+    </element>
+  </define>
+
+</grammar>

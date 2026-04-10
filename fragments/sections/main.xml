@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xml:id="section-main">
+  <title>Main Content</title>
+  <xi:include href="../paras/main.xml" xpointer="para-main"/>
+  <xi:include href="../paras/additional.xml" xpointer="para-additional"/>
+</section>

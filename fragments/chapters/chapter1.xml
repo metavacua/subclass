@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xml:id="chapter-1">
+  <title>Chapter One: Getting Started</title>
+  <info>
+    <abstract>
+      <para>This chapter introduces the basic concepts and setup requirements.</para>
+    </abstract>
+  </info>
+  <xi:include href="../sections/intro.xml" xpointer="section-intro"/>
+  <xi:include href="../sections/main.xml" xpointer="section-main"/>
+  <xi:include href="../sections/conclusion.xml" xpointer="section-conclusion"/>
+</chapter>

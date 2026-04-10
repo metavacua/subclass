@@ -1,0 +1,103 @@
+# Book constraint schema - allows full DocBook hierarchy
+# Part > Chapter > Section > Paragraph
+
+namespace db = "http://docbook.org/ns/docbook"
+namespace xi = "http://www.w3.org/2001/XInclude"
+
+# Book element - root of full document hierarchy
+db.book = element book {
+    attribute id { xsd:ID }?,
+    attribute version { xsd:string }?,
+    attribute xml:base { xsd:anyURI }?,
+    attribute xml:id { xsd:ID }?,
+    attribute xmlns:xi { "http://www.w3.org/2001/XInclude" }?,
+    attribute xmlns:db { "http://docbook.org/ns/docbook" }?,
+    db.book.title?,
+    db.info.db:info*,
+    (db.part | db.chapter | db.para)+
+}
+
+db.book.title = element title {
+    attribute id { xsd:ID }?,
+    db.title.content
+}
+
+# Part contains chapters
+db.part = element part {
+    attribute id { xsd:ID }?,
+    attribute version { xsd:string }?,
+    attribute xml:base { xsd:anyURI }?,
+    attribute xml:id { xsd:ID }?,
+    attribute xmlns:xi { "http://www.w3.org/2001/XInclude" }?,
+    db.part.title?,
+    db.info.db:info*,
+    db.part.intro?,
+    db.chapter+
+}
+
+db.part.title = element title {
+    attribute id { xsd:ID }?,
+    db.title.content
+}
+
+db.part.intro = element info {
+    db.info.content
+}
+
+# Chapter can contain sections
+db.chapter = element chapter {
+    attribute id { xsd:ID }?,
+    attribute version { xsd:string }?,
+    attribute xml:base { xsd:anyURI }?,
+    attribute xml:id { xsd:ID }?,
+    attribute xmlns:xi { "http://www.w3.org/2001/XInclude" }?,
+    db.chapter.title?,
+    db.info.db:info*,
+    (db.section | db.para)+
+}
+
+db.chapter.title = element title {
+    attribute id { xsd:ID }?,
+    db.title.content
+}
+
+# Section can contain paragraphs and nested sections
+db.section = element section {
+    attribute id { xsd:ID }?,
+    attribute version { xsd:string }?,
+    attribute xml:base { xsd:anyURI }?,
+    attribute xml:id { xsd:ID }?,
+    attribute xmlns:xi { "http://www.w3.org/2001/XInclude" }?,
+    db.section.title?,
+    (db.para | db.section)+
+}
+
+db.section.title = element title {
+    attribute id { xsd:ID }?,
+    db.title.content
+}
+
+# Paragraph content
+db.para = element para {
+    attribute id { xsd:ID }?,
+    attribute version { xsd:string }?,
+    attribute xml:base { xsd:anyURI }?,
+    attribute xml:id { xsd:ID }?,
+    db.para.title?,
+    db.para.content
+}
+
+db.para.title = element title {
+    db.title.content
+}
+
+# Info wrapper for metadata
+db.info = element info {
+    db.info.content
+}
+
+db.info.content = (db.title+, db.subtitle*, db.authorgroup*, db.pubdate*, 
+                   db.copyright*, db.publisher*, db.legalnotice*)
+
+# Include chapter constraint
+include "chapter.rnc"

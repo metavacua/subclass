@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<book xmlns="http://docbook.org/ns/docbook"
+       xmlns:xi="http://www.w3.org/2001/XInclude"
+       xmlns:xlink="http://www.w3.org/1999/xlink"
+       version="5.2"
+       xml:id="book-root">
+  <title>Sample DocBook Document</title>
+  <info>
+    <author>
+      <personname>
+        <firstname>Author</firstname>
+        <surname>Name</surname>
+      </personname>
+    </author>
+    <pubdate>2024</pubdate>
+    <abstract>
+      <para>This is a sample DocBook 5.2 document demonstrating the XInclude
+      fragment structure and tiered validation architecture.</para>
+    </abstract>
+  </info>
+  <xi:include href="../fragments/parts/part1.xml" xpointer="part-1"/>
+  <chapter xml:id="chapter-appendices">
+    <title>Appendices</title>
+    <section xml:id="appendix-a">
+      <title>Appendix A: Reference</title>
+      <para>This appendix provides reference material and additional resources
+      for the document.</para>
+    </section>
+  </chapter>
+</book>

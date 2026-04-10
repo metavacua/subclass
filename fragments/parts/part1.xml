@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<part xmlns="http://docbook.org/ns/docbook"
+       xmlns:xi="http://www.w3.org/2001/XInclude"
+       xml:id="part-1">
+  <title>Part I: Foundations</title>
+  <info>
+    <abstract>
+      <para>This part covers the foundational concepts and basics.</para>
+    </abstract>
+  </info>
+  <xi:include href="../chapters/chapter1.xml" xpointer="chapter-1"/>
+  <xi:include href="../chapters/chapter2.xml" xpointer="chapter-2"/>
+</part>

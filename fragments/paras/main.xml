@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<para xmlns="http://docbook.org/ns/docbook"
+       xmlns:xi="http://www.w3.org/2001/XInclude"
+       xml:id="para-main">
+  This is the main content paragraph that provides detailed information.
+  It can contain <code>code samples</code>, <literal>literal text</literal>,
+  and various inline elements like <xref linkend="para-intro"/>,
+  <ulink url="https://example.com">external links</ulink>,
+  and <footnote><para>A footnote reference for additional context.</para></footnote>.
+</para>

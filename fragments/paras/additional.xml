@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<para xmlns="http://docbook.org/ns/docbook"
+       xmlns:xi="http://www.w3.org/2001/XInclude"
+       xml:id="para-additional">
+  This is an additional paragraph that provides supplementary information.
+  It supports the main content with <quote>quoted material from external sources</quote>
+  and includes technical terms like <firstterm>XML</firstterm> and 
+  <acronym>RELAX NG</acronym> for clarity.
+</para>

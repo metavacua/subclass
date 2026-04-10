@@ -1,0 +1,91 @@
+name: DocBook Validation Pipeline
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libxml2-utils
+      
+      - name: Validate XML Catalog
+        run: |
+          xmllint --noout catalog.xml
+      
+      - name: Validate DocBook schemas
+        run: |
+          xmllint --noout schemas/docbook-5.2/docbook.rng
+          xmllint --noout schemas/docbook-5.2/docbook-5.2.rng
+      
+      - name: Validate constraint schemas
+        run: |
+          xmllint --noout schemas/constraints/para.rnc || true
+          xmllint --noout schemas/constraints/section.rnc || true
+          xmllint --noout schemas/constraints/chapter.rnc || true
+          xmllint --noout schemas/constraints/book.rnc || true
+      
+      - name: Validate paragraph fragments
+        run: |
+          for f in fragments/paras/*.xml; do
+            xmllint --noout --xinclude "$f" || exit 1
+          done
+      
+      - name: Validate section fragments
+        run: |
+          for f in fragments/sections/*.xml; do
+            xmllint --noout --xinclude "$f" || exit 1
+          done
+      
+      - name: Validate chapter fragments
+        run: |
+          for f in fragments/chapters/*.xml; do
+            xmllint --noout --xinclude "$f" || exit 1
+          done
+      
+      - name: Validate part fragments
+        run: |
+          for f in fragments/parts/*.xml; do
+            xmllint --noout --xinclude "$f" || exit 1
+          done
+      
+      - name: Validate book assembly
+        run: |
+          xmllint --noout --xinclude assembly/book.xml
+      
+      - name: Expand and validate full document
+        run: |
+          xmllint --xinclude assembly/book.xml -o /tmp/expanded.xml
+          xmllint --noout /tmp/expanded.xml
+      
+      - name: Check IDREF integrity
+        run: |
+          # Extract all IDs
+          find . -name "*.xml" -exec grep -h 'xml:id=' {} \; 2>/dev/null | \
+            sed 's/.*xml:id="\([^"]*\)".*/\1/' | sort -u > /tmp/ids.txt
+          # Extract all XRef linkends
+          find . -name "*.xml" -exec grep -h 'linkend=' {} \; 2>/dev/null | \
+            sed 's/.*linkend="\([^"]*\)".*/\1/' | sort -u > /tmp/refs.txt
+          # Check each reference exists
+          while IFS= read -r ref; do
+            if ! grep -q "^${ref}$" /tmp/ids.txt 2>/dev/null; then
+              echo "Broken reference: $ref"
+              exit 1
+            fi
+          done < /tmp/refs.txt
+      
+      - name: Run tiered validation script
+        run: |
+          export XML_CATALOG_FILES="$PWD/catalog.xml"
+          chmod +x validate.sh
+          ./validate.sh all

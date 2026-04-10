@@ -1,0 +1,55 @@
+# Chapter constraint schema - allows sections within chapters
+# No parts or book elements allowed at this level
+
+namespace db = "http://docbook.org/ns/docbook"
+namespace xi = "http://www.w3.org/2001/XInclude"
+
+# Chapter can contain title and sections
+db.chapter = element chapter {
+    attribute id { xsd:ID }?,
+    attribute version { xsd:string }?,
+    attribute xml:base { xsd:anyURI }?,
+    attribute xml:id { xsd:ID }?,
+    attribute xmlns:xi { "http://www.w3.org/2001/XInclude" }?,
+    db.chapter.title?,
+    (db.info.db:info*)?,
+    (db.section | db.para)+
+}
+
+db.chapter.title = element title {
+    attribute id { xsd:ID }?,
+    db.title.content
+}
+
+# Section can contain paragraphs and nested sections
+db.section = element section {
+    attribute id { xsd:ID }?,
+    attribute version { xsd:string }?,
+    attribute xml:base { xsd:anyURI }?,
+    attribute xml:id { xsd:ID }?,
+    attribute xmlns:xi { "http://www.w3.org/2001/XInclude" }?,
+    db.section.title?,
+    (db.para | db.section)+
+}
+
+db.section.title = element title {
+    attribute id { xsd:ID }?,
+    db.title.content
+}
+
+# Paragraph can include block elements for chapter level
+db.para = element para {
+    attribute id { xsd:ID }?,
+    attribute version { xsd:string }?,
+    attribute xml:base { xsd:anyURI }?,
+    attribute xml:id { xsd:ID }?,
+    db.para.title?,
+    db.para.content
+}
+
+db.para.title = element title {
+    db.title.content
+}
+
+# Include section constraint
+include "section.rnc"

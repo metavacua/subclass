@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog"
+         xml:base="">
+  
+  <!-- DocBook 5.2 RELAX NG schemas -->
+  <system systemId="http://docbook.org/xml/5.2/rng/docbook.rng"
+          uri="schemas/docbook-5.2/docbook.rng"/>
+  <system systemId="http://docbook.org/xml/5.2/rng/docbook-5.2.rng"
+          uri="schemas/docbook-5.2/docbook-5.2.rng"/>
+  <system systemId="http://docbook.org/xml/5.2/rng/docbook-5.2-funcset.rng"
+          uri="schemas/docbook-5.2/docbook-5.2-funcset.rng"/>
+  
+  <!-- Local constraint schemas -->
+  <system systemId="constraints/para.rnc"
+          uri="schemas/constraints/para.rnc"/>
+  <system systemId="constraints/section.rnc"
+          uri="schemas/constraints/section.rnc"/>
+  <system systemId="constraints/chapter.rnc"
+          uri="schemas/constraints/chapter.rnc"/>
+  <system systemId="constraints/book.rnc"
+          uri="schemas/constraints/book.rnc"/>
+  
+  <!-- URI redirections for DocBook namespace -->
+  <uri name="http://docbook.org/ns/docbook"
+       uri="schemas/docbook-5.2/docbook.rng"/>
+  <uri name="http://docbook.org/xml/5.2/docbook"
+       uri="schemas/docbook-5.2/docbook.rng"/>
+  
+  <!-- XInclude fragment resolution -->
+  <system systemId="fragments/paras/"
+          uri="fragments/paras/"/>
+  <system systemId="fragments/sections/"
+          uri="fragments/sections/"/>
+  <system systemId="fragments/chapters/"
+          uri="fragments/chapters/"/>
+  <system systemId="fragments/parts/"
+          uri="fragments/parts/"/>
+  
+  <!-- Delegate public identifiers -->
+  <delegatePublic publicIdStartString="-//OASIS//DTD DocBook XML 5.2//EN"
+                  catalog="schemas/docbook-5.2/docbook.dtd"/>
+  
+  <!-- Documentation -->
+  <doc href="https://docbook.org/"/>
+  
+</catalog>

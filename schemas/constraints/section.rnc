@@ -1,0 +1,56 @@
+# Section constraint schema - allows paragraphs and nested sections
+# No chapters or books allowed at this level
+
+namespace db = "http://docbook.org/ns/docbook"
+namespace xi = "http://www.w3.org/2001/XInclude"
+
+# Section can contain paragraphs and nested sections only
+db.section = element section {
+    attribute id { xsd:ID }?,
+    attribute version { xsd:string }?,
+    attribute xml:base { xsd:anyURI }?,
+    attribute xml:id { xsd:ID }?,
+    attribute xmlns:xi { "http://www.w3.org/2001/XInclude" }?,
+    db.section.title?,
+    (db.para | db.section)+
+}
+
+# Section title
+db.section.title = element title {
+    attribute id { xsd:ID }?,
+    db.title.content
+}
+
+# Paragraph with relaxed content (can include some block-inlines)
+db.para = element para {
+    attribute id { xsd:ID }?,
+    attribute version { xsd:string }?,
+    attribute xml:base { xsd:anyURI }?,
+    attribute xml:id { xsd:ID }?,
+    db.para.title?,
+    db.para.content
+}
+
+db.para.title = element title {
+    db.title.content
+}
+
+# Relaxed inline content for section-level paragraphs
+db.para.content = (db._text | db._Space.char)*
+db.para.content |= db.emphasis
+db.para.content |= db.strong
+db.para.content |= db.code
+db.para.content |= db.literal
+db.para.content |= db.quote
+db.para.content |= db.ulink
+db.para.content |= db.link
+db.para.content |= db.footnote
+db.para.content |= db.anchor
+db.para.content |= db.xref
+db.para.content |= db.inlinegraphic
+db.para.content |= db.inlinemediaobject
+db.para.content |= db.footnote
+db.para.content |= db.remark
+
+# Include external paragraphs via XInclude
+include "para.rnc"
