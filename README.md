@@ -49,15 +49,15 @@ Tarski, Mostowski, and Robinson established that many classical first-order theo
 
 ### The Gap This Work Addresses
 
-Classical logic is Boolean; there exist non-Boolean logics — linear, paraconsistent, phase-space — where the landscape of first-order theories is strictly larger. The substructural extensions reachable from classical logic contain theories that have no classical counterpart whatsoever.
+Classical logic is Boolean; there exist non-Boolean logics — linear, paraconsistent, phase-space — where the landscape of first-order theories is strictly larger.
 
 ### Abstract
 
-This monograph extends the foundational work of Tarski, Mostowski, and Robinson on undecidable theories to the full class of first-order theories formalizable in logics compatible with classical first-order predicate logic (CFOPL). While Tarski's framework exhausts the space of classical first-order theories within a Boolean metatheory, we demonstrate that the interpretability relation is fundamentally asymmetric: every classical theory admits faithful embedding into substructural extensions such as First-order Additive Linear Logic (FALL), yet there exist first-order theories in FALL that resist classical interpretation due to their paraconsistent and paracomplete features.
+This monograph extends the foundational work of Tarski, Mostowski, and Robinson on undecidable theories to the full class of first-order theories formalizable in logics compatible with classical first-order predicate logic (CFOPL). While Tarski's framework exhausts the space of classical first-order theories within a Boolean metatheory, we demonstrate that the interpretability relation is fundamentally asymmetric: every classical first order theory is a theoretical extension of a substructural or non-structural logic such as First-order Additive Linear Logic (FALL), yet there exist first-order theories formalizable in FALL that resist classical interpretation due to their paraconsistent or paracomplete features.
 
-We introduce the **Hierarchy of Infinite Regrets**—the infinite regress of classical set theories (ZF, NBG, MK, etc.) that approach but never achieve totality—and prove an independence result establishing that certain first-order theories exist in non-Boolean semantic frameworks (complete lattices, phase spaces) that have no counterpart in CFOPL. These theories inhabit the gaps between classical consistency and inconsistency, admitting both constructive truth and constructive falsity (bi-constructive theories) while escaping Tarski's original classification of axiomatizability, decidability, and essential undecidability.
+We introduce the **Hierarchy of Infinite Regrets**—the infinite regress of classical set theories (ZF, NBG, MK, etc.) that approach but never achieve totality—and prove an independence result establishing that certain first-order theories exist in non-Boolean semantic frameworks (complete lattices, phase spaces) that have no counterpart in CFOPL. These theories inhabit the gaps between classical consistency and inconsistency or triviality and non-triviality, admitting both constructive truth and constructive falsity (bi-constructive theories) while escaping Tarski's original classification of axiomatizability, decidability, and essential undecidability.
 
-Our main theorem establishes that the set of first-order theories $\mathrm{Th}(\mathcal{L})$ for any logic $\mathcal{L}$ strictly weaker than CFOPL syntactically but semantically richer (non-Boolean) properly extends $\mathrm{Th}(\text{CFOPL})$, yielding new primitive classes of essentially undecidable theories that are neither recursively axiomatizable in the classical sense nor interpretable as classical theories. This generalization reveals that the "undecidable" is not merely a property of theories within a fixed logical framework, but a relational feature between metatheories, with the classical Boolean framework representing only the shadow of a larger lattice-theoretic universe of first-order theories.
+Our main theorem establishes that the set of first-order theories $\mathrm{Th}(\mathcal{L})$ for any logic $\mathcal{L}$ strictly weaker than CFOPL syntactically but semantically richer (non-Boolean) properly extends $\mathrm{Th}(\text{CFOPL})$.
 
 ---
 
@@ -226,13 +226,7 @@ Run the test suite:
 
 ## Contributing
 
-Contributions are welcome in three forms:
-
-**Mathematical review** — If you work in mathematical logic, model theory, or substructural logics, feedback on the monograph content, proof correctness, or related work is valuable. Open a GitHub Issue to start a discussion.
-
-**DocBook XML authoring** — If you are comfortable with DocBook 5 or XML toolchains, contributions to the modular monograph structure, XSLT stylesheets, or schema definitions are welcome.
-
-**Java implementation** — Once the architecture is established (Milestone 2), contributions to the theory library, test coverage, or build infrastructure are invited.
+Contributions are closed at this time; any contributions require an explicit written contract to protect contributor and repository intellectual property rights.
 
 Formal contribution guidelines (`CONTRIBUTING.md`) and a code of conduct will be added before Milestone 2. In the meantime, use the [Issues tracker](https://github.com/metavacua/subclass/issues) for all contributions and discussion.
 
@@ -257,5 +251,3 @@ Licensed under **Creative Commons Attribution-ShareAlike 4.0 International (CC-S
 - Troelstra, A.S., *Lectures on Linear Logic*. CSLI Lecture Notes 29, Stanford, 1992.
 - Visser, A., "Categories of theories and interpretations." In *Logic in Tehran*, Lecture Notes in Logic 26, ASL, 2006.
 - Restall, G., *An Introduction to Substructural Logics*. Routledge, 2000.
-
-The central insight is that "undecidability" is not an intrinsic property of a theory but a **relational feature between metatheories**. The Boolean framework of classical logic represents only the shadow of a larger lattice-theoretic universe of first-order theories.
