@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xml:id="chomsky-hierarchy"
+         xmlns="http://docbook.org/ns/docbook"
+         version="5.0">
+
+  <title>The Chomsky Hierarchy and the Boundary of Constructibility</title>
+
+  <para>
+    The Chomsky hierarchy classifies formal languages — and hence sets such
+    as <mathphrase>Th(T)</mathphrase> — by the class of automaton required
+    to recognise them.
+  </para>
+
+  <table xml:id="table-chomsky-hierarchy" frame="all">
+    <title>The Chomsky Hierarchy</title>
+    <tgroup cols="4" align="left">
+      <colspec colname="type"     colwidth="1*"/>
+      <colspec colname="grammar"  colwidth="2*"/>
+      <colspec colname="automaton" colwidth="2*"/>
+      <colspec colname="decidable" colwidth="2*"/>
+      <thead>
+        <row>
+          <entry>Type</entry>
+          <entry>Grammar class</entry>
+          <entry>Recognising automaton</entry>
+          <entry>Decidability</entry>
+        </row>
+      </thead>
+      <tbody>
+        <row>
+          <entry>3</entry>
+          <entry>Regular</entry>
+          <entry>Finite automaton (DFA/NFA)</entry>
+          <entry>Recursive (decidable)</entry>
+        </row>
+        <row>
+          <entry>2</entry>
+          <entry>Context-free</entry>
+          <entry>Pushdown automaton (PDA)</entry>
+          <entry>Recursive (decidable)</entry>
+        </row>
+        <row>
+          <entry>1</entry>
+          <entry>Context-sensitive</entry>
+          <entry>Linear-bounded automaton (LBA)</entry>
+          <entry>Recursive (decidable)</entry>
+        </row>
+        <row>
+          <entry>0</entry>
+          <entry>Recursively enumerable</entry>
+          <entry>Turing machine (possibly non-halting)</entry>
+          <entry>RE; not necessarily recursive</entry>
+        </row>
+      </tbody>
+    </tgroup>
+  </table>
+
+  <para>
+    Types 1 through 3 are all recursive: recognition by a linear-bounded
+    automaton, a pushdown automaton, or a finite automaton is always a total
+    procedure that terminates in finite time.  Type 0 captures the
+    recursively enumerable sets; a Type 0 language may not be recursive,
+    and its membership problem may be only semi-decidable.
+  </para>
+
+  <para>
+    Whether <mathphrase>Th(T)</mathphrase> for a given theory
+    <mathphrase>T</mathphrase> falls at or below the recursive boundary
+    determines what kind of computational witness can be constructed:
+  </para>
+
+  <itemizedlist>
+    <listitem>
+      <para>
+        If <mathphrase>Th(T)</mathphrase> is recursive, a decider (as defined
+        in the preceding section) witnesses the decision problem of
+        <mathphrase>T</mathphrase>.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        If <mathphrase>Th(T)</mathphrase> is properly RE (RE but not
+        recursive), only a semi-decider can be constructed; no decider
+        exists.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        If <mathphrase>Th(T)</mathphrase> is not RE, no Turing-machine
+        witness of either kind exists.
+      </para>
+    </listitem>
+  </itemizedlist>
+
+  <para>
+    This library witnesses specific named theories whose membership in one of
+    these three classes has a known, positive resolution.  It does not
+    witness the set of all first-order theories: that set is not computably
+    characterised.  It contains True Arithmetic —
+    <mathphrase>Th(&#x2115;, +, &#x00D7;, 0, 1)</mathphrase> under the
+    standard model — which is not arithmetically definable, as well as
+    essentially undecidable theories such as Robinson arithmetic
+    <mathphrase>Q</mathphrase>, for which no consistent extension is
+    decidable.  Membership in the set of all first-order theories therefore
+    admits no general decision procedure, classical or otherwise.
+  </para>
+
+</section>
