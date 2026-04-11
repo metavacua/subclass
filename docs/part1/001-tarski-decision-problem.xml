@@ -16,32 +16,30 @@
     <mathphrase>T</mathphrase>.
   </para>
 
-  <para>
-    Tarski stated the criterion as follows:
-  </para>
+         <para>
+                  A theory <mathphrase>T</mathphrase> is called <emphasis>decidable</emphasis>
+                  if there exists a method by means of which, for every sentence
+                  <mathphrase>&#x03C6;</mathphrase> formulated in the terms of
+                  <mathphrase>T</mathphrase>, it can be decided in a finite number of steps
+                  whether <mathphrase>&#x03C6;</mathphrase> is or is not provable (i.e.,
+                  derivable) in <mathphrase>T</mathphrase>; otherwise
+                  <mathphrase>T</mathphrase> is called <emphasis>undecidable</emphasis>.
+         </para>
 
   <blockquote>
-    <para>
-      A theory <mathphrase>T</mathphrase> is called <emphasis>decidable</emphasis>
-      if there exists a method by means of which, for every sentence
-      <mathphrase>&#x03C6;</mathphrase> formulated in the terms of
-      <mathphrase>T</mathphrase>, it can be decided in a finite number of steps
-      whether <mathphrase>&#x03C6;</mathphrase> is or is not provable (i.e.,
-      derivable) in <mathphrase>T</mathphrase>; otherwise
-      <mathphrase>T</mathphrase> is called <emphasis>undecidable</emphasis>.
-    </para>
+         <para>
+                  By a <emphasis>decision procedure</emphasis> for a given formalized theory T we understand a method which permits us to decide in each particular case whether a given sentence formulated in the symbolism of T can be proved by means of the devices available in T (or, more generally, can be recognized as valid in T).
+         </para>
+         <para>
+                  The <emphasis>decision problem</emphasis> for T is the problem of determining whether a decision procedure for T exists (and possibly of exhibiting such a procedure).
+         </para>
+         <para>
+                  A theory T is called <emphasis>decidable</emphasis> or <emphasis>undecidable</emphasis> according as the solution of the decision problem is positive or negative.
+         </para>  
     <attribution>
       Alfred Tarski, Andrzej Mostowski, and Raphael M. Robinson,
       <emphasis>Undecidable Theories</emphasis>, North-Holland, 1953, p. 3.
     </attribution>
   </blockquote>
-
-  <para>
-    The phrase <quote>a method by means of which</quote> — equivalently,
-    Tarski's earlier phrasing <quote>proved by means of the devices
-    available in <mathphrase>T</mathphrase></quote> — calls for formal
-    precision.  What counts as a device?  What counts as a method?  These
-    questions are addressed in the sections that follow.
-  </para>
 
 </section>
