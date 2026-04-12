@@ -1,7 +1,5 @@
 package org.subclass.logic.signature;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -20,59 +18,25 @@ import java.util.Set;
  *   but with restricted right-hand side of sequents (at most 1 formula)
  * - Linear Logic: Has {⊗, ⊕, !, ?} with {Exchange} only (no Weakening/Contraction)
  */
-public class LogicalSignature {
-    private final String name;
-    private final String displayName;
-    private final Set<Connective> connectives;
-    private final Set<StructuralRule> structuralRules;
-    private final boolean functionallyComplete;
-    private final String description;
-
+public record LogicalSignature(
+    String name,
+    String displayName,
+    Set<Connective> connectives,
+    Set<StructuralRule> structuralRules,
+    boolean functionallyComplete,
+    String description
+) {
     /**
-     * Create a logical signature.
-     *
-     * @param name Internal identifier (e.g., "LK", "LJ")
-     * @param displayName Human-readable name (e.g., "Classical Sequent Calculus")
-     * @param connectives Set of connectives in this signature
-     * @param structuralRules Set of structural rules allowed
-     * @param functionallyComplete Whether this signature is functionally complete
-     * @param description Detailed description
+     * Canonical constructor for validation and immutability.
+     * Uses Set.copyOf() (Java 10+) to guarantee immutability.
      */
-    public LogicalSignature(String name, String displayName,
-                           Set<Connective> connectives,
-                           Set<StructuralRule> structuralRules,
-                           boolean functionallyComplete,
-                           String description) {
-        this.name = Objects.requireNonNull(name);
-        this.displayName = Objects.requireNonNull(displayName);
-        this.connectives = Collections.unmodifiableSet(Objects.requireNonNull(connectives));
-        this.structuralRules = Collections.unmodifiableSet(Objects.requireNonNull(structuralRules));
-        this.functionallyComplete = functionallyComplete;
-        this.description = description;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public Set<Connective> getConnectives() {
-        return connectives;
-    }
-
-    public Set<StructuralRule> getStructuralRules() {
-        return structuralRules;
-    }
-
-    public boolean isFunctionallyComplete() {
-        return functionallyComplete;
-    }
-
-    public String getDescription() {
-        return description;
+    public LogicalSignature {
+        Objects.requireNonNull(name, "name cannot be null");
+        Objects.requireNonNull(displayName, "displayName cannot be null");
+        Objects.requireNonNull(connectives, "connectives cannot be null");
+        Objects.requireNonNull(structuralRules, "structuralRules cannot be null");
+        connectives = Set.copyOf(connectives);
+        structuralRules = Set.copyOf(structuralRules);
     }
 
     /**
@@ -117,19 +81,14 @@ public class LogicalSignature {
         if (hasAllStructuralRules()) {
             return "Full structural rules (W, C, E)";
         }
-        StringBuilder sb = new StringBuilder();
-        if (hasStructuralRule(StructuralRule.WEAKENING)) {
-            sb.append("W");
+        if (structuralRules.isEmpty()) {
+            return "No structural rules";
         }
-        if (hasStructuralRule(StructuralRule.CONTRACTION)) {
-            if (sb.length() > 0) sb.append(", ");
-            sb.append("C");
-        }
-        if (hasStructuralRule(StructuralRule.EXCHANGE)) {
-            if (sb.length() > 0) sb.append(", ");
-            sb.append("E");
-        }
-        return sb.toString().isEmpty() ? "No structural rules" : sb.toString();
+        return structuralRules.stream()
+            .map(StructuralRule::getSymbol)
+            .sorted()
+            .reduce((a, b) -> a + ", " + b)
+            .orElse("No structural rules");
     }
 
     @Override
@@ -138,70 +97,5 @@ public class LogicalSignature {
                " - Connectives: " + connectives.size() +
                ", Structural rules: " + getStructuralRulesSummary() +
                ", Functionally " + (functionallyComplete ? "complete" : "incomplete");
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        LogicalSignature that = (LogicalSignature) o;
-        return name.equals(that.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name);
-    }
-
-    /**
-     * Builder for constructing LogicalSignature instances.
-     */
-    public static class Builder {
-        private final String name;
-        private final String displayName;
-        private final Set<Connective> connectives = new HashSet<>();
-        private final Set<StructuralRule> structuralRules = new HashSet<>();
-        private boolean functionallyComplete = false;
-        private String description = "";
-
-        public Builder(String name, String displayName) {
-            this.name = Objects.requireNonNull(name);
-            this.displayName = Objects.requireNonNull(displayName);
-        }
-
-        public Builder addConnective(Connective connective) {
-            this.connectives.add(Objects.requireNonNull(connective));
-            return this;
-        }
-
-        public Builder addConnectives(Set<Connective> connectives) {
-            this.connectives.addAll(Objects.requireNonNull(connectives));
-            return this;
-        }
-
-        public Builder addStructuralRule(StructuralRule rule) {
-            this.structuralRules.add(Objects.requireNonNull(rule));
-            return this;
-        }
-
-        public Builder addStructuralRules(Set<StructuralRule> rules) {
-            this.structuralRules.addAll(Objects.requireNonNull(rules));
-            return this;
-        }
-
-        public Builder functionallyComplete(boolean complete) {
-            this.functionallyComplete = complete;
-            return this;
-        }
-
-        public Builder description(String desc) {
-            this.description = desc;
-            return this;
-        }
-
-        public LogicalSignature build() {
-            return new LogicalSignature(name, displayName, connectives, structuralRules,
-                    functionallyComplete, description);
-        }
     }
 }
