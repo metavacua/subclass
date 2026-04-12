@@ -234,93 +234,99 @@ public class SignatureDefinitions {
     }
 
     /**
-     * Dual of LJ: Paraconsistent counterpart
+     * LDJ: Paraconsistent dual of LJ (Urbas-Rauszer)
      * Functionally incomplete: same connectives as LJ but with left-side restriction
      * Node: <Consistent=false, Complete=true>
      *
-     * This signature is the dual of LJ under the exchange of left and right.
+     * This signature is the dual of LJ under the exchange of left and right (Urbas-Rauszer).
      * It restricts sequents to at most one formula on the LEFT (Γ where |Γ| ≤ 1).
-     * This makes the logic paraconsistent: LNC (law of non-contradiction) is not a theorem.
+     * This makes the logic paraconsistent: LNC (law of non-contradiction) is NOT a theorem.
      *
-     * LEM is still NOT a theorem (though in different sense).
-     * The duality symmetry between LJ and this dual is key to the tetragram.
+     * CRITICAL CORRECTION: LEM IS PROVABLE in LDJ.
+     * This is the exact dual of LJ: where LJ fails to prove LEM, LDJ proves it.
+     * Where LJ proves LNC, LDJ fails to prove it.
+     *
+     * The negation in LDJ is defined by:
+     * - Double negation elimination (A ⊢ ¬¬A): present in LDJ
+     * - Double negation introduction (¬¬A ⊢ A): absent in LDJ
+     * This is symmetric to LJ which has introduction but not elimination.
      */
-    public static LogicalSignature createDualOfLJSignature() {
-        // Symmetric dual of LJ
+    public static LogicalSignature createLDJSignature() {
+        // LDJ (Urbas-Rauszer dual of LJ): symmetric dual with left-side restriction
         Connective negation = new Connective(
             "¬", 1, "propositional",
             Arrays.asList(
-                new InferenceRule("neg_left_dual", "¬", "left",
+                new InferenceRule("neg_left_ldj", "¬", "left",
                     Arrays.asList("⊢ A, Δ"),
                     "¬A ⊢ Δ",
-                    "Dual negation left intro")
+                    "LDJ negation left intro: symmetric to LJ right intro")
             ),
             Arrays.asList(
-                new InferenceRule("neg_right_dual", "¬", "right",
+                new InferenceRule("neg_right_ldj", "¬", "right",
                     Arrays.asList("A ⊢ Δ"),
                     "⊢ ¬A, Δ",
-                    "Dual negation right intro")
+                    "LDJ negation right intro: symmetric to LJ left intro")
             ),
-            "Dual negation: symmetric to intuitionistic"
+            "Paraconsistent negation: dual to intuitionistic, lacks LNC"
         );
 
         Connective conjunction = new Connective(
             "∧", 2, "propositional",
             Arrays.asList(
-                new InferenceRule("and_left_dual", "∧", "left",
+                new InferenceRule("and_left_ldj", "∧", "left",
                     Arrays.asList("A ⊢ Δ", "B ⊢ Δ"),
                     "A ∧ B ⊢ Δ",
-                    "Dual conjunction left intro")
+                    "LDJ conjunction left intro: symmetric to LJ right")
             ),
             Arrays.asList(
-                new InferenceRule("and_right_1_dual", "∧", "right",
+                new InferenceRule("and_right_1_ldj", "∧", "right",
                     Arrays.asList("⊢ A, Δ"),
                     "⊢ A ∧ B, Δ",
-                    "Dual conjunction right intro 1"),
-                new InferenceRule("and_right_2_dual", "∧", "right",
+                    "LDJ conjunction right intro 1"),
+                new InferenceRule("and_right_2_ldj", "∧", "right",
                     Arrays.asList("⊢ B, Δ"),
                     "⊢ A ∧ B, Δ",
-                    "Dual conjunction right intro 2")
+                    "LDJ conjunction right intro 2")
             ),
-            "Dual conjunction"
+            "LDJ conjunction: symmetric to intuitionistic"
         );
 
         Connective disjunction = new Connective(
             "∨", 2, "propositional",
             Arrays.asList(
-                new InferenceRule("or_left_1_dual", "∨", "left",
+                new InferenceRule("or_left_1_ldj", "∨", "left",
                     Arrays.asList("A ⊢ Δ"),
                     "A ∨ B ⊢ Δ",
-                    "Dual disjunction left intro 1"),
-                new InferenceRule("or_left_2_dual", "∨", "left",
+                    "LDJ disjunction left intro 1"),
+                new InferenceRule("or_left_2_ldj", "∨", "left",
                     Arrays.asList("B ⊢ Δ"),
                     "A ∨ B ⊢ Δ",
-                    "Dual disjunction left intro 2")
+                    "LDJ disjunction left intro 2")
             ),
             Arrays.asList(
-                new InferenceRule("or_right_dual", "∨", "right",
+                new InferenceRule("or_right_ldj", "∨", "right",
                     Arrays.asList("⊢ A, Δ", "⊢ B, Δ"),
                     "⊢ A ∨ B, Δ",
-                    "Dual disjunction right intro")
+                    "LDJ disjunction right intro: symmetric to LJ left")
             ),
-            "Dual disjunction"
+            "LDJ disjunction: symmetric to intuitionistic"
         );
 
         Connective implication = new Connective(
             "→", 2, "propositional",
             Arrays.asList(
-                new InferenceRule("impl_left_dual", "→", "left",
+                new InferenceRule("impl_left_ldj", "→", "left",
                     Arrays.asList("⊢ A, Δ", "B ⊢ Δ"),
                     "A → B ⊢ Δ",
-                    "Dual implication left intro")
+                    "LDJ implication left intro")
             ),
             Arrays.asList(
-                new InferenceRule("impl_right_dual", "→", "right",
+                new InferenceRule("impl_right_ldj", "→", "right",
                     Arrays.asList("A ⊢ B, Δ"),
                     "⊢ A → B, Δ",
-                    "Dual implication right intro")
+                    "LDJ implication right intro")
             ),
-            "Dual implication"
+            "LDJ implication: symmetric to intuitionistic"
         );
 
         Set<Connective> connectives = new HashSet<>(Arrays.asList(
@@ -333,12 +339,13 @@ public class SignatureDefinitions {
             StructuralRule.EXCHANGE
         ));
 
-        return new LogicalSignature.Builder("Dual(LJ)", "Dual of Intuitionistic (Paraconsistent)")
+        return new LogicalSignature.Builder("LDJ", "Paraconsistent Dual of Intuitionistic (Urbas-Rauszer)")
             .addConnectives(connectives)
             .addStructuralRules(structuralRules)
             .functionallyComplete(false)
-            .description("Symmetric dual of LJ obtained by exchanging left and right. " +
-                "Functionally incomplete, paraconsistent. Does NOT prove LEM.")
+            .description("Urbas-Rauszer dual of LJ obtained by exchanging left and right. " +
+                "Functionally incomplete, paraconsistent. DOES prove LEM but NOT LNC. " +
+                "Lacks double negation introduction but has double negation elimination.")
             .build();
     }
 

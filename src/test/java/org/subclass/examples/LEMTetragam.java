@@ -8,31 +8,41 @@ import org.subclass.logic.tetragram.TetragamNode;
 import org.subclass.logic.tetragram.TheoremStatus;
 
 /**
- * Case study: Law of Excluded Middle (LEM) formalized across a tetragram.
+ * Case study: Law of Excluded Middle (LEM) and its dual formalized across a tetragram.
  *
  * LEM is the statement: A ∨ ¬A (for any proposition A)
+ * LNC (dual) is the statement: ¬(A ∧ ¬A) (law of non-contradiction)
  *
- * This class demonstrates how LEM has different provability statuses
- * across four logically related systems forming a diamond/tetragram:
+ * CORRECTED tetragram based on Urbas-Rauszer semantics:
  *
- * LK (LEM provable)          ← Classical logic, <Consistent, Complete>
- *     ↗                ↖
- *  LJ  ↔  Dual(LJ)           ← Intuitionistic and paraconsistent, <Consistent, Paracomplete> × <Paraconsistent, Complete>
- *     ↖                ↗
- *   Common (neither)          ← Intersection, <Paraconsistent, Paracomplete>
+ *        LK: LEM✓ LNC✓              ← Classical logic, <Consistent, Complete>
+ *         ↗              ↖
+ *   LJ: LEM✗ LNC✓  ↔  LDJ: LEM✓ LNC✗  ← Intuitionistic vs Paraconsistent
+ *         ↖              ↗            ← <Consistent, Paracomplete> × <Paraconsistent, Complete>
+ *     Common: LEM? LNC?              ← Intersection, <Paraconsistent, Paracomplete>
  *
- * The meta-theorem is: How theorem status varies systematically across the tetragram
- * reflects the deep structure of logical systems and their relationships.
+ * KEY INSIGHT: LEM and LNC are dual theorems across the tetragram.
+ * - LEM is provable in LK and LDJ, not provable in LJ and Common
+ * - LNC is provable in LK and LJ, not provable in LDJ and Common
+ *
+ * The relationship is mediated by double negation:
+ * - Double negation INTRO (¬¬A ⊢ A): present in LK & LJ, absent in LDJ & Common
+ * - Double negation ELIM (A ⊢ ¬¬A): present in LK & LDJ, absent in LJ & Common
+ *
+ * The meta-theorem is: Theorem status across the tetragram reveals the deep structure
+ * of logical systems through their handling of negation and double negation.
  */
 @TheoremFamily(
     name = "LEM",
     displayName = "Law of Excluded Middle",
     classicalTheorem = "lemInLK",
     intuitionisticTheorem = "lemInLJ",
-    paraconsistentTheorem = "lemInDual",
+    paraconsistentTheorem = "lemInLDJ",
     commonLogicTheorem = "lemInCommon",
-    description = "The tetragram of LEM across classical, intuitionistic, paraconsistent, and common logics. " +
-                  "Demonstrates how a single theorem participates in different provability relationships depending on the logic."
+    description = "The tetragram of LEM across classical (LK), intuitionistic (LJ), " +
+                  "paraconsistent (LDJ), and common logics. " +
+                  "Key insight: LEM is PROVABLE in both LK and LDJ (paraconsistent), " +
+                  "but NOT in LJ. This reflects the complementary nature of LEM vs LNC across logics."
 )
 public class LEMTetragam {
 
@@ -103,35 +113,42 @@ public class LEMTetragam {
     }
 
     /**
-     * LEM in Dual(LJ) (Paraconsistent Dual)
-     * Status: NON_PROVABLE
+     * LEM in LDJ (Urbas-Rauszer Paraconsistent Dual)
+     * Status: PROVABLE
      *
-     * In the paraconsistent dual of LJ, LEM is also NOT provable.
-     * This logic is obtained by syntactically exchanging left and right sides
-     * and restricted contexts (now on the left instead of right).
+     * CRITICAL INSIGHT: LEM IS PROVABLE in LDJ (the paraconsistent dual of LJ).
+     * This is the exact dual of LJ's behavior: where LJ fails to prove LEM,
+     * LDJ succeeds in proving it.
      *
-     * The dual has:
+     * LDJ is obtained by syntactically exchanging left and right sides from LJ:
      * - Single-formula restriction on the LEFT (instead of right as in LJ)
-     * - Makes the logic paraconsistent (explosion rule doesn't apply)
-     * - Law of Non-Contradiction (LNC: ¬(A ∧ ¬A)) is not provable
+     * - Makes the logic paraconsistent (doesn't validate explosion)
+     * - Law of Non-Contradiction (LNC: ¬(A ∧ ¬A)) is NOT provable (dual to LEM in LJ)
      *
-     * By duality, the dual's inability to prove LEM mirrors LJ's inability.
-     * This demonstrates the tetragram's symmetry: what is unprovable in one
-     * dimension (right restriction) has a dual that is unprovable in the
-     * perpendicular dimension (left restriction).
+     * The negation structure in LDJ:
+     * - Has double negation elimination (A ⊢ ¬¬A): PRESENT
+     * - Lacks double negation introduction (¬¬A ⊢ A): ABSENT
+     * This is symmetric to LJ which has introduction but not elimination.
+     *
+     * Proof of LEM in LDJ: Uses the paraconsistent structure to establish (A ∨ ¬A)
+     * through double negation elimination without requiring classical excluded middle.
      */
     @Theorem(
-        name = "LEM_in_Dual",
-        signature = "Dual(LJ)",
-        status = "NON_PROVABLE",
-        proofReference = "Duality principle: dual(LJ) obtains by swapping left/right roles. " +
-                         "By duality, non-provability of LEM in LJ implies non-provability in dual.",
-        description = "Law of Excluded Middle is NOT provable in the paraconsistent dual of LJ. " +
-                      "This demonstrates the structural duality of the tetragram."
+        name = "LEM_in_LDJ",
+        signature = "LDJ",
+        status = "PROVABLE",
+        proofReference = "Urbas & Rauszer (1990). Paraconsistent logic LDJ proves LEM. " +
+                         "This is the exact dual of LJ's non-provability of LEM. " +
+                         "Conversely, LDJ does NOT prove LNC, which LJ does prove.",
+        description = "Law of Excluded Middle IS provable in the paraconsistent dual LDJ. " +
+                      "This demonstrates the fundamental tetragram duality: " +
+                      "LEM provable in LK and LDJ, not provable in LJ and Common. " +
+                      "LNC is the inverse: provable in LK and LJ, not provable in LDJ and Common."
     )
-    public static void lemInDual() {
-        // This method documents the consequence of duality.
-        // The dual logic is the mirror image of LJ along the tetragram structure.
+    public static void lemInLDJ() {
+        // This method documents the dual nature of LEM and LNC across the tetragram.
+        // LEM in LDJ is provable because LDJ has double negation elimination.
+        // LNC is unprovable in LDJ for the same reason it's unprovable in paraconsistent logics.
     }
 
     /**
@@ -173,23 +190,35 @@ public class LEMTetragam {
      * Construct and validate the LEM tetragram.
      * This demonstrates how to programmatically build the tetragram
      * and verify its consistency.
+     *
+     * The corrected tetragram based on Urbas-Rauszer semantics:
+     * - LEM is PROVABLE in LK (classical): LEM ⊢ A ∨ ¬A
+     * - LEM is NON_PROVABLE in LJ (intuitionistic): lacks LEM due to right-restriction
+     * - LEM is PROVABLE in LDJ (paraconsistent): has double negation elimination
+     * - LEM is UNPROVABLE_AND_REFUTABLE in Common: lacks all negation structure
+     *
+     * Dual theorem (LNC - Law of Non-Contradiction):
+     * - LNC is PROVABLE in LK: classical
+     * - LNC is PROVABLE in LJ: intuitionistic (you can prove ¬(A ∧ ¬A))
+     * - LNC is NON_PROVABLE in LDJ: paraconsistent lacks LNC
+     * - LNC is UNPROVABLE_AND_REFUTABLE in Common: undetermined
      */
     public static Tetragram<String> buildLEMTetragram() {
         // Create the four signatures
         LogicalSignature lkSig = SignatureDefinitions.createLKSignature();
         LogicalSignature ljSig = SignatureDefinitions.createLJSignature();
-        LogicalSignature dualSig = SignatureDefinitions.createDualOfLJSignature();
+        LogicalSignature ldjSig = SignatureDefinitions.createLDJSignature();
         LogicalSignature commonSig = SignatureDefinitions.createCommonLogicSignature();
 
         // Create the four tetragram nodes
         TetragamNode classicalNode = new TetragamNode(true, true, lkSig,
-            "Classical logic: LEM is provable");
+            "LK (Classical): LEM is provable, LNC is provable");
         TetragamNode intuitionisticNode = new TetragamNode(true, false, ljSig,
-            "Intuitionistic logic: LEM is not provable");
-        TetragamNode paraconsistentCompleteNode = new TetragamNode(false, true, dualSig,
-            "Paraconsistent complete: LEM is not provable");
+            "LJ (Intuitionistic): LEM is NOT provable, LNC is provable");
+        TetragamNode paraconsistentCompleteNode = new TetragamNode(false, true, ldjSig,
+            "LDJ (Paraconsistent): LEM is provable, LNC is NOT provable (Urbas-Rauszer)");
         TetragamNode commonLogicNode = new TetragamNode(false, false, commonSig,
-            "Common logic: LEM is undetermined");
+            "Common Logic: Both LEM and LNC are undetermined");
 
         // Create the tetragram
         Tetragram<String> tetragram = new Tetragram<>(
@@ -200,12 +229,12 @@ public class LEMTetragam {
             commonLogicNode
         );
 
-        // Register the theorem with its status in each node
+        // Register the theorem with its status in each node (corrected)
         tetragram.registerTheorem("LEM",
-            TheoremStatus.PROVABLE,           // LK: provable
-            TheoremStatus.NON_PROVABLE,       // LJ: not provable
-            TheoremStatus.NON_PROVABLE,       // Dual: not provable
-            TheoremStatus.UNPROVABLE_AND_REFUTABLE  // Common: undetermined
+            TheoremStatus.PROVABLE,                    // LK: provable
+            TheoremStatus.NON_PROVABLE,                // LJ: not provable
+            TheoremStatus.PROVABLE,                    // LDJ: provable (CORRECTED from NON_PROVABLE)
+            TheoremStatus.UNPROVABLE_AND_REFUTABLE     // Common: undetermined
         );
 
         return tetragram;
