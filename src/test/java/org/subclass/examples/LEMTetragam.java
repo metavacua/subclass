@@ -8,29 +8,31 @@ import org.subclass.logic.tetragram.TetragamNode;
 import org.subclass.logic.tetragram.TheoremStatus;
 
 /**
- * Case study: Law of Excluded Middle (LEM) and its dual formalized across a tetragram.
+ * Case study 1: Law of Excluded Middle (LEM) formalized across a tetragram.
  *
  * LEM is the statement: A ∨ ¬A (for any proposition A)
- * LNC (dual) is the statement: ¬(A ∧ ¬A) (law of non-contradiction)
  *
- * CORRECTED tetragram based on Urbas-Rauszer semantics:
+ * This class demonstrates how LEM has different provability statuses
+ * across four logically related systems forming a diamond/tetragram:
  *
- *        LK: LEM✓ LNC✓              ← Classical logic, <Consistent, Complete>
+ *        LK: LEM✓              ← Classical logic, <Consistent, Complete>
  *         ↗              ↖
- *   LJ: LEM✗ LNC✓  ↔  LDJ: LEM✓ LNC✗  ← Intuitionistic vs Paraconsistent
- *         ↖              ↗            ← <Consistent, Paracomplete> × <Paraconsistent, Complete>
- *     Common: LEM? LNC?              ← Intersection, <Paraconsistent, Paracomplete>
+ *   LJ: LEM✗  ↔  LDJ: LEM✓     ← Intuitionistic vs Paraconsistent
+ *         ↖              ↗      ← <Consistent, Paracomplete> × <Paraconsistent, Complete>
+ *     Common: LEM?              ← Intersection, <Paraconsistent, Paracomplete>
  *
- * KEY INSIGHT: LEM and LNC are dual theorems across the tetragram.
- * - LEM is provable in LK and LDJ, not provable in LJ and Common
- * - LNC is provable in LK and LJ, not provable in LDJ and Common
+ * **LEM TETRAGRAM** (Separate from LNC tetragram):
+ * - LEM is PROVABLE in: {LK, LDJ}
+ * - LEM is NON_PROVABLE in: {LJ}
+ * - LEM is UNPROVABLE_AND_REFUTABLE in: {Common}
  *
- * The relationship is mediated by double negation:
- * - Double negation INTRO (¬¬A ⊢ A): present in LK & LJ, absent in LDJ & Common
- * - Double negation ELIM (A ⊢ ¬¬A): present in LK & LDJ, absent in LJ & Common
+ * **Relationship to LNC**: LNC has a DUAL tetragram where:
+ * - LNC is PROVABLE in: {LK, LJ}
+ * - LNC is NON_PROVABLE in: {LDJ}
+ * - LNC is UNPROVABLE_AND_REFUTABLE in: {Common}
  *
- * The meta-theorem is: Theorem status across the tetragram reveals the deep structure
- * of logical systems through their handling of negation and double negation.
+ * The duality is mediated by double negation operators.
+ * Neither LEM nor LNC are provable in the common logic.
  */
 @TheoremFamily(
     name = "LEM",
@@ -153,37 +155,41 @@ public class LEMTetragam {
 
     /**
      * LEM in Common Logic (Intersection)
-     * Status: UNPROVABLE_AND_REFUTABLE
+     * Status: NEITHER PROVABLE NOR REFUTABLE
      *
-     * In the common logic (intersection of LJ and its dual), LEM is neither
-     * provable nor refutable.
+     * In the common logic (intersection of LJ and LDJ), LEM is neither provable nor refutable.
      *
-     * The common logic is:
-     * - Paraconsistent AND paracomplete
-     * - Has minimal or no structural rules
-     * - The most conservative logic embeddable in all four
+     * CRITICAL LOGICAL CONSTRAINT:
+     * - LEM cannot be REFUTABLE in common logic because LEM is PROVABLE in LDJ and LK
+     *   (which are extensions of common logic). If LEM were refutable in common logic,
+     *   this would create a contradiction: the negation of LEM would be provable in the
+     *   intersection, thus provable in all extensions, but it's not provable in LDJ.
+     * - LEM cannot be PROVABLE in common logic for symmetric reasons: it's not provable
+     *   in LJ (which is an extension), so it cannot be provable in their intersection.
      *
-     * In this logic:
-     * - LEM cannot be proven (inherited from LJ's restriction)
-     * - ¬LEM also cannot be proven (inherited from dual's restriction)
+     * Therefore, LEM is simply UNDETERMINED in common logic:
      * - Neither (A ∨ ¬A) nor ¬(A ∨ ¬A) is derivable
+     * - No contradiction arises from either assumption
+     * - The proposition is logically independent in the common logic
      *
-     * This is the defining characteristic of a paracomplete logic:
-     * some propositions are neither provable nor refutable.
-     * The common logic is the natural meeting point of the tetragram.
+     * This is consistent with common logic being the most conservative:
+     * it contains only theorems that are theorems in ALL four logics.
      */
     @Theorem(
         name = "LEM_in_Common",
         signature = "Common",
         status = "UNPROVABLE_AND_REFUTABLE",
-        proofReference = "Common logic is the intersection of all four logics in the tetragram. " +
-                         "Propositions undetermined in both LJ and Dual(LJ) remain undetermined here.",
+        proofReference = "Common logic is the intersection of all four logics. " +
+                         "LEM is undetermined here: if it were provable, it would be provable in LJ (contradiction). " +
+                         "If it were refutable, it would be refutable in LDJ (contradiction). " +
+                         "Therefore it is neither.",
         description = "Law of Excluded Middle is neither provable nor refutable in common logic. " +
-                      "This demonstrates the paracomplete nature of the common logic node."
+                      "This reflects the logical independence of LEM in the most restrictive logic."
     )
     public static void lemInCommon() {
-        // This method documents the undetermined status in common logic.
-        // Common logic is the most restrictive: it has no theorems in many cases.
+        // LEM is undetermined in common logic by logical necessity:
+        // Its provability in extensions (LDJ, LK) forbids refutability here.
+        // Its non-provability in extensions (LJ) forbids provability here.
     }
 
     /**
