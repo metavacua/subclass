@@ -54,27 +54,4 @@ public enum TheoremStatus {
     public String getDisplayName() {
         return displayName;
     }
-
-    /**
-     * Check if this theorem is provable.
-     */
-    public boolean isProvable() {
-        return this == PROVABLE;
-    }
-
-    /**
-     * Check if this theorem is refutable (its negation is provable).
-     */
-    public boolean isRefutable() {
-        return this == REFUTABLE || this == PROVABLE; // Paraconsistent can have both
-    }
-
-    /**
-     * Check if the theorem status is determined (either provable or refutable, but not undetermined).
-     * In classical logic, every well-formed statement is determined.
-     * In paracomplete logic, undetermined statements exist.
-     */
-    public boolean isDetermined() {
-        return this != UNPROVABLE_AND_REFUTABLE;
-    }
 }
