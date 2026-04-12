@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xml:id="definitions"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.1">
+
+  <title>Definitions</title>
+
+  <xi:include href="p01.xml"/>
+  <xi:include href="def-calculus.xml"/>
+  <xi:include href="def-subclassical.xml"/>
+  <xi:include href="def-edge-types.xml"/>
+  <xi:include href="p02.xml"/>
+
+</section>

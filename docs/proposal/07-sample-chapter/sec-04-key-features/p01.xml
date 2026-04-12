@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<para xmlns="http://docbook.org/ns/docbook">
+  The graph is not merely a representation of known results: it is a research tool
+  that generates new ones. Its connectivity structure is itself informative. Two
+  calculi that appear to have no relationship when studied in isolation may prove
+  to be connected by a path of extension and embedding edges of modest length; such
+  a path establishes a chain of translations that may or may not be composable into
+  a direct translation between the two endpoints. When a direct translation exists,
+  the path constitutes a proof of its existence; when no direct translation can be
+  composed from the available edges, the obstruction is localized to a specific step
+  in the path, and the analysis of that obstruction becomes a well-defined proof-theoretic
+  problem rather than an open-ended search. The graph thus converts the vague question
+  <quote>Are these two logics related?</quote> into the precise question
+  <quote>What is the shortest path between these two nodes, and do the edge types
+  along it compose?</quote>
+</para>

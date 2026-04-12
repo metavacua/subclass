@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<para xmlns="http://docbook.org/ns/docbook">
+  The following definitions fix the vocabulary of the graph construction. They are stated
+  in general terms sufficient for the results of this chapter; sharper conditions will be
+  imposed in later chapters as the structure of specific regions of the graph demands it.
+  Each definition is followed by brief remarks identifying the salient cases among the
+  calculi that anchor the present construction.
+</para>

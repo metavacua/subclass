@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<para xmlns="http://docbook.org/ns/docbook">
+  The field of logic has produced, over the past century and a half, an extraordinary
+  profusion of formal systems. From Gentzen's sequent calculi for classical and
+  intuitionistic logic, through Łukasiewicz's many-valued systems, Girard's linear logic,
+  and the paraconsistent and paracomplete families developed by da Costa, Belnap, and
+  their successors, each generation of logicians has extended, restricted, or reorganized
+  the inferential resources of its predecessors. The result is a landscape of incomparable
+  richness — and, as a consequence of that richness, of incomparable difficulty to
+  navigate. Individual calculi are studied with great precision. Their relationships to
+  one another are understood only locally, by pairwise comparison or by the occasional
+  systematic survey of a particular family. The global structure of the space they jointly
+  inhabit — the question of what kind of object the totality of logical calculi <emphasis>is</emphasis>,
+  what shape it has, what its internal topology looks like — has never been the direct
+  object of a mathematical investigation. The present chapter begins that investigation.
+</para>

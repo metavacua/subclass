@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<para xmlns="http://docbook.org/ns/docbook">
+  The duality structure of the graph is particularly revealing. Paraconsistency and
+  paracompleteness — properties that have historically been treated as independent
+  and competing departures from classical logic — appear in the graph as a pair
+  of symmetric positions with respect to the duality operations of
+  <xref linkend="thm-duality-generation"/>. A paraconsistent calculus is one in which
+  the principle of explosion (<mathphrase>&#x22A5; &#x22A2; &#x03C6;</mathphrase>
+  for arbitrary <mathphrase>&#x03C6;</mathphrase>) fails; its dual under
+  <mathphrase>&#x03B4;<subscript>L</subscript></mathphrase>
+  is a paracomplete calculus, one in which the principle of excluded middle
+  (<mathphrase>&#x22A2; &#x03C6; &#x2228; &#x00AC;&#x03C6;</mathphrase>) fails.
+  The graph makes this duality structural and explicit: it is not a philosophical
+  observation about two families of non-classical logics, but a theorem about the
+  action of a specific operation on a specific class of sequent calculi. Identifying
+  the duality makes it possible to transfer results across the paraconsistent–paracomplete
+  divide automatically, and to identify the precise metalinguistic conditions that
+  define membership in each family.
+</para>

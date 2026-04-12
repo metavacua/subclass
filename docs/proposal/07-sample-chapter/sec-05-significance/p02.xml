@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<para xmlns="http://docbook.org/ns/docbook">
+  Beyond its role within the theory of logical calculi, the subclassical graph has a
+  structural relationship to quantum computing that warrants remark even at this
+  preliminary stage. The logical operations of a quantum gate act on qubits in a
+  non-classical setting: the conjunction and disjunction of quantum states do not
+  satisfy the classical structural rules of Weakening and Contraction, and the
+  measurement process introduces an asymmetry between the left and right sides of the
+  information-flow relation that has a precise proof-theoretic analogue in the
+  restriction from <mathphrase>LK</mathphrase> to
+  <mathphrase>LJ</mathphrase>. The duality operations of
+  <xref linkend="thm-duality-generation"/>, applied to the fragment of the subclassical
+  graph that includes linear logic and its extensions, generate a family of calculi
+  whose sequent structure corresponds to the algebraic structure of the quantum
+  circuit model. Whether this correspondence is merely a structural analogy or a
+  substantive theoretical connection — whether the subclassical graph can be made to
+  serve as the logical foundation for a theory of quantum computation in the same way
+  that classical propositional logic underlies the Boolean circuit model — is an open
+  question. It is the right question. Its investigation begins with the construction
+  that this chapter has described.
+</para>

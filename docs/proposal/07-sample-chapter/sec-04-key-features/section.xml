@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xml:id="key-features"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.1">
+
+  <title>Key Features of the Graph</title>
+
+  <xi:include href="p01.xml"/>
+  <xi:include href="p02.xml"/>
+  <xi:include href="p03.xml"/>
+
+</section>

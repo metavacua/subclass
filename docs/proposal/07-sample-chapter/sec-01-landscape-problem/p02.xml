@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<para xmlns="http://docbook.org/ns/docbook">
+  The instrument of investigation is the <emphasis>subclassical graph of calculi</emphasis>:
+  a directed graph in which every node is a logical calculus and every edge encodes a
+  specific structural relationship between two calculi — whether one extends the other by
+  the addition of axioms or rules, whether one embeds into the other by a definitional
+  translation, whether the two are equivalent under some reinterpretation of their
+  connectives, or whether one is the systematic dual of the other, obtained by exchanging
+  the roles of premiss and conclusion in the underlying proof theory. The graph does not
+  impose an arbitrary ordering on the calculi; it records the relationships that hold
+  among them on structural grounds. To traverse it is, in the relevant sense, to do
+  comparative proof theory in earnest — not as a catalogue of curiosities, but as the
+  systematic cartography of a previously unmapped territory.
+</para>

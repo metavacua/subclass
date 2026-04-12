@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<para xmlns="http://docbook.org/ns/docbook">
+  The subclassical graph serves as a benchmark for the expressiveness and computational
+  power of logical calculi in a sense that no pairwise comparison can provide: a
+  calculus's position in the graph — its extensions, its embeddings, the cardinality
+  and composition of its duality orbit — gives a structural fingerprint that can be
+  compared across the entire landscape at once. This fingerprint is the natural unit
+  for the decision problem that was Tarski's starting point and that remains the
+  organizing problem of the present work: the question of decidability, semi-decidability,
+  and essential undecidability for theories formulated in non-classical logical
+  frameworks does not have the same answer in every region of the graph, and the
+  graph is the tool that makes it possible to ask the question with the precision
+  it requires. An automated reasoning system modeled on the graph — one that represents
+  its inference engine as a navigable subgraph and selects proof strategies by
+  traversing duality and extension edges — is a natural engineering consequence of
+  the theoretical framework, and its development constitutes one of the
+  later aims of this project.
+</para>

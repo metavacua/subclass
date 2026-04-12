@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xml:id="significance"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.1">
+
+  <title>Significance and Implications</title>
+
+  <xi:include href="p01.xml"/>
+  <xi:include href="p02.xml"/>
+
+</section>

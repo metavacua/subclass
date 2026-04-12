@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<para xmlns="http://docbook.org/ns/docbook">
+  The four edge types are not mutually exclusive at the level of pairs of calculi;
+  a single pair may be related by more than one edge of different types, and identifying
+  such coincidences is itself a source of structural information about the graph.
+  What distinguishes the graph from an untyped Hasse diagram is precisely the
+  differentiation of edge types: it is possible, and important, to know not merely
+  that two calculi stand in some relation but which relation or relations hold between
+  them and in which direction. An extension edge is directed from the weaker to the
+  stronger calculus; an embedding edge is directed from the source to its host; a
+  duality edge is directed according to the convention established in the construction
+  of <xref linkend="construction-method"/>, where the notion of a <quote>primary</quote>
+  and <quote>derived</quote> calculus within a dual pair will be made precise.
+  Equivalence edges are undirected.
+</para>

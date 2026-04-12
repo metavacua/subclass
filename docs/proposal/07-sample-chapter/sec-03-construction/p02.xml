@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<para xmlns="http://docbook.org/ns/docbook">
+  The construction is most transparent in the four-fold family generated from
+  Gentzen's intuitionistic sequent calculus
+  <mathphrase>LJ</mathphrase>. In <mathphrase>LJ</mathphrase>, the right-hand side
+  of every sequent is restricted to contain at most one formula; this is the
+  syntactic encoding of the constructive reading of disjunction and existence, under
+  which a disjunction is only asserted when one of its disjuncts has been
+  established. Dualizing the right restriction to the left yields a calculus in which
+  the left-hand side of every sequent contains at most one formula: this is
+  Rauszer's dual-intuitionistic logic, here written
+  <mathphrase>LDJ</mathphrase>, whose provable sequents correspond to the theorems
+  of the co-Heyting algebra. A second, independent duality operation exchanges the
+  treatment of the implication connective: the result is the counter-intuitionistic
+  calculus <mathphrase>CoLJ</mathphrase>. Combining both operations produces the
+  fourth member of the orbit, which collapses back to a variant of classical logic
+  when both restrictions are simultaneously lifted, confirming that
+  <mathphrase>LK</mathphrase> itself is a fixed point of the combined duality and
+  that the orbit of <mathphrase>LJ</mathphrase> under the Klein four-group is
+  genuinely four-element. The same construction, applied to Sambin's Basic Logic and
+  to the Ardeshir–Vaezian calculus <mathphrase>U</mathphrase>, populates further
+  regions of the graph with calculi whose positions would otherwise require
+  independent discovery.
+</para>

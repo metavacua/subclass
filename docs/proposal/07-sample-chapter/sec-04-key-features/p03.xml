@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<para xmlns="http://docbook.org/ns/docbook">
+  The graph is generative, not merely archival. Its primary value is not as a fixed
+  catalogue of known calculi but as a framework for producing calculi that have not
+  previously been described. Every blank region — every part of the graph where the
+  duality construction predicts a node but no independently named calculus exists —
+  is a prediction: there ought to be a calculus there, with such-and-such properties,
+  and the construction specifies in advance what its rules must look like. Some of
+  these predictions will be confirmed by the rediscovery of calculi that have already
+  been studied under other names; others will identify genuinely new systems. In either
+  case the graph provides what the existing literature does not: a principled basis for
+  asking <quote>What is missing?</quote> and a method for answering the question that
+  is independent of historical accident.
+</para>

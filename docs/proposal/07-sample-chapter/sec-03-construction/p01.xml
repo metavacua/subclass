@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<para xmlns="http://docbook.org/ns/docbook">
+  The primary engine of construction in the subclassical graph is systematic
+  dualization. Every sequent calculus in the Gentzen tradition presents its rules
+  in a <emphasis>bilateral</emphasis> format: each connective
+  <mathphrase>&#x25CB;</mathphrase> has a left-introduction rule governing how
+  <mathphrase>&#x25CB;</mathphrase>-formulas may appear on the left of the turnstile,
+  and a right-introduction rule governing how they may appear on the right. These two
+  rules are, in a precise sense, independent specifications. One may exchange them —
+  replacing the left rule for <mathphrase>&#x25CB;</mathphrase> with the mirror image
+  of its right rule, and vice versa — and the result is a new, well-formed calculus.
+  Iterated across all connectives, or applied selectively to subsets of them, this
+  operation generates a structured family of calculi from any single starting point.
+  The family has a canonical algebraic description: the group of duality operations
+  acting on a calculus is a quotient of
+  <mathphrase>&#x2124;/2&#x2124; &#x00D7; &#x2124;/2&#x2124;</mathphrase>,
+  the Klein four-group.
+</para>

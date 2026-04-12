@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xml:id="construction-method"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.1">
+
+  <title>The Construction Method: Symmetry and Duality</title>
+
+  <xi:include href="p01.xml"/>
+  <xi:include href="p02.xml"/>
+  <xi:include href="thm-duality-generation.xml"/>
+
+</section>

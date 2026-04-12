@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter xml:id="subclassical-graph-calculi"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         version="5.1">
+
+  <title>The Subclassical Graph of Calculi</title>
+
+  <xi:include href="sec-01-landscape-problem/section.xml"/>
+  <xi:include href="sec-02-definitions/section.xml"/>
+  <xi:include href="sec-03-construction/section.xml"/>
+  <xi:include href="sec-04-key-features/section.xml"/>
+  <xi:include href="sec-05-significance/section.xml"/>
+
+</chapter>

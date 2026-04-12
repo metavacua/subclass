@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<theorem xml:id="thm-duality-generation"
+         xmlns="http://docbook.org/ns/docbook">
+  <title>Duality Generation</title>
+  <para>
+    Let <mathphrase>C = (&#x2112;, &#x211B;)</mathphrase> be a sequent calculus
+    whose rules are presented in bilateral Gentzen form. Define two operations on
+    calculi:
+  </para>
+  <itemizedlist>
+    <listitem>
+      <para>
+        <emphasis role="bold">Left-dualization</emphasis>
+        <mathphrase>&#x03B4;<subscript>L</subscript></mathphrase>:
+        for each connective, exchange its left-introduction rule with the
+        left-right mirror image of its right-introduction rule, leaving all
+        other rules unchanged.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <emphasis role="bold">Right-dualization</emphasis>
+        <mathphrase>&#x03B4;<subscript>R</subscript></mathphrase>:
+        for each connective, exchange its right-introduction rule with the
+        left-right mirror image of its left-introduction rule, leaving all
+        other rules unchanged.
+      </para>
+    </listitem>
+  </itemizedlist>
+  <para>
+    Then <mathphrase>&#x03B4;<subscript>L</subscript></mathphrase>
+    and <mathphrase>&#x03B4;<subscript>R</subscript></mathphrase>
+    are both involutions, they commute, and the group
+    <mathphrase>G = &#x27E8;&#x03B4;<subscript>L</subscript>,
+    &#x03B4;<subscript>R</subscript>&#x27E9;</mathphrase>
+    is isomorphic to a quotient of
+    <mathphrase>&#x2124;/2&#x2124; &#x00D7; &#x2124;/2&#x2124;</mathphrase>.
+    The orbit
+    <mathphrase>{C,
+    &#x03B4;<subscript>L</subscript>(C),
+    &#x03B4;<subscript>R</subscript>(C),
+    &#x03B4;<subscript>L</subscript>(&#x03B4;<subscript>R</subscript>(C))}</mathphrase>
+    has cardinality at most 4; it has cardinality exactly 4 when
+    <mathphrase>C</mathphrase> is not a fixed point of either
+    <mathphrase>&#x03B4;<subscript>L</subscript></mathphrase> or
+    <mathphrase>&#x03B4;<subscript>R</subscript></mathphrase>.
+  </para>
+  <proof>
+    <para>
+      That each operation is an involution follows by inspection: applying
+      <mathphrase>&#x03B4;<subscript>L</subscript></mathphrase> twice to any rule
+      restores it to its original form, since the exchange is its own inverse.
+      Commutativity holds because
+      <mathphrase>&#x03B4;<subscript>L</subscript></mathphrase> and
+      <mathphrase>&#x03B4;<subscript>R</subscript></mathphrase> act on disjoint
+      families of rules: the former on the left-introduction rules for each
+      connective, the latter on the right-introduction rules. Rules in neither
+      affected family are unchanged by both operations, and the order in which the
+      exchanges are performed is therefore immaterial. The orbit cardinality claim
+      is a standard consequence of the orbit-stabilizer theorem applied to an
+      action of
+      <mathphrase>&#x2124;/2&#x2124; &#x00D7; &#x2124;/2&#x2124;</mathphrase>
+      on a set: an orbit has size equal to the index of the stabilizer of any of
+      its elements, and the stabilizer of <mathphrase>C</mathphrase> is trivial
+      if and only if <mathphrase>C</mathphrase> is a fixed point of neither
+      generator.
+    </para>
+  </proof>
+</theorem>

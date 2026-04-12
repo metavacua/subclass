@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definition xml:id="def-edge-types"
+            xmlns="http://docbook.org/ns/docbook">
+  <title>Edge Types</title>
+  <para>
+    Let <mathphrase>C</mathphrase> and <mathphrase>D</mathphrase> be nodes of the
+    subclassical graph. An <emphasis>edge</emphasis> from <mathphrase>C</mathphrase>
+    to <mathphrase>D</mathphrase> is a labelled pair
+    <mathphrase>(C, D, &#x03C4;)</mathphrase>
+    where the label <mathphrase>&#x03C4;</mathphrase> belongs to the set
+    <mathphrase>{extension, embedding, equivalence, duality}</mathphrase>,
+    with meanings as follows.
+  </para>
+  <itemizedlist>
+    <listitem>
+      <para>
+        <emphasis role="bold">Extension.</emphasis>
+        <mathphrase>D</mathphrase> extends <mathphrase>C</mathphrase>: every rule
+        of <mathphrase>C</mathphrase> is a rule of <mathphrase>D</mathphrase>, and
+        <mathphrase>D</mathphrase> adds at least one rule not present in
+        <mathphrase>C</mathphrase>. Extension is the subclassical analogue of the
+        set-inclusion order on theories: <mathphrase>Th(C) &#x2286; Th(D)</mathphrase>.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <emphasis role="bold">Embedding.</emphasis>
+        <mathphrase>C</mathphrase> embeds into <mathphrase>D</mathphrase> via a
+        definitional translation <mathphrase>t</mathphrase>: there exists a
+        systematic mapping of the connectives of <mathphrase>C</mathphrase> into
+        complex formulas of <mathphrase>D</mathphrase> such that
+        <mathphrase>C &#x22A2; &#x03C6;</mathphrase> if and only if
+        <mathphrase>D &#x22A2; t(&#x03C6;)</mathphrase> for all formulas
+        <mathphrase>&#x03C6;</mathphrase>.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <emphasis role="bold">Equivalence.</emphasis>
+        <mathphrase>C</mathphrase> and <mathphrase>D</mathphrase> are
+        equiprovable: each embeds into the other, and the embeddings are mutually
+        inverse up to provable equivalence of the translations.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <emphasis role="bold">Duality.</emphasis>
+        <mathphrase>D</mathphrase> is a structural dual of <mathphrase>C</mathphrase>:
+        <mathphrase>D</mathphrase> is obtained from <mathphrase>C</mathphrase> by a
+        systematic exchange of the roles of premiss and conclusion in one or more
+        families of inference rules, as specified in
+        <xref linkend="construction-method"/>.
+      </para>
+    </listitem>
+  </itemizedlist>
+</definition>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definition xml:id="def-subclassical"
+            xmlns="http://docbook.org/ns/docbook">
+  <title>Subclassical Calculus</title>
+  <para>
+    A calculus <mathphrase>C</mathphrase> is <emphasis>subclassical</emphasis>
+    with respect to a background calculus <mathphrase>B</mathphrase> if every
+    sequent derivable in <mathphrase>C</mathphrase> is derivable in
+    <mathphrase>B</mathphrase>, but there exists at least one sequent derivable in
+    <mathphrase>B</mathphrase> that is not derivable in <mathphrase>C</mathphrase>.
+    The graph takes Gentzen's classical sequent calculus
+    <mathphrase>LK</mathphrase> as the canonical background. A subclassical calculus
+    is therefore a restriction: it forbids at least one inference that
+    <mathphrase>LK</mathphrase> licenses, whether by omitting a structural rule
+    (as in linear logic, which removes both Weakening and Contraction), by
+    restricting the multiplicity of conclusions (as in intuitionistic logic
+    <mathphrase>LJ</mathphrase>, which permits at most one formula on the right of
+    the turnstile), or by some combination of rule modifications.
+  </para>
+</definition>
