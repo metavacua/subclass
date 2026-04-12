@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xml:id="decidability-update"
+         xmlns="http://docbook.org/ns/docbook"
+         version="5.0">
+
+  <title>Formalising the Notion of a Decision Method</title>
+
+  <para>
+    The Curry-Howard-Lambek correspondence identifies three equivalent
+    descriptions of the same notion of <emphasis>constructive
+    witness</emphasis>:
+  </para>
+
+  <itemizedlist>
+    <listitem>
+      <para>
+        <emphasis role="bold">Logic (Curry-Howard).</emphasis>
+        A proof of a proposition <mathphrase>P</mathphrase> is a term of type
+        <mathphrase>P</mathphrase> in a typed lambda calculus.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <emphasis role="bold">Type theory.</emphasis>
+        A program inhabiting a type <mathphrase>A &#x2192; B</mathphrase> is
+        a constructive function mapping evidence of <mathphrase>A</mathphrase>
+        to evidence of <mathphrase>B</mathphrase>.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <emphasis role="bold">Category theory (Lambek).</emphasis>
+        A morphism in a cartesian closed category corresponds to a proof in
+        intuitionistic propositional logic and to a typed program.
+      </para>
+    </listitem>
+  </itemizedlist>
+
+  <para>
+    The <emphasis>dual</emphasis> — the non-correspondence — is equally
+    precise: a sentence for which no proof term, no inhabiting program, and
+    no morphism exists is not constructively witnessed.  This gives formal
+    content to Tarski's phrase <quote>devices available in
+    <mathphrase>T</mathphrase></quote>: a device is exactly a constructive
+    witness in the sense of the correspondence.
+  </para>
+
+  <para>
+    Given a theory <mathphrase>T</mathphrase> in some logical framework, write
+  </para>
+
+  <para>
+    <mathphrase>Th(T) = { &#x03C6; : T &#x22A2; &#x03C6; }</mathphrase>
+  </para>
+
+  <para>
+    for the set of sentences provable in <mathphrase>T</mathphrase>.  The
+    decision problem of <mathphrase>T</mathphrase> reduces to asking whether
+    <mathphrase>Th(T)</mathphrase> is a <emphasis>recursive</emphasis>
+    (decidable) set.
+  </para>
+
+  <definition xml:id="def-decider">
+    <title>Decider</title>
+    <para>
+      A <emphasis>decider</emphasis> for <mathphrase>T</mathphrase> is a total
+      Turing machine <mathphrase>M</mathphrase> that halts on every input
+      <mathphrase>&#x03C6;</mathphrase> and accepts if and only if
+      <mathphrase>&#x03C6; &#x2208; Th(T)</mathphrase>.  The existence of a
+      decider is equivalent to <mathphrase>Th(T)</mathphrase> being a recursive
+      set.
+    </para>
+  </definition>
+
+  <definition xml:id="def-semi-decider">
+    <title>Semi-decider</title>
+    <para>
+      A <emphasis>semi-decider</emphasis> for <mathphrase>T</mathphrase> is a
+      Turing machine <mathphrase>M</mathphrase> that accepts every
+      <mathphrase>&#x03C6; &#x2208; Th(T)</mathphrase> and either rejects or
+      diverges on every <mathphrase>&#x03C6; &#x2209; Th(T)</mathphrase>.  The
+      existence of a semi-decider is equivalent to
+      <mathphrase>Th(T)</mathphrase> being recursively enumerable (RE).
+    </para>
+  </definition>
+
+  <para>
+    Semi-decidability is strictly weaker than decidability: every recursive
+    set is RE, but the converse fails.  The set of first-order validities
+    is RE — systematic proof search is guaranteed to halt on every valid
+    sentence by the completeness theorem (Gödel, 1930) — but it is not
+    recursive, as established by Church and Turing (1936).
+  </para>
+
+  <para>
+    A classically inconsistent theory <mathphrase>T</mathphrase> has
+    <mathphrase>Th(T)</mathphrase> equal to the set of all sentences in its
+    language: every sentence is provable by the principle of explosion.  The
+    constant-YES function is then a decider, making every classically
+    inconsistent theory trivially decidable.  This conclusion holds
+    regardless of the logical framework used to formalise
+    <mathphrase>T</mathphrase>, provided that framework validates explosion.
+  </para>
+
+</section>
