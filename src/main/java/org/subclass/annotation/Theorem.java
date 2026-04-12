@@ -72,4 +72,21 @@ public @interface Theorem {
      * Useful for linking to external resources.
      */
     String proofReferenceId() default "";
+
+    /**
+     * Optional verifiable proof notation in sequent calculus form.
+     * Format: (⊢sequent, rule₁, rule₂, ..., Ax) for linear proofs
+     * or (⊢sequent, rule₁, [(branch₁); (branch₂)]) for branching proofs.
+     *
+     * When provided, the proof is compiled and validated at compile-time by the
+     * annotation processor. Every formula in the proof must be a subformula of
+     * the starting sequent (subformula property).
+     *
+     * Example:
+     *   proof = "(⊢A∨¬A, L∨, L¬, Ax)"
+     *
+     * If both `proof` and `proofReference` are provided, `proof` is the formal,
+     * machine-checkable proof, while `proofReference` cites the original source.
+     */
+    String proof() default "";
 }
