@@ -17,16 +17,16 @@ The author's library is built from a systematic search for a pre-existing soluti
 specific problem of articulation. That library includes *From Kant to Hilbert* (Ewald),
 *From Frege to Gödel* (van Heijenoort), *The Undecidable* (Davis), *Model Theory*
 (Chang and Keisler), *Undecidable Theories* (Tarski, Mostowski, and Robinson),
-*Conjectures and Refutations* (Popper), and much else in the standard reference canon of
+*Conjectures and Refutations* (Popper), and much more in the standard reference canon of
 formal logic and foundations. If a work existed that occupied the intersection this book
 addresses, it would be on those shelves. It is not. The gap is not a marketing claim; it
 is the reason the book has to be written.
 
 What is absent from the existing literature is a unified framework that treats the
-**consequence relation itself as a parameter** across the class of logics compatible with
+**logical relation itself as a parameter** across the category of logics compatible with
 classical first-order predicate logic — logics that stand in well-defined relationships
 to classical logic as extensions, duals, meets, or joins in the logical and categorical
-space of formal systems. Within that class, interpretability and provability have precise
+space of formal systems. Within that category, interpretability, irrefutability, and provability have precise
 dual counterparts: non-interpretability, unprovability, and refutability. Working out
 these dual relationships gives the framework indirect reach toward theories and logics
 that are *not* compatible with classical logic, without requiring that the incompatible
@@ -47,7 +47,7 @@ the scope of any current formalism. The framework makes that distinction tractab
 No existing work provides this. The surveys of non-classical logic treat individual systems
 in isolation or in pairwise comparison; they do not construct the unified architecture.
 The category-theoretic treatments of logic (Lawvere, Johnstone) address the categorical
-structure of logical systems but not the specific problem of variable consequence and its
+structure of consistent logical systems but not the specific problem of variable consequence and its
 applications to cross-disciplinary formal reasoning. *Undecidable Theories*, the closest
 foundational antecedent, establishes the complete picture for the classical case; it does
 not ask how that picture changes when the underlying logic is varied, because it takes the
