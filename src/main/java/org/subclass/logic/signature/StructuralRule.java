@@ -1,5 +1,8 @@
 package org.subclass.logic.signature;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 /**
  * Enum representing structural rules in sequent calculus.
  * These rules apply to all formulas uniformly and define
@@ -38,5 +41,25 @@ public enum StructuralRule {
 
     public String getDescription() {
         return description;
+    }
+
+    /**
+     * Format a set of structural rules as a human-readable string.
+     * Handles special cases (full set, empty set) and provides consistent formatting.
+     *
+     * @param rules Set of structural rules to format
+     * @return Human-readable string representation of the rules
+     */
+    public static String formatRules(Set<StructuralRule> rules) {
+        if (rules == null || rules.isEmpty()) {
+            return "No structural rules";
+        }
+        if (rules.size() == 3) {
+            return "Full structural rules (W, C, E)";
+        }
+        return rules.stream()
+            .map(StructuralRule::getSymbol)
+            .sorted()
+            .collect(Collectors.joining(", "));
     }
 }

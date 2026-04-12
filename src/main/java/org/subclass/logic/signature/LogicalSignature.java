@@ -78,17 +78,7 @@ public record LogicalSignature(
      * Get a human-readable string representation of structural rules.
      */
     public String getStructuralRulesSummary() {
-        if (hasAllStructuralRules()) {
-            return "Full structural rules (W, C, E)";
-        }
-        if (structuralRules.isEmpty()) {
-            return "No structural rules";
-        }
-        return structuralRules.stream()
-            .map(StructuralRule::getSymbol)
-            .sorted()
-            .reduce((a, b) -> a + ", " + b)
-            .orElse("No structural rules");
+        return StructuralRule.formatRules(structuralRules);
     }
 
     @Override
