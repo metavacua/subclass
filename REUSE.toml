@@ -1,0 +1,43 @@
+# SPDX-FileCopyrightText: 2026 metavacua
+# SPDX-License-Identifier: CC0-1.0
+#
+# REUSE configuration for the subclass project.
+# See https://reuse.software/spec-3.3/ for the specification.
+#
+# The project is dual-licensed:
+#   * Software (Java sources, build scripts, configuration) under AGPL-3.0-or-later.
+#   * Monograph content (README, CHANGELOG, docs/**) under CC-BY-SA-4.0.
+#
+# These bulk annotations apply to files that do not carry an inline SPDX header.
+# Inline headers in individual files always take precedence (precedence = "aggregate").
+
+version = 1
+
+# ---------------------------------------------------------------------------
+# Software: AGPL-3.0-or-later
+# ---------------------------------------------------------------------------
+
+[[annotations]]
+path = [
+    "pom.xml",
+    ".gitignore",
+    "src/**",
+]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 metavacua"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+# ---------------------------------------------------------------------------
+# Monograph content and project documentation: CC-BY-SA-4.0
+# ---------------------------------------------------------------------------
+
+[[annotations]]
+path = [
+    "README.md",
+    "CHANGELOG.md",
+    "MAVEN_PROXY_CONFIG.md",
+    "docs/**",
+]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 metavacua"
+SPDX-License-Identifier = "CC-BY-SA-4.0"

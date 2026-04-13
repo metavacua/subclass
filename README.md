@@ -2,9 +2,12 @@
 
 > A Java formalization library and DocBook XML monograph extending Tarski's undecidability results beyond classical Boolean logic into the lattice-theoretic universe of first-order theories.
 
-![Status](https://img.shields.io/badge/status-pre--alpha%20%E2%80%93%20no%20source%20yet-red)
+![Status](https://img.shields.io/badge/status-alpha-orange)
 ![License (code)](https://img.shields.io/badge/code%20license-AGPL%20v3-blue)
-![License (content)](https://img.shields.io/badge/content%20license-CC--SA%204.0%20International-lightgrey)
+![License (content)](https://img.shields.io/badge/content%20license-CC--BY--SA%204.0-lightgrey)
+![REUSE](https://img.shields.io/badge/REUSE-3.3-green)
+![SemVer](https://img.shields.io/badge/SemVer-2.0.0-informational)
+![Changelog](https://img.shields.io/badge/changelog-Keep%20a%20Changelog%201.1.0-yellow)
 
 ---
 
@@ -19,9 +22,10 @@
 7. [Documentation Architecture](#documentation-architecture)
 8. [Prerequisites](#prerequisites)
 9. [Building from Source](#building-from-source)
-10. [Contributing](#contributing)
-11. [License](#license)
-12. [References](#references)
+10. [Versioning and Changelog](#versioning-and-changelog)
+11. [Licensing and REUSE Compliance](#licensing-and-reuse-compliance)
+12. [Contributing](#contributing)
+13. [References](#references)
 
 ---
 
@@ -90,13 +94,18 @@ The following concepts appear throughout the codebase and the accompanying monog
 ## Project Status and Roadmap
 
 > [!NOTE]
-> This repository is in the monograph-drafting and architecture phase. No Java source files or DocBook XML modules exist yet. The directory structure described below is planned, not present.
+> This repository is in the **alpha** phase. Core infrastructure (tetragram
+> metalanguage, phantom-typed proof architecture, annotation processor, and
+> a first DocBook sample chapter) is in place. The example proof witnesses
+> and several inference rules are still stubs — see
+> [`CHANGELOG.md`](CHANGELOG.md) for the current working set.
 
 - [x] Repository initialized
 - [x] Mathematical foundations documented in README
-- [ ] `pom.xml` with initial dependencies
-- [ ] DocBook XML schema and atomized module skeleton
-- [ ] Core Java interfaces: `LogicSignature`, `Theory`, `Interpretation`
+- [x] `pom.xml` with initial dependencies
+- [x] Core Java infrastructure: `LogicalSignature`, `Tetragram`, `Proof<L,R>`, `TheoremProcessor`
+- [x] First DocBook sample chapter (`docs/proposal/07-sample-chapter/`)
+- [ ] Complete atomized DocBook module skeleton (abstract, introduction, hierarchy, main theorem)
 
 **Milestone 1 — DocBook XML Monograph Skeleton**
 - [ ] `docs/` directory with exc-c14n XML schema configuration
@@ -129,27 +138,49 @@ The following concepts appear throughout the codebase and the accompanying monog
 
 ## Repository Structure
 
-The following directory layout is planned. Only the repository root and `.gitignore` currently exist.
+The layout below reflects the current state of the repository. Directories
+marked _(planned)_ are described by the roadmap but not yet present.
 
 ```
 subclass/
-├── docs/                          # Monograph — atomized DocBook XML modules
-│   ├── schema/                    # exc-c14n XML schema and catalog
-│   ├── abstract/                  # One .xml file per paragraph of the abstract
-│   ├── introduction/
-│   ├── hierarchy-of-regrets/
-│   ├── main-theorem/
-│   └── xslt/                      # Output stylesheets (LaTeX, XHTML, RDF)
-├── src/
-│   └── main/
-│       └── java/
-│           └── io/github/metavacua/subclass/
-│               ├── theories/      # FALL, bi-constructive, phase-space
-│               ├── hierarchy/     # Hierarchy of Infinite Regrets
-│               ├── independence/  # Non-interpretability results
-│               └── decidability/  # Decision procedures and witnesses
-├── pom.xml
-└── README.md
+├── LICENSE                              # AGPL-3.0-or-later (root copy for GitHub)
+├── LICENSES/                            # REUSE-compliant SPDX license texts
+│   ├── AGPL-3.0-or-later.txt
+│   └── CC-BY-SA-4.0.txt
+├── REUSE.toml                           # REUSE 3.3 SPDX annotations
+├── CHANGELOG.md                         # Keep a Changelog 1.1.0
+├── README.md
+├── MAVEN_PROXY_CONFIG.md
+├── pom.xml                              # Maven, Java 17, JUnit 5, JGraphT
+├── docs/
+│   ├── part1/                           # Early narrative fragments (DocBook)
+│   └── proposal/
+│       ├── 02-market-and-competition.md
+│       ├── 03-publication-details.md
+│       ├── 04-biographical-sketch.md
+│       └── 07-sample-chapter/           # First atomized DocBook 5.1 sample chapter
+│           ├── chapter.xml
+│           └── sec-01-…05-…/            # Per-section paragraph and definition files
+└── src/
+    ├── main/
+    │   ├── java/org/subclass/
+    │   │   ├── annotation/              # @Theorem, @TheoremFamily, LogicalSignatureDefinition
+    │   │   ├── doc/                     # TheoremDocExporter, TheoremFamilyTaglet
+    │   │   ├── logic/
+    │   │   │   ├── proof/               # Legacy string-based Proof / ProofChecker / ProofParser
+    │   │   │   │   └── typed/           # Phantom-typed Proof<L,R> architecture
+    │   │   │   │       └── capabilities/# Structural-rule capability markers
+    │   │   │   ├── rules/               # InferenceRules (sequent calculus)
+    │   │   │   ├── signature/           # LogicalSignature, Connective, InferenceRule, StructuralRule
+    │   │   │   └── tetragram/           # Tetragram, TetragamNode, TheoremStatus
+    │   │   └── processor/               # TheoremProcessor (annotation processor)
+    │   └── resources/META-INF/services/ # javax.annotation.processing.Processor registration
+    └── test/
+        └── java/org/subclass/examples/
+            ├── LEMTetragam.java
+            ├── LNCTetragram.java
+            ├── SignatureDefinitions.java
+            └── executable/              # LEMProofs, LNCProofs (typed witnesses)
 ```
 
 ---
@@ -191,7 +222,7 @@ exc-c14n (defined in [W3C Exclusive XML Canonicalization](https://www.w3.org/TR/
 ## Prerequisites
 
 - **Java 17 or later** — tested on OpenJDK 17 and 21
-- **Apache Maven 3.9+** — or use the Maven Wrapper (`./mvnw`) bundled in the repository
+- **Apache Maven 3.9+** — system-installed (no Maven Wrapper is committed; see the Building from Source section)
 - **Git**
 - **DocBook/XSLT toolchain** (for monograph rendering) — Saxon-HE 12+ recommended; `dblatex` for PDF output
 - **IDE** (optional) — IntelliJ IDEA or Eclipse with m2e plugin
@@ -207,20 +238,66 @@ git clone https://github.com/metavacua/subclass.git
 cd subclass
 ```
 
-Build with the Maven Wrapper:
+Build and test with a locally installed Maven 3.9+:
 
 ```bash
-./mvnw clean verify
+mvn clean verify
 ```
 
-Run the test suite:
+Run just the test suite:
 
 ```bash
-./mvnw test
+mvn test
 ```
 
 > [!NOTE]
-> As of the current pre-alpha stage no source files exist and the `pom.xml` has not been created. The build instructions above describe the intended workflow and will be updated as development progresses.
+> A Maven Wrapper (`./mvnw`) is not committed. If you prefer a pinned
+> Maven version, generate one with `mvn -N wrapper:wrapper`. For
+> offline or proxy-restricted environments, see
+> [`MAVEN_PROXY_CONFIG.md`](MAVEN_PROXY_CONFIG.md).
+
+---
+
+## Versioning and Changelog
+
+This project follows [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html).
+While the version is below `1.0.0`, the public API (the Java library surface,
+the `@Theorem` / `@TheoremFamily` annotation contract, the annotation
+processor's diagnostic schema, and the DocBook module layout) may change in
+any `0.MINOR.PATCH` release without further notice. Once `1.0.0` is cut, the
+usual SemVer compatibility guarantees take effect.
+
+All user-visible changes are tracked in [`CHANGELOG.md`](CHANGELOG.md),
+which follows [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/).
+Every pull request that touches public behaviour should add an entry to the
+`[Unreleased]` section.
+
+---
+
+## Licensing and REUSE Compliance
+
+SubClass is **dual-licensed** and declares its licensing in the machine-readable
+[REUSE 3.3](https://reuse.software/spec-3.3/) format via [`REUSE.toml`](REUSE.toml):
+
+| Scope | SPDX identifier | Files |
+|---|---|---|
+| **Software** (Java sources, build scripts, configuration) | `AGPL-3.0-or-later` | `src/**`, `pom.xml`, `.gitignore` |
+| **Monograph content** (README, changelog, DocBook modules) | `CC-BY-SA-4.0` | `README.md`, `CHANGELOG.md`, `MAVEN_PROXY_CONFIG.md`, `docs/**` |
+
+Full license texts live in the [`LICENSES/`](LICENSES/) directory (one file
+per SPDX identifier, as required by REUSE). A copy of the software license
+is also at [`LICENSE`](LICENSE) in the repository root so that GitHub's
+license detection picks it up.
+
+To verify REUSE compliance locally:
+
+```bash
+pipx install reuse     # or: pip install --user reuse
+reuse lint
+```
+
+Inline SPDX headers in individual files take precedence over the bulk
+annotations in `REUSE.toml`.
 
 ---
 
@@ -229,16 +306,6 @@ Run the test suite:
 Contributions are closed at this time; any contributions require an explicit written contract to protect contributor and repository intellectual property rights.
 
 Formal contribution guidelines (`CONTRIBUTING.md`) and a code of conduct will be added before Milestone 2. In the meantime, use the [Issues tracker](https://github.com/metavacua/subclass/issues) for all contributions and discussion.
-
----
-
-## License
-
-**Software** (all Java source code, build scripts, and XSLT stylesheets in this repository):
-Licensed under the **GNU Affero General Public License v3.0 (AGPL v3)**. See `LICENSE` (to be added).
-
-**Monograph content** (all DocBook XML files in `docs/` and the text of this README):
-Licensed under **Creative Commons Attribution-ShareAlike 4.0 International (CC-SA 4.0)**. See `LICENSE-content` (to be added).
 
 ---
 
