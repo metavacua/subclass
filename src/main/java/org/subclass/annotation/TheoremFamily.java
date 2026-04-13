@@ -30,6 +30,9 @@ import java.lang.annotation.Target;
  *     description = "The tetragram of LEM across four logical systems"
  * )
  * public class LEMTetragram { ... }
+ *
+ * For metadata-only usage, method references can be omitted (left as empty strings).
+ * However, if any method reference is provided, all four must be provided.
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
@@ -52,28 +55,28 @@ public @interface TheoremFamily {
      * This logic is consistent and complete (e.g., LK).
      * Example: "lemInLK"
      */
-    String classicalTheorem();
+    String classicalTheorem() default "";
 
     /**
      * Name of the method annotated with @Theorem for the intuitionistic node.
      * This logic is consistent but not complete (e.g., LJ).
      * Example: "lemInLJ"
      */
-    String intuitionisticTheorem();
+    String intuitionisticTheorem() default "";
 
     /**
      * Name of the method annotated with @Theorem for the paraconsistent-complete node.
      * This logic is paraconsistent but complete (e.g., dual of LJ).
      * Example: "lemInDual"
      */
-    String paraconsistentTheorem();
+    String paraconsistentTheorem() default "";
 
     /**
      * Name of the method annotated with @Theorem for the common logic node.
      * This logic is paraconsistent and paracomplete (e.g., intersection).
      * Example: "lemInCommon"
      */
-    String commonLogicTheorem();
+    String commonLogicTheorem() default "";
 
     /**
      * Optional description of this theorem family.

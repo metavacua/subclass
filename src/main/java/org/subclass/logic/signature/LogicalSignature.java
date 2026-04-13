@@ -88,4 +88,47 @@ public record LogicalSignature(
                ", Structural rules: " + getStructuralRulesSummary() +
                ", Functionally " + (functionallyComplete ? "complete" : "incomplete");
     }
+
+    /**
+     * Builder for creating LogicalSignature instances.
+     */
+    public static class Builder {
+        private final String name;
+        private final String displayName;
+        private Set<Connective> connectives = Set.of();
+        private Set<StructuralRule> structuralRules = Set.of();
+        private boolean functionallyComplete = false;
+        private String description = "";
+
+        public Builder(String name, String displayName) {
+            this.name = name;
+            this.displayName = displayName;
+        }
+
+        public Builder addConnectives(Set<Connective> connectives) {
+            this.connectives = connectives;
+            return this;
+        }
+
+        public Builder addStructuralRules(Set<StructuralRule> structuralRules) {
+            this.structuralRules = structuralRules;
+            return this;
+        }
+
+        public Builder functionallyComplete(boolean functionallyComplete) {
+            this.functionallyComplete = functionallyComplete;
+            return this;
+        }
+
+        public Builder description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public LogicalSignature build() {
+            return new LogicalSignature(
+                name, displayName, connectives, structuralRules, functionallyComplete, description
+            );
+        }
+    }
 }
