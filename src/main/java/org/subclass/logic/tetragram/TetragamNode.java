@@ -98,8 +98,8 @@ public class TetragamNode {
 
     @Override
     public String toString() {
-        return "Node " + getQuadrant() + " " + getCoordinate() + ": " + signature.getName()
-               + " (" + signature.getDisplayName() + ")";
+        return "Node " + getQuadrant() + " " + getCoordinate() + ": " + signature.name()
+               + " (" + signature.displayName() + ")";
     }
 
     @Override

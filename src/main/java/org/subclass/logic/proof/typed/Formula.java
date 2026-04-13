@@ -10,7 +10,7 @@ import java.util.Objects;
  *
  * Implementations: Atom, Not, Or, And, Implies, etc.
  */
-public sealed interface Formula permits Atom, Not, Or, And, Implies {
+public interface Formula {
     /**
      * Get a human-readable representation of this formula.
      */

@@ -27,17 +27,14 @@ public record Sequent<L extends Cardinality, R extends Cardinality>(
     List<Formula> succedent
 ) {
     /**
-     * Construct a sequent, enforcing that formulas are immutable.
-     *
-     * @param antecedent list of formulas on the left of the turnstile
-     * @param succedent list of formulas on the right of the turnstile
+     * Construct a sequent, enforcing that formulas are immutable (compact constructor form).
      */
-    public Sequent(List<Formula> antecedent, List<Formula> succedent) {
-        this.antecedent = Objects.requireNonNull(antecedent, "Antecedent cannot be null");
-        this.succedent = Objects.requireNonNull(succedent, "Succedent cannot be null");
+    public Sequent {
+        Objects.requireNonNull(antecedent, "Antecedent cannot be null");
+        Objects.requireNonNull(succedent, "Succedent cannot be null");
         // Make lists immutable to preserve cardinality invariant at runtime
-        this.antecedent = List.copyOf(this.antecedent);
-        this.succedent = List.copyOf(this.succedent);
+        antecedent = List.copyOf(antecedent);
+        succedent = List.copyOf(succedent);
     }
 
     /**

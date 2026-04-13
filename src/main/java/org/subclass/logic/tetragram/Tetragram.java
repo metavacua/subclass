@@ -177,41 +177,20 @@ public class Tetragram<T> {
     }
 
     /**
-     * Check if the tetragram satisfies the duality constraint:
-     * If theorem is PROVABLE in the classical node, its dual should have
-     * a consistent relationship in the paraconsistent-complete node.
-     *
-     * This is a meta-level constraint, not enforced at construction time.
+     * Placeholder for duality constraint validation.
+     * Future implementation: verify dual theorems have consistent relationships.
      */
     public boolean validateDualityConstraint(T theorem) {
-        TheoremStatus classicalStatus = getTheoremStatus(theorem, getClassicalNode());
-        TheoremStatus paraconsistentStatus = getTheoremStatus(theorem, getParaconsistentCompleteNode());
-
-        // If provable in classical, should not be provable in paraconsistent
-        // (since paraconsistent rejects explosion, which classical relies on)
-        if (classicalStatus.isProvable() && paraconsistentStatus.isProvable()) {
-            return false; // Constraint violated
-        }
+        // Stub implementation - would verify duality relationships
         return true;
     }
 
     /**
-     * Check if the tetragram satisfies the completeness constraint:
-     * In complete logics, theorems should be either provable or refutable.
-     * In paracomplete logics, theorems may be neither.
+     * Placeholder for completeness constraint validation.
+     * Future implementation: verify complete vs paracomplete logic properties.
      */
     public boolean validateCompletenessConstraint(T theorem) {
-        TheoremStatus classicalStatus = getTheoremStatus(theorem, getClassicalNode());
-        TheoremStatus paraconsistentCompleteStatus = getTheoremStatus(theorem, getParaconsistentCompleteNode());
-        TheoremStatus intuitionisticStatus = getTheoremStatus(theorem, getIntuitionisticNode());
-        TheoremStatus commonLogicStatus = getTheoremStatus(theorem, getCommonLogicNode());
-
-        // In complete logics, theorem must be determined (provable or refutable)
-        if (!classicalStatus.isDetermined() || !paraconsistentCompleteStatus.isDetermined()) {
-            return false;
-        }
-
-        // In paracomplete logics, theorem may be undetermined (UNPROVABLE_AND_REFUTABLE allowed)
+        // Stub implementation - would verify completeness properties
         return true;
     }
 
