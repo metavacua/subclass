@@ -1,7 +1,7 @@
 package org.subclass.doc;
 
 import com.sun.source.doctree.DocTree;
-import jdk.javadoc.doclets.Taglet;
+import jdk.javadoc.doclet.Taglet;
 import javax.lang.model.element.Element;
 import java.util.EnumSet;
 import java.util.List;
@@ -24,13 +24,13 @@ import java.util.Set;
 public class TheoremFamilyTaglet implements Taglet {
 
     @Override
-    public Set<Location> getAllowedLocations() {
-        return EnumSet.of(Location.TYPE);
+    public Set<Taglet.Location> getAllowedLocations() {
+        return EnumSet.of(Taglet.Location.TYPE);
     }
 
     @Override
-    public boolean isBlockTag() {
-        return true;
+    public boolean isInlineTag() {
+        return false;
     }
 
     @Override

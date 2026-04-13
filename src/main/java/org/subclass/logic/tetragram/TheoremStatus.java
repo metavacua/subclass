@@ -54,4 +54,19 @@ public enum TheoremStatus {
     public String getDisplayName() {
         return displayName;
     }
+
+    /**
+     * Check if this status represents a provable state.
+     */
+    public boolean isProvable() {
+        return this == PROVABLE;
+    }
+
+    /**
+     * Check if this status represents a determined state (either provable or refutable).
+     * In paracomplete logics, a theorem may be undetermined.
+     */
+    public boolean isDetermined() {
+        return this == PROVABLE || this == REFUTABLE || this == NON_PROVABLE;
+    }
 }

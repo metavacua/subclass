@@ -56,7 +56,7 @@ public abstract class ProofChecker {
         // Validate each rule application
         for (String rule : proof.getRuleSequence()) {
             if (!isValidRule(rule)) {
-                result.addError("Invalid rule for signature " + signature.getName() + ": " + rule);
+                result.addError("Invalid rule for signature " + signature.name() + ": " + rule);
             }
         }
 
