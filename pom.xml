@@ -51,10 +51,28 @@
           <source>${java.version}</source>
           <target>${java.version}</target>
           <encoding>${project.build.sourceEncoding}</encoding>
-          <!-- NOTE: Annotation processor path removed to avoid circular dependency.
-               Once TheoremProcessor is fully implemented and in a separate module,
-               it can be re-enabled here. -->
+          <compilerArgs>
+            <arg>--add-modules</arg>
+            <arg>jdk.javadoc</arg>
+          </compilerArgs>
         </configuration>
+        <executions>
+          <execution>
+            <id>default-compile</id>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+            <configuration>
+              <proc>none</proc>
+            </configuration>
+          </execution>
+          <execution>
+            <id>default-testCompile</id>
+            <goals>
+              <goal>testCompile</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

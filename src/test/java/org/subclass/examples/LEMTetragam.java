@@ -268,9 +268,9 @@ public class LEMTetragam {
         System.out.println("\n=== Node Details ===");
         for (TetragamNode node : lem.getAllNodes()) {
             System.out.println(node);
-            System.out.println("  Signature: " + node.getSignature().getDisplayName());
+            System.out.println("  Signature: " + node.getSignature().displayName());
             System.out.println("  Functionally complete: " +
-                node.getSignature().isFunctionallyComplete());
+                node.getSignature().functionallyComplete());
             System.out.println("  LEM status: " + lem.getTheoremStatus("LEM", node));
             System.out.println();
         }
