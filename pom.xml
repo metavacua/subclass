@@ -51,13 +51,9 @@
           <source>${java.version}</source>
           <target>${java.version}</target>
           <encoding>${project.build.sourceEncoding}</encoding>
-          <annotationProcessorPaths>
-            <path>
-              <groupId>org.subclass</groupId>
-              <artifactId>subclass</artifactId>
-              <version>${project.version}</version>
-            </path>
-          </annotationProcessorPaths>
+          <!-- NOTE: Annotation processor path removed to avoid circular dependency.
+               Once TheoremProcessor is fully implemented and in a separate module,
+               it can be re-enabled here. -->
         </configuration>
       </plugin>
       <plugin>
