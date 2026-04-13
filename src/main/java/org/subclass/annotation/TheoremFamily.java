@@ -30,6 +30,9 @@ import java.lang.annotation.Target;
  *     description = "The tetragram of LEM across four logical systems"
  * )
  * public class LEMTetragram { ... }
+ *
+ * For metadata-only usage, method references can be omitted (left as empty strings).
+ * However, if any method reference is provided, all four must be provided.
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

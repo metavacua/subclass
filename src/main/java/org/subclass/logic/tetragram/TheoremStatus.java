@@ -67,6 +67,6 @@ public enum TheoremStatus {
      * In paracomplete logics, a theorem may be undetermined.
      */
     public boolean isDetermined() {
-        return this == PROVABLE || this == REFUTABLE || this == NON_PROVABLE;
+        return this == PROVABLE || this == REFUTABLE;
     }
 }

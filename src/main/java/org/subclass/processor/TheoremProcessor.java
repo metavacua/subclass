@@ -10,6 +10,8 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.DeclaredType;
+import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic;
 import java.util.Set;
@@ -88,14 +90,44 @@ public class TheoremProcessor extends AbstractProcessor {
             family.commonLogicTheorem()
         };
 
-        for (int i = 0; i < theoremMethods.length; i++) {
-            if (theoremMethods[i].isEmpty()) {
-                // If method references are missing, we skip this validation
-                // This allows classes like LEMProofs to use @TheoremFamily for metadata
-                // without necessarily providing method references.
-                continue;
+        int nonEmptyCount = 0;
+        for (String methodRef : theoremMethods) {
+            if (!methodRef.isEmpty()) {
+                nonEmptyCount++;
             }
-            // Optional: check if method exists...
+        }
+
+        if (nonEmptyCount > 0 && nonEmptyCount < 4) {
+            String[] positions = {"classical", "intuitionistic", "paraconsistent", "common logic"};
+            for (int i = 0; i < theoremMethods.length; i++) {
+                if (theoremMethods[i].isEmpty()) {
+                    processingEnv.getMessager().printMessage(
+                        Diagnostic.Kind.ERROR,
+                        "TheoremFamily provides some method references but is missing " + positions[i] + " theorem method reference. All four must be provided if any are present.",
+                        element
+                    );
+                }
+            }
+        }
+
+        // Optional: verify that the referenced methods exist on the annotated type
+        if (nonEmptyCount == 4) {
+            for (String methodName : theoremMethods) {
+                boolean found = false;
+                for (Element member : element.getEnclosedElements()) {
+                    if (member instanceof ExecutableElement method && method.getSimpleName().contentEquals(methodName)) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    processingEnv.getMessager().printMessage(
+                        Diagnostic.Kind.ERROR,
+                        "TheoremFamily references method '" + methodName + "' which does not exist in class " + element.getSimpleName(),
+                        element
+                    );
+                }
+            }
         }
 
         // Additional validation could go here:
@@ -118,54 +150,66 @@ public class TheoremProcessor extends AbstractProcessor {
      */
     private void validateTheoremSignature(ExecutableElement method) {
         Theorem theorem = method.getAnnotation(Theorem.class);
-        String signature = theorem.signature();
-
-        // Get the actual return type, preserving generics
+        String signatureName = theorem.signature();
         TypeMirror returnType = method.getReturnType();
-        String returnTypeString = returnType.toString();
 
-        // Determine expected return type based on signature
-        String expectedType = signatureToProofType(signature);
-
-        // Validate return type matches signature
-        // We use contains to handle fully qualified names and different generic styles.
         // We allow void return types to support non-executable theorem metadata classes.
-        if (!expectedType.isEmpty() && !returnTypeString.equals("void") && !returnTypeString.contains("Proof") && !returnTypeString.contains(expectedType)) {
-            processingEnv.getMessager().printMessage(
-                Diagnostic.Kind.ERROR,
-                "Theorem '" + theorem.name() + "' claims signature '" + signature +
-                    "' but returns '" + returnTypeString + "'. Expected: '" + expectedType + "'",
-                method
-            );
+        if (returnType.getKind() == TypeKind.VOID) {
+            return;
         }
 
-        // Validate non-provable theorems return null
-        if ("NON_PROVABLE".equals(theorem.status())) {
-            // Note: Detailed AST inspection to verify method returns null would require
-            // additional processing. For now, we rely on the type system: if a method
-            // is declared to return Proof but actually returns null, that's caught at runtime.
+        // Expected generic arguments for Proof<L, R>
+        String leftArg;
+        String rightArg;
+        switch (signatureName) {
+            case "LK" -> { leftArg = "Many"; rightArg = "Many"; }
+            case "LJ" -> { leftArg = "Many"; rightArg = "One"; }
+            case "LDJ" -> { leftArg = "One"; rightArg = "Many"; }
+            case "Common" -> { leftArg = "One"; rightArg = "One"; }
+            default -> {
+                processingEnv.getMessager().printMessage(
+                    Diagnostic.Kind.WARNING,
+                    "Unknown signature '" + signatureName + "'. Skipping return type validation.",
+                    method
+                );
+                return;
+            }
+        }
+
+        TypeMirror expectedType = getExpectedProofType(leftArg, rightArg);
+        if (expectedType == null) {
+            // Types not found on classpath, skip validation
+            return;
+        }
+
+        // Validate return type matches signature
+        if (!processingEnv.getTypeUtils().isSameType(returnType, expectedType) &&
+            !processingEnv.getTypeUtils().isAssignable(returnType, expectedType)) {
+            processingEnv.getMessager().printMessage(
+                Diagnostic.Kind.ERROR,
+                "Theorem '" + theorem.name() + "' claims signature '" + signatureName +
+                    "' but returns '" + returnType + "'. Expected: '" + expectedType + "'",
+                method
+            );
         }
     }
 
     /**
-     * Map a signature name to its corresponding Proof type.
+     * Construct the expected Proof type with appropriate generic arguments.
      *
-     * @param signature The signature name (e.g., "LK", "LJ", "LDJ", "Common")
-     * @return The expected Proof type string (e.g., "Proof<Many, Many>")
+     * @param left Generic argument for left side (Many or One)
+     * @param right Generic argument for right side (Many or One)
+     * @return The constructed DeclaredType, or null if types not found
      */
-    private String signatureToProofType(String signature) {
-        return switch (signature) {
-            case "LK" -> "Proof<Many,Many>";          // classical: unrestricted both sides
-            case "LJ" -> "Proof<Many,One>";            // intuitionistic: unrestricted left, single right
-            case "LDJ" -> "Proof<One,Many>";           // paraconsistent dual: single left, unrestricted right
-            case "Common" -> "Proof<One,One>";         // common logic: single both sides
-            default -> {
-                processingEnv.getMessager().printMessage(
-                    Diagnostic.Kind.WARNING,
-                    "Unknown signature '" + signature + "'. Skipping return type validation."
-                );
-                yield "";  // Empty string means skip validation
-            }
-        };
+    private TypeMirror getExpectedProofType(String left, String right) {
+        TypeElement proofElem = processingEnv.getElementUtils().getTypeElement("org.subclass.logic.proof.typed.Proof");
+        TypeElement leftElem = processingEnv.getElementUtils().getTypeElement("org.subclass.logic.proof.typed." + left);
+        TypeElement rightElem = processingEnv.getElementUtils().getTypeElement("org.subclass.logic.proof.typed." + right);
+
+        if (proofElem == null || leftElem == null || rightElem == null) {
+            return null;
+        }
+
+        return processingEnv.getTypeUtils().getDeclaredType(proofElem, leftElem.asType(), rightElem.asType());
     }
 }

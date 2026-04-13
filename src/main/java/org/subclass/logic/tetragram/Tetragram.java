@@ -177,20 +177,39 @@ public class Tetragram<T> {
     }
 
     /**
-     * Placeholder for duality constraint validation.
-     * Future implementation: verify dual theorems have consistent relationships.
+     * Check if the tetragram satisfies the duality constraint:
+     * If theorem is PROVABLE in the classical node, its dual should have
+     * a consistent relationship in the paraconsistent-complete node.
+     *
+     * This is a meta-level constraint, not enforced at construction time.
      */
     public boolean validateDualityConstraint(T theorem) {
-        // Stub implementation - would verify duality relationships
+        TheoremStatus classicalStatus = getTheoremStatus(theorem, getClassicalNode());
+        TheoremStatus paraconsistentStatus = getTheoremStatus(theorem, getParaconsistentCompleteNode());
+
+        // If provable in classical, should not be provable in paraconsistent
+        // (since paraconsistent rejects explosion, which classical relies on)
+        if (classicalStatus.isProvable() && paraconsistentStatus.isProvable()) {
+            return false; // Constraint violated
+        }
         return true;
     }
 
     /**
-     * Placeholder for completeness constraint validation.
-     * Future implementation: verify complete vs paracomplete logic properties.
+     * Check if the tetragram satisfies the completeness constraint:
+     * In complete logics, theorems should be either provable or refutable.
+     * In paracomplete logics, theorems may be neither.
      */
     public boolean validateCompletenessConstraint(T theorem) {
-        // Stub implementation - would verify completeness properties
+        TheoremStatus classicalStatus = getTheoremStatus(theorem, getClassicalNode());
+        TheoremStatus paraconsistentCompleteStatus = getTheoremStatus(theorem, getParaconsistentCompleteNode());
+
+        // In complete logics, theorem must be determined (provable or refutable)
+        if (!classicalStatus.isDetermined() || !paraconsistentCompleteStatus.isDetermined()) {
+            return false;
+        }
+
+        // In paracomplete logics, theorem may be undetermined (UNPROVABLE_AND_REFUTABLE allowed)
         return true;
     }
 
