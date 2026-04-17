@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xml:id="classical-first-order-theory"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0">
+
+  <title>Classical First-Order Theories: Proof-Theoretic Formalization</title>
+
+  <xi:include href="004-classical-first-order-theory/sec-01-lk.xml"/>
+  <xi:include href="004-classical-first-order-theory/sec-02-cut.xml"/>
+  <xi:include href="004-classical-first-order-theory/sec-03-extensions.xml"/>
+
+</section>

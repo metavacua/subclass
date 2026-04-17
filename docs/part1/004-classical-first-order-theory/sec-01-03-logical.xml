@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xml:id="logical-rules"
+         xmlns="http://docbook.org/ns/docbook"
+         version="5.0">
+
+  <title>Logical Rules</title>
+
+  <section xml:id="negation">
+    <title>Negation</title>
+    <informaltable frame="none">
+      <tgroup cols="2">
+        <colspec colname="c1" align="center"/>
+        <colspec colname="c2" align="center"/>
+        <tbody>
+          <row>
+            <entry rowsep="1"><mathphrase>&#x0393; &#x22A2; &#x0394;, A</mathphrase></entry>
+            <entry rowsep="1"><mathphrase>&#x0393;, A &#x22A2; &#x0394;</mathphrase></entry>
+          </row>
+          <row>
+            <entry><mathphrase>&#x0393;, &#x00AC; A &#x22A2; &#x0394; (&#x00AC;L)</mathphrase></entry>
+            <entry><mathphrase>&#x0393; &#x22A2; &#x0394;, &#x00AC; A (&#x00AC;R)</mathphrase></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </informaltable>
+  </section>
+
+  <section xml:id="conjunction">
+    <title>Conjunction</title>
+    <informaltable frame="none">
+      <tgroup cols="3">
+        <colspec colname="c1" align="center"/>
+        <colspec colname="c2" align="center"/>
+        <colspec colname="c3" align="center"/>
+        <tbody>
+          <row>
+            <entry rowsep="1"><mathphrase>&#x0393;, A &#x22A2; &#x0394;</mathphrase></entry>
+            <entry rowsep="1"><mathphrase>&#x0393;, B &#x22A2; &#x0394;</mathphrase></entry>
+            <entry rowsep="1"><mathphrase>&#x0393; &#x22A2; &#x0394;, A &#x2003; &#x0393; &#x22A2; &#x0394;, B</mathphrase></entry>
+          </row>
+          <row>
+            <entry><mathphrase>&#x0393;, A &#x2227; B &#x22A2; &#x0394; (&#x2227;L&#x2081;)</mathphrase></entry>
+            <entry><mathphrase>&#x0393;, A &#x2227; B &#x22A2; &#x0394; (&#x2227;L&#x2082;)</mathphrase></entry>
+            <entry><mathphrase>&#x0393; &#x22A2; &#x0394;, A &#x2227; B (&#x2227;R)</mathphrase></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </informaltable>
+  </section>
+
+  <section xml:id="disjunction">
+    <title>Disjunction</title>
+    <informaltable frame="none">
+      <tgroup cols="3">
+        <colspec colname="c1" align="center"/>
+        <colspec colname="c2" align="center"/>
+        <colspec colname="c3" align="center"/>
+        <tbody>
+          <row>
+            <entry rowsep="1"><mathphrase>&#x0393;, A &#x22A2; &#x0394; &#x2003; &#x0393;, B &#x22A2; &#x0394;</mathphrase></entry>
+            <entry rowsep="1"><mathphrase>&#x0393; &#x22A2; &#x0394;, A</mathphrase></entry>
+            <entry rowsep="1"><mathphrase>&#x0393; &#x22A2; &#x0394;, B</mathphrase></entry>
+          </row>
+          <row>
+            <entry><mathphrase>&#x0393;, A &#x2228; B &#x22A2; &#x0394; (&#x2228;L)</mathphrase></entry>
+            <entry><mathphrase>&#x0393; &#x22A2; &#x0394;, A &#x2228; B (&#x2228;R&#x2081;)</mathphrase></entry>
+            <entry><mathphrase>&#x0393; &#x22A2; &#x0394;, A &#x2228; B (&#x2228;R&#x2082;)</mathphrase></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </informaltable>
+  </section>
+
+  <section xml:id="implication">
+    <title>Implication</title>
+    <informaltable frame="none">
+      <tgroup cols="2">
+        <colspec colname="c1" align="center"/>
+        <colspec colname="c2" align="center"/>
+        <tbody>
+          <row>
+            <entry rowsep="1"><mathphrase>&#x0393; &#x22A2; &#x0394;, A &#x2003; &#x0393;, B &#x22A2; &#x0394;</mathphrase></entry>
+            <entry rowsep="1"><mathphrase>&#x0393;, A &#x22A2; &#x0394;, B</mathphrase></entry>
+          </row>
+          <row>
+            <entry><mathphrase>&#x0393;, A &#x2192; B &#x22A2; &#x0394; (&#x2192;L)</mathphrase></entry>
+            <entry><mathphrase>&#x0393; &#x22A2; &#x0394;, A &#x2192; B (&#x2192;R)</mathphrase></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </informaltable>
+  </section>
+
+  <section xml:id="universal-quantifier">
+    <title>Universal Quantifier</title>
+    <informaltable frame="none">
+      <tgroup cols="2">
+        <colspec colname="c1" align="center"/>
+        <colspec colname="c2" align="center"/>
+        <tbody>
+          <row>
+            <entry rowsep="1"><mathphrase>&#x0393;, A[t/x] &#x22A2; &#x0394;</mathphrase></entry>
+            <entry rowsep="1"><mathphrase>&#x0393; &#x22A2; &#x0394;, A[y/x]</mathphrase></entry>
+          </row>
+          <row>
+            <entry><mathphrase>&#x0393;, &#x2200; x.A &#x22A2; &#x0394; (&#x2200;L)</mathphrase></entry>
+            <entry><mathphrase>&#x0393; &#x22A2; &#x0394;, &#x2200; x.A (&#x2200;R)</mathphrase></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </informaltable>
+    <para>
+      In <mathphrase>(&#x2200;L)</mathphrase>, <mathphrase>t</mathphrase> must be free for <mathphrase>x</mathphrase> in <mathphrase>A</mathphrase>.
+      In <mathphrase>(&#x2200;R)</mathphrase>, <mathphrase>y</mathphrase> is an <emphasis>eigenvariable</emphasis>, not free in the conclusion.
+    </para>
+  </section>
+
+  <section xml:id="existential-quantifier">
+    <title>Existential Quantifier</title>
+    <informaltable frame="none">
+      <tgroup cols="2">
+        <colspec colname="c1" align="center"/>
+        <colspec colname="c2" align="center"/>
+        <tbody>
+          <row>
+            <entry rowsep="1"><mathphrase>&#x0393;, A[y/x] &#x22A2; &#x0394;</mathphrase></entry>
+            <entry rowsep="1"><mathphrase>&#x0393; &#x22A2; &#x0394;, A[t/x]</mathphrase></entry>
+          </row>
+          <row>
+            <entry><mathphrase>&#x0393;, &#x2203; x.A &#x22A2; &#x0394; (&#x2203;L)</mathphrase></entry>
+            <entry><mathphrase>&#x0393; &#x22A2; &#x0394;, &#x2203; x.A (&#x2203;R)</mathphrase></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </informaltable>
+    <para>
+      In <mathphrase>(&#x2203;L)</mathphrase>, <mathphrase>y</mathphrase> is an <emphasis>eigenvariable</emphasis>, not free in the conclusion.
+      In <mathphrase>(&#x2203;R)</mathphrase>, <mathphrase>t</mathphrase> must be free for <mathphrase>x</mathphrase> in <mathphrase>A</mathphrase>.
+    </para>
+  </section>
+
+</section>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xml:id="initial-sequents"
+         xmlns="http://docbook.org/ns/docbook"
+         version="5.0">
+
+  <title>Initial Sequents</title>
+
+  <para>
+    For any formula <mathphrase>A</mathphrase>, the following is an initial sequent:
+  </para>
+
+  <para xml:id="initial-sequent-axiom" align="center">
+    <mathphrase>&#x0393;, A &#x22A2; A, &#x0394;</mathphrase>
+  </para>
+
+</section>

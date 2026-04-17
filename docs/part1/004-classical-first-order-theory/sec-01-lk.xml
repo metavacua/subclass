@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xml:id="sequent-calculus-lk"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0">
+
+  <title>The Sequent Calculus LK</title>
+
+  <section xml:id="sequents">
+    <title>Sequents</title>
+    <para>
+      A <emphasis role="bold">sequent</emphasis> is an expression
+      <mathphrase>&#x0393; &#x22A2; &#x0394;</mathphrase> where:
+    </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+          <mathphrase>&#x0393;</mathphrase> (the <emphasis role="bold">antecedent</emphasis>)
+          is a finite multiset of formulas
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <mathphrase>&#x0394;</mathphrase> (the <emphasis role="bold">succedent</emphasis>)
+          is a finite multiset of formulas
+        </para>
+      </listitem>
+    </itemizedlist>
+    <para>
+      The turnstile <mathphrase>&#x22A2;</mathphrase> separates assumptions (left) from conclusions (right).
+    </para>
+    <para>
+      <emphasis>Variant:</emphasis> If <mathphrase>&#x0393;, &#x0394;</mathphrase> are taken as <emphasis role="bold">sets</emphasis> (rather than multisets), Exchange and Contraction rules become redundant and may be omitted.
+    </para>
+  </section>
+
+  <xi:include href="sec-01-02-structural.xml"/>
+  <xi:include href="sec-01-03-logical.xml"/>
+  <xi:include href="sec-01-04-initial.xml"/>
+
+</section>
