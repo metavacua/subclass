@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xml:id="theory-extensions"
+         xmlns="http://docbook.org/ns/docbook"
+         version="5.0">
+
+  <title>Theory Extensions</title>
+
+  <para>
+    A <emphasis>theory</emphasis> <mathphrase>T</mathphrase> over a signature
+    <mathphrase>&#x03A3;</mathphrase> is a structure
+    <mathphrase>T = (&#x03A3;, R)</mathphrase> extending
+    <emphasis role="bold">LK</emphasis>, where <mathphrase>R</mathphrase> is a set of
+    <emphasis role="bold">non-logical rules</emphasis>.
+  </para>
+
+  <section xml:id="non-logical-rules">
+    <title>Non-Logical Rules</title>
+    <para>
+      Each non-logical rule <mathphrase>r &#x2208; R</mathphrase> has the form:
+    </para>
+    <informaltable frame="none">
+      <tgroup cols="1">
+        <colspec align="center"/>
+        <tbody>
+          <row>
+            <entry rowsep="1"><mathphrase>&#x0393;&#x2081; &#x22A2; &#x0394;&#x2081; &#x2003; &#x22EF; &#x2003; &#x0393;&#x2092; &#x22A2; &#x0394;&#x2092;</mathphrase></entry>
+          </row>
+          <row>
+            <entry><mathphrase>&#x0393; &#x22A2; &#x0394;</mathphrase></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </informaltable>
+    <para>
+      where <mathphrase>n &#x2265; 0</mathphrase>. When <mathphrase>n = 0</mathphrase>,
+      the rule is called an <emphasis role="bold">axiom sequent</emphasis> (a zero-premise rule).
+    </para>
+    <para>
+      The following forms are permitted:
+    </para>
+    <itemizedlist>
+      <listitem>
+        <para>Multiple premises (<mathphrase>n &#x2265; 1</mathphrase>)</para>
+      </listitem>
+      <listitem>
+        <para>Multiple antecedent formulas (multiset <mathphrase>&#x0393;</mathphrase>)</para>
+      </listitem>
+      <listitem>
+        <para>Multiple succedent formulas (multiset <mathphrase>&#x0394;</mathphrase>)</para>
+      </listitem>
+    </itemizedlist>
+    <para>
+      Theories may include the Cut rule explicitly in <mathphrase>R</mathphrase> or remain Cut-free.
+    </para>
+  </section>
+
+</section>

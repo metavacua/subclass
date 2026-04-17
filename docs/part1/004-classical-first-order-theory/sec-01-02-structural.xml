@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xml:id="structural-rules"
+         xmlns="http://docbook.org/ns/docbook"
+         version="5.0">
+
+  <title>Structural Rules</title>
+
+  <informaltable frame="none">
+    <tgroup cols="2">
+      <colspec colname="c1" align="center"/>
+      <colspec colname="c2" align="center"/>
+      <tbody>
+        <row>
+          <entry rowsep="1"><mathphrase>&#x0393;, A, B, &#x0393;' &#x22A2; &#x0394;</mathphrase></entry>
+          <entry rowsep="1"><mathphrase>&#x0393; &#x22A2; &#x0394;, A, B, &#x0394;'</mathphrase></entry>
+        </row>
+        <row>
+          <entry><mathphrase>&#x0393;, B, A, &#x0393;' &#x22A2; &#x0394; (XL)</mathphrase></entry>
+          <entry><mathphrase>&#x0393; &#x22A2; &#x0394;, B, A, &#x0394;' (XR)</mathphrase></entry>
+        </row>
+        <row><entry><para> </para></entry><entry><para> </para></entry></row> <!-- Spacer -->
+        <row>
+          <entry rowsep="1"><mathphrase>&#x0393; &#x22A2; &#x0394;</mathphrase></entry>
+          <entry rowsep="1"><mathphrase>&#x0393; &#x22A2; &#x0394;</mathphrase></entry>
+        </row>
+        <row>
+          <entry><mathphrase>&#x0393;, A &#x22A2; &#x0394; (WL)</mathphrase></entry>
+          <entry><mathphrase>&#x0393; &#x22A2; &#x0394;, A (WR)</mathphrase></entry>
+        </row>
+        <row><entry><para> </para></entry><entry><para> </para></entry></row> <!-- Spacer -->
+        <row>
+          <entry rowsep="1"><mathphrase>&#x0393;, A, A &#x22A2; &#x0394;</mathphrase></entry>
+          <entry rowsep="1"><mathphrase>&#x0393; &#x22A2; &#x0394;, A, A</mathphrase></entry>
+        </row>
+        <row>
+          <entry><mathphrase>&#x0393;, A &#x22A2; &#x0394; (CL)</mathphrase></entry>
+          <entry><mathphrase>&#x0393; &#x22A2; &#x0394;, A (CR)</mathphrase></entry>
+        </row>
+      </tbody>
+    </tgroup>
+  </informaltable>
+
+</section>

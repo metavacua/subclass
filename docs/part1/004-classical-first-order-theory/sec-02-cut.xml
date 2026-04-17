@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xml:id="cut-rule"
+         xmlns="http://docbook.org/ns/docbook"
+         version="5.0">
+
+  <title>The Cut Rule</title>
+
+  <informaltable frame="none">
+    <tgroup cols="1">
+      <colspec align="center"/>
+      <tbody>
+        <row>
+          <entry rowsep="1"><mathphrase>&#x0393; &#x22A2; &#x0394;, A &#x2003; &#x0393;', A &#x22A2; &#x0394;'</mathphrase></entry>
+        </row>
+        <row>
+          <entry><mathphrase>&#x0393;, &#x0393;' &#x22A2; &#x0394;, &#x0394;' (Cut)</mathphrase></entry>
+        </row>
+      </tbody>
+    </tgroup>
+  </informaltable>
+
+  <para>
+    Gentzen's <emphasis>Hauptsatz</emphasis> states that the Cut rule is admissible in
+    <emphasis role="bold">LK</emphasis>: any sequent provable using the Cut rule is also
+    provable without it. This implies that derivations in <emphasis role="bold">LK</emphasis>
+    can be transformed into a normal form that does not use Cut.
+  </para>
+
+</section>
