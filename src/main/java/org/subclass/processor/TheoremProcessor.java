@@ -1,5 +1,6 @@
 package org.subclass.processor;
 
+import org.subclass.annotation.RuleSpec;
 import org.subclass.annotation.TheoremFamily;
 import org.subclass.annotation.Theorem;
 
@@ -39,7 +40,11 @@ public class TheoremProcessor extends AbstractProcessor {
 
     @Override
     public Set<String> getSupportedAnnotationTypes() {
-        return Set.of(TheoremFamily.class.getName(), Theorem.class.getName());
+        return Set.of(
+            TheoremFamily.class.getName(),
+            Theorem.class.getName(),
+            RuleSpec.class.getName()
+        );
     }
 
     @Override
@@ -61,8 +66,65 @@ public class TheoremProcessor extends AbstractProcessor {
             }
         }
 
+        // Process @RuleSpec annotations
+        for (Element element : roundEnv.getElementsAnnotatedWith(RuleSpec.class)) {
+            if (element instanceof TypeElement type) {
+                validateRuleSpec(type);
+            }
+        }
+
         // Note: We don't claim the annotations to allow other processors to handle them
         return false;
+    }
+
+    /**
+     * Cross-check a {@code @RuleSpec}-annotated class against the structure of
+     * the reified proof-tree API:
+     * <ul>
+     *   <li>the class must implement {@code ProofNode<L,R>};</li>
+     *   <li>{@link RuleSpec#side()} must be one of the known values;</li>
+     *   <li>{@link RuleSpec#premiseCount()} must be non-negative; axioms must have zero premises.</li>
+     * </ul>
+     */
+    private void validateRuleSpec(TypeElement type) {
+        RuleSpec spec = type.getAnnotation(RuleSpec.class);
+        Set<String> validSides = Set.of("axiom", "cut", "structural", "left", "right");
+        if (!validSides.contains(spec.side())) {
+            processingEnv.getMessager().printMessage(
+                Diagnostic.Kind.ERROR,
+                "@RuleSpec.side must be one of " + validSides + " but was '" + spec.side() + "'",
+                type
+            );
+        }
+        if (spec.premiseCount() < 0) {
+            processingEnv.getMessager().printMessage(
+                Diagnostic.Kind.ERROR,
+                "@RuleSpec.premiseCount must be non-negative, was " + spec.premiseCount(),
+                type
+            );
+        }
+        if ("axiom".equals(spec.side()) && spec.premiseCount() != 0) {
+            processingEnv.getMessager().printMessage(
+                Diagnostic.Kind.ERROR,
+                "Axiom rule '" + spec.name() + "' must declare premiseCount=0, got " + spec.premiseCount(),
+                type
+            );
+        }
+
+        TypeElement proofNodeElem = processingEnv.getElementUtils()
+            .getTypeElement("org.subclass.logic.proof.typed.ProofNode");
+        if (proofNodeElem == null) {
+            return;
+        }
+        TypeMirror proofNodeErased = processingEnv.getTypeUtils().erasure(proofNodeElem.asType());
+        if (!processingEnv.getTypeUtils().isAssignable(
+                processingEnv.getTypeUtils().erasure(type.asType()), proofNodeErased)) {
+            processingEnv.getMessager().printMessage(
+                Diagnostic.Kind.ERROR,
+                "@RuleSpec class '" + type.getQualifiedName() + "' must implement ProofNode<L,R>",
+                type
+            );
+        }
     }
 
     /**

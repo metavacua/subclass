@@ -5,6 +5,10 @@ import org.subclass.annotation.TheoremFamily;
 import org.subclass.logic.proof.typed.*;
 import org.subclass.logic.rules.InferenceRules;
 
+import static org.subclass.logic.rules.InferenceRules.axiom;
+import static org.subclass.logic.rules.InferenceRules.notRight;
+import static org.subclass.logic.rules.InferenceRules.orRight;
+
 /**
  * Type-safe executable proofs for the Law of Excluded Middle (LEM).
  *
@@ -51,14 +55,27 @@ public class LEMProofs {
         proofReference = "Classical sequent calculus - fundamental axiom"
     )
     public static Proof<Many, Many> classical() {
-        // Stub implementation: return type is the proof witness
-        // In reality, this would construct:
-        //   A ⊢ A ∨ ¬A  (via orRight with axiom)
-        //   ¬A ⊢ A ∨ ¬A (via orRight with axiom)
-        // Then combine using cases (LK allows both)
+        return classical(new Formula.Atom("A"));
+    }
 
-        // Type signature is what matters for annotation processor validation
-        throw new UnsupportedOperationException("LEM classical proof not yet implemented");
+    /**
+     * Classical LEM proof for a given atom A, constructed via the sequent-calculus
+     * derivation:
+     * <pre>
+     *          A ⊢ A      (Ax)
+     *       ------------  (¬R)
+     *         ⊢ A, ¬A
+     *       -------------- (∨R)
+     *         ⊢ A ∨ ¬A
+     * </pre>
+     * The reified proof tree is rooted at {@code OrRight} and terminates at two
+     * axioms {@code A ⊢ A}; the intermediate {@code ¬R} step moves A from the
+     * antecedent to the succedent as ¬A.
+     */
+    public static Proof<Many, Many> classical(Formula atom) {
+        Proof<Many, Many> ax = axiom(atom);                 // A ⊢ A
+        Proof<Many, Many> notR = notRight(ax);              // ⊢ A, ¬A
+        return orRight(notR);                               // ⊢ A ∨ ¬A
     }
 
     /**
@@ -109,10 +126,25 @@ public class LEMProofs {
         proofReference = "Urbas & Rauszer (1990) - Paraconsistent logic without LNC retains DNE"
     )
     public static Proof<One, Many> paraconsistent() {
-        // LDJ allows multiple conclusions and has double negation elimination,
-        // making LEM provable via DNE on ¬¬(A ∨ ¬A).
+        return paraconsistent(new Formula.Atom("A"));
+    }
 
-        throw new UnsupportedOperationException("LEM paraconsistent proof not yet implemented");
+    /**
+     * Paraconsistent (LDJ) LEM proof:
+     * <pre>
+     *         A ⊢ A     (Ax)
+     *       ------------  (¬R)
+     *         ⊢ A, ¬A
+     *       -------------- (∨R)
+     *         ⊢ A ∨ ¬A
+     * </pre>
+     * The structure mirrors the classical derivation; the LDJ variant is
+     * admissible because the succedent is unrestricted (Many) on the right.
+     */
+    public static Proof<One, Many> paraconsistent(Formula atom) {
+        Proof<One, Many> ax = axiom(atom);
+        Proof<One, Many> notR = notRight(ax);
+        return orRight(notR);
     }
 
     /**

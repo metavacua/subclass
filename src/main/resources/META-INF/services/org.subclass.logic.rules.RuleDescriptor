@@ -1,0 +1,10 @@
+org.subclass.logic.rules.descriptors.AxiomDescriptor
+org.subclass.logic.rules.descriptors.CutDescriptor
+org.subclass.logic.rules.descriptors.AndLeftDescriptor
+org.subclass.logic.rules.descriptors.AndRightDescriptor
+org.subclass.logic.rules.descriptors.OrLeftDescriptor
+org.subclass.logic.rules.descriptors.OrRightDescriptor
+org.subclass.logic.rules.descriptors.ImpliesLeftDescriptor
+org.subclass.logic.rules.descriptors.ImpliesRightDescriptor
+org.subclass.logic.rules.descriptors.NotLeftDescriptor
+org.subclass.logic.rules.descriptors.NotRightDescriptor

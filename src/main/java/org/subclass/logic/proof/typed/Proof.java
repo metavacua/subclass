@@ -19,7 +19,7 @@ package org.subclass.logic.proof.typed;
  * @param <R> succedent cardinality
  */
 public sealed interface Proof<L extends Cardinality, R extends Cardinality>
-    permits CommonProof, IntuitionisticProof, ClassicalProof, DualProof {
+    permits CommonProof, IntuitionisticProof, ClassicalProof, DualProof, ProofNode {
 
     /**
      * Get the conclusion of this proof (the sequent that is proven).

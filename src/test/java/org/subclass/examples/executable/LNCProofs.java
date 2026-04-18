@@ -5,6 +5,11 @@ import org.subclass.annotation.TheoremFamily;
 import org.subclass.logic.proof.typed.*;
 import org.subclass.logic.rules.InferenceRules;
 
+import static org.subclass.logic.rules.InferenceRules.andLeft;
+import static org.subclass.logic.rules.InferenceRules.axiom;
+import static org.subclass.logic.rules.InferenceRules.notLeft;
+import static org.subclass.logic.rules.InferenceRules.notRight;
+
 /**
  * Type-safe executable proofs for the Law of Non-Contradiction (LNC).
  *
@@ -48,10 +53,28 @@ public class LNCProofs {
         proofReference = "Classical sequent calculus - fundamental axiom"
     )
     public static Proof<Many, Many> classical() {
-        // Classical logic proves ¬(A ∧ ¬A) directly via negation right introduction.
-        // Assume A ∧ ¬A, derive contradiction from incompatibility of A and ¬A.
+        return classical(new Formula.Atom("A"));
+    }
 
-        throw new UnsupportedOperationException("LNC classical proof not yet implemented");
+    /**
+     * Classical LNC proof for a given atom A:
+     * <pre>
+     *           A ⊢ A            (Ax)
+     *        ------------         (¬L)
+     *         A, ¬A ⊢
+     *        -------------        (∧L)
+     *         A ∧ ¬A ⊢
+     *        --------------       (¬R)
+     *         ⊢ ¬(A ∧ ¬A)
+     * </pre>
+     * Axiom at the leaves, ¬L moves ¬A into the antecedent, ∧L combines A
+     * and ¬A into A ∧ ¬A, ¬R derives ¬(A ∧ ¬A) on the right.
+     */
+    public static Proof<Many, Many> classical(Formula atom) {
+        Proof<Many, Many> ax = axiom(atom);         // A ⊢ A
+        Proof<Many, Many> nL = notLeft(ax);         // A, ¬A ⊢
+        Proof<Many, Many> aL = andLeft(nL);         // A ∧ ¬A ⊢
+        return notRight(aL);                        // ⊢ ¬(A ∧ ¬A)
     }
 
     /**
@@ -72,11 +95,19 @@ public class LNCProofs {
         proofReference = "Intuitionistic logic accepts LNC (constructively provable)"
     )
     public static Proof<Many, One> intuitionistic() {
-        // Intuitionistic LNC is provable:
-        // To prove ¬(A ∧ ¬A), assume A ∧ ¬A and derive contradiction.
-        // This requires only intuitionistic negation (¬A := A → ⊥).
+        return intuitionistic(new Formula.Atom("A"));
+    }
 
-        throw new UnsupportedOperationException("LNC intuitionistic proof not yet implemented");
+    /**
+     * Intuitionistic LNC proof: identical shape to the classical derivation,
+     * admissible in LJ because {@code ¬R} is valid on a single succedent and
+     * the antecedent is unrestricted.
+     */
+    public static Proof<Many, One> intuitionistic(Formula atom) {
+        Proof<Many, One> ax = axiom(atom);          // A ⊢ A
+        Proof<Many, One> nL = notLeft(ax);          // A, ¬A ⊢ (succedent empty at One)
+        Proof<Many, One> aL = andLeft(nL);          // A ∧ ¬A ⊢
+        return notRight(aL);                        // ⊢ ¬(A ∧ ¬A)
     }
 
     /**
