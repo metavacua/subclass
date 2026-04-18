@@ -15,6 +15,16 @@ import org.subclass.logic.rules.InferenceRules;
  * LNC:  LK (✓), LJ (✓), LDJ (✗), Common (?)
  *
  * Perfect duality: where LEM is provable, LNC is non-provable, and vice versa in LJ/LDJ.
+ *
+ * @apiNote Method bodies are <strong>stubs</strong>: the PROVABLE witnesses
+ *     ({@link #classical()}, {@link #intuitionistic()}) throw
+ *     {@link UnsupportedOperationException} at runtime, and the NON_PROVABLE /
+ *     UNPROVABLE_AND_REFUTABLE witnesses ({@link #paraconsistent()},
+ *     {@link #common()}) return {@code null} by design. The value of this
+ *     class today is that its return-type annotations are validated by
+ *     {@link org.subclass.processor.TheoremProcessor} at compile time, not
+ *     that the methods execute. Real proof construction is tracked on the
+ *     roadmap in the top-level {@code README.md}.
  */
 @TheoremFamily(
     name = "LNC",

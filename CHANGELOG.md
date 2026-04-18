@@ -35,6 +35,16 @@ SemVer compatibility guarantees take effect.
 
 ### Changed
 
+- **Renamed `TetragamNode` → `TetragramNode`** (public class and filename)
+  and **`LEMTetragam` → `LEMTetragram`** (test-example class and
+  filename), correcting a systemic spelling typo. All internal references
+  in `Tetragram.java`, `LEMTetragram.java`, `LNCTetragram.java`, and the
+  README's repository-structure block have been updated. This is a
+  breaking rename of unreleased public API; no deprecation shim is
+  provided because the project is still pre-`1.0.0`.
+- Softened the README's claim of an "executable test suite" to reflect
+  that the current `src/test/` tree contains example/witness classes
+  (no `@Test` methods yet). The JUnit 5 suite remains a roadmap item.
 - `README.md` corrected to reflect the actual state of the repository:
   - Removed the "no source files exist yet" claims from the status callout
     and the Building from Source section.
@@ -55,7 +65,9 @@ introduced. It is recorded here for context only and will not follow the
 Keep a Changelog sectioning.
 
 - Core infrastructure for theorem formalization via tetragrams
-  (`Tetragram`, `TetragamNode`, `TheoremStatus`).
+  (`Tetragram`, `TetragramNode`, `TheoremStatus`). (Originally landed
+  with the class name `TetragamNode` — misspelled — and renamed in the
+  `[Unreleased]` section above.)
 - Modularized `LogicalSignature` as a Java 14+ record.
 - Separated LEM and LNC into distinct dual tetragrams with the correct
   paraconsistent semantics (Urbas–Rauszer, 1990).

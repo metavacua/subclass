@@ -23,7 +23,7 @@ import java.util.Objects;
  */
 public class Tetragram<T> {
     private final String name;
-    private final Map<String, TetragamNode> nodes;
+    private final Map<String, TetragramNode> nodes;
     private final Map<T, TheoremStatus[]> theoremStatuses; // Maps theorem to 4-tuple of statuses
 
     /**
@@ -36,10 +36,10 @@ public class Tetragram<T> {
      * @param paraconsistentParacomplete Node at (false, false)
      */
     public Tetragram(String name,
-                    TetragamNode consistentComplete,
-                    TetragamNode consistentParacomplete,
-                    TetragamNode paraconsistentComplete,
-                    TetragamNode paraconsistentParacomplete) {
+                    TetragramNode consistentComplete,
+                    TetragramNode consistentParacomplete,
+                    TetragramNode paraconsistentComplete,
+                    TetragramNode paraconsistentParacomplete) {
         this.name = Objects.requireNonNull(name);
         this.nodes = new HashMap<>();
         this.theoremStatuses = new HashMap<>();
@@ -56,7 +56,7 @@ public class Tetragram<T> {
         }
     }
 
-    private void addNode(TetragamNode node) {
+    private void addNode(TetragramNode node) {
         nodes.put(node.getCoordinate(), node);
     }
 
@@ -71,9 +71,9 @@ public class Tetragram<T> {
      * @param complete Whether the node is complete
      * @return The node at those coordinates
      */
-    public TetragamNode getNode(boolean consistent, boolean complete) {
+    public TetragramNode getNode(boolean consistent, boolean complete) {
         String key = "<" + consistent + ", " + complete + ">";
-        TetragamNode node = nodes.get(key);
+        TetragramNode node = nodes.get(key);
         if (node == null) {
             throw new IllegalArgumentException("No node at coordinates " + key);
         }
@@ -83,36 +83,36 @@ public class Tetragram<T> {
     /**
      * Get the classical logic node (consistent & complete).
      */
-    public TetragamNode getClassicalNode() {
+    public TetragramNode getClassicalNode() {
         return getNode(true, true);
     }
 
     /**
      * Get the intuitionistic-like node (consistent & paracomplete).
      */
-    public TetragamNode getIntuitionisticNode() {
+    public TetragramNode getIntuitionisticNode() {
         return getNode(true, false);
     }
 
     /**
      * Get the paraconsistent-complete node (paraconsistent & complete).
      */
-    public TetragamNode getParaconsistentCompleteNode() {
+    public TetragramNode getParaconsistentCompleteNode() {
         return getNode(false, true);
     }
 
     /**
      * Get the common logic node (paraconsistent & paracomplete).
      */
-    public TetragamNode getCommonLogicNode() {
+    public TetragramNode getCommonLogicNode() {
         return getNode(false, false);
     }
 
     /**
      * Get all four nodes in order: [Classical, Intuitionistic, Paraconsistent-Complete, Common Logic]
      */
-    public TetragamNode[] getAllNodes() {
-        return new TetragamNode[]{
+    public TetragramNode[] getAllNodes() {
+        return new TetragramNode[]{
             getClassicalNode(),
             getIntuitionisticNode(),
             getParaconsistentCompleteNode(),
@@ -150,7 +150,7 @@ public class Tetragram<T> {
      * @param node The node
      * @return The theorem's status in that node
      */
-    public TheoremStatus getTheoremStatus(T theorem, TetragamNode node) {
+    public TheoremStatus getTheoremStatus(T theorem, TetragramNode node) {
         TheoremStatus[] statuses = theoremStatuses.get(theorem);
         if (statuses == null) {
             throw new IllegalArgumentException("Theorem not registered: " + theorem);
@@ -222,7 +222,7 @@ public class Tetragram<T> {
         sb.append("Tetragram: ").append(name).append("\n\n");
 
         TheoremStatus[] statuses = getTheoremStatuses(theorem);
-        TetragamNode[] nodeArray = getAllNodes();
+        TetragramNode[] nodeArray = getAllNodes();
 
         for (int i = 0; i < 4; i++) {
             sb.append(nodeArray[i].toString()).append(": ").append(statuses[i].getDisplayName()).append("\n");

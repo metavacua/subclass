@@ -4,7 +4,7 @@ import org.subclass.annotation.Theorem;
 import org.subclass.annotation.TheoremFamily;
 import org.subclass.logic.signature.LogicalSignature;
 import org.subclass.logic.tetragram.Tetragram;
-import org.subclass.logic.tetragram.TetragamNode;
+import org.subclass.logic.tetragram.TetragramNode;
 import org.subclass.logic.tetragram.TheoremStatus;
 
 /**
@@ -161,13 +161,13 @@ public class LNCTetragram {
         LogicalSignature commonSig = SignatureDefinitions.createCommonLogicSignature();
 
         // Create tetragram nodes
-        TetragamNode classicalNode = new TetragamNode(true, true, lkSig,
+        TetragramNode classicalNode = new TetragramNode(true, true, lkSig,
             "LK (Classical): LNC is provable, LEM is provable");
-        TetragamNode intuitionisticNode = new TetragamNode(true, false, ljSig,
+        TetragramNode intuitionisticNode = new TetragramNode(true, false, ljSig,
             "LJ (Intuitionistic): LNC is provable, LEM is NOT provable");
-        TetragamNode paraconsistentCompleteNode = new TetragamNode(false, true, ldjSig,
+        TetragramNode paraconsistentCompleteNode = new TetragramNode(false, true, ldjSig,
             "LDJ (Paraconsistent): LNC is NOT provable, LEM is provable");
-        TetragamNode commonLogicNode = new TetragamNode(false, false, commonSig,
+        TetragramNode commonLogicNode = new TetragramNode(false, false, commonSig,
             "Common Logic: Both LNC and LEM are undetermined");
 
         // Create tetragram

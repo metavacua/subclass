@@ -4,7 +4,7 @@ import org.subclass.annotation.Theorem;
 import org.subclass.annotation.TheoremFamily;
 import org.subclass.logic.signature.LogicalSignature;
 import org.subclass.logic.tetragram.Tetragram;
-import org.subclass.logic.tetragram.TetragamNode;
+import org.subclass.logic.tetragram.TetragramNode;
 import org.subclass.logic.tetragram.TheoremStatus;
 
 /**
@@ -46,7 +46,7 @@ import org.subclass.logic.tetragram.TheoremStatus;
                   "Key insight: LEM is PROVABLE in both LK and LDJ (paraconsistent), " +
                   "but NOT in LJ. This reflects the complementary nature of LEM vs LNC across logics."
 )
-public class LEMTetragam {
+public class LEMTetragram {
 
     /**
      * LEM in LK (Classical Sequent Calculus)
@@ -217,13 +217,13 @@ public class LEMTetragam {
         LogicalSignature commonSig = SignatureDefinitions.createCommonLogicSignature();
 
         // Create the four tetragram nodes
-        TetragamNode classicalNode = new TetragamNode(true, true, lkSig,
+        TetragramNode classicalNode = new TetragramNode(true, true, lkSig,
             "LK (Classical): LEM is provable, LNC is provable");
-        TetragamNode intuitionisticNode = new TetragamNode(true, false, ljSig,
+        TetragramNode intuitionisticNode = new TetragramNode(true, false, ljSig,
             "LJ (Intuitionistic): LEM is NOT provable, LNC is provable");
-        TetragamNode paraconsistentCompleteNode = new TetragamNode(false, true, ldjSig,
+        TetragramNode paraconsistentCompleteNode = new TetragramNode(false, true, ldjSig,
             "LDJ (Paraconsistent): LEM is provable, LNC is NOT provable (Urbas-Rauszer)");
-        TetragamNode commonLogicNode = new TetragamNode(false, false, commonSig,
+        TetragramNode commonLogicNode = new TetragramNode(false, false, commonSig,
             "Common Logic: Both LEM and LNC are undetermined");
 
         // Create the tetragram
@@ -266,7 +266,7 @@ public class LEMTetragam {
 
         // Print node details
         System.out.println("\n=== Node Details ===");
-        for (TetragamNode node : lem.getAllNodes()) {
+        for (TetragramNode node : lem.getAllNodes()) {
             System.out.println(node);
             System.out.println("  Signature: " + node.getSignature().displayName());
             System.out.println("  Functionally complete: " +

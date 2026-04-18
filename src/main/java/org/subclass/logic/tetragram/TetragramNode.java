@@ -16,7 +16,7 @@ import java.util.Objects;
  *
  * Each node is associated with a logical signature that defines its vocabulary and rules.
  */
-public class TetragamNode {
+public class TetragramNode {
     private final boolean consistent;
     private final boolean complete;
     private final LogicalSignature signature;
@@ -30,7 +30,7 @@ public class TetragamNode {
      * @param signature The logical signature for this node
      * @param description Human-readable description of this node's properties
      */
-    public TetragamNode(boolean consistent, boolean complete, LogicalSignature signature, String description) {
+    public TetragramNode(boolean consistent, boolean complete, LogicalSignature signature, String description) {
         this.consistent = consistent;
         this.complete = complete;
         this.signature = Objects.requireNonNull(signature);
@@ -106,7 +106,7 @@ public class TetragamNode {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TetragamNode that = (TetragamNode) o;
+        TetragramNode that = (TetragramNode) o;
         return consistent == that.consistent && complete == that.complete
                && signature.equals(that.signature);
     }

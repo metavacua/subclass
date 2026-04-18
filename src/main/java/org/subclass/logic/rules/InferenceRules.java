@@ -14,8 +14,28 @@ import java.util.function.Function;
  * - If you try to apply orRight() to a Proof&lt;Many, One&gt;, it won't type-check
  *   (because orRight needs to be able to join two disjuncts on the right)
  *
- * These methods are stubs that demonstrate the pattern. Real implementations
- * would construct actual proof objects with proper sequent manipulation.
+ * <h2>Stub status — read before use</h2>
+ *
+ * <strong>Every method in this class currently throws
+ * {@link UnsupportedOperationException} at runtime.</strong> The class exists
+ * today to lock in the type-level contract (the generic signatures encode the
+ * structural-rule constraints of each calculus) rather than to run proofs.
+ *
+ * <p>This is deliberate: the phantom-typed {@link org.subclass.logic.proof.typed.Proof}
+ * architecture expresses proof validity through the Java type system, so the
+ * signatures here are the primary artefact. Replacing the stubs with real
+ * sequent manipulation is tracked on the roadmap (see
+ * <a href="../../../../../../../../CHANGELOG.md">CHANGELOG.md</a> and
+ * <a href="../../../../../../../../README.md">README.md</a>).
+ *
+ * @apiNote Do not call these methods from production code. Call sites that
+ *     need an actual proof witness should construct one directly via the
+ *     appropriate {@code *Proof} implementation; the factory methods here
+ *     are placeholders whose purpose is to demonstrate the typing discipline.
+ * @implNote Each method body intentionally throws
+ *     {@code UnsupportedOperationException("... not yet implemented")} so
+ *     that accidental runtime use fails loudly rather than silently returning
+ *     a malformed proof object.
  */
 public final class InferenceRules {
     private InferenceRules() {

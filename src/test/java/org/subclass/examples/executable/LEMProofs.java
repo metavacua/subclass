@@ -14,6 +14,16 @@ import org.subclass.logic.rules.InferenceRules;
  *
  * The key insight: method return types ARE proof witnesses. Type mismatches
  * are compile-time errors, not runtime failures.
+ *
+ * @apiNote Method bodies are <strong>stubs</strong>: the PROVABLE witnesses
+ *     ({@link #classical()}, {@link #paraconsistent()}) throw
+ *     {@link UnsupportedOperationException} at runtime, and the NON_PROVABLE /
+ *     UNPROVABLE_AND_REFUTABLE witnesses ({@link #intuitionistic()},
+ *     {@link #common()}) return {@code null} by design. The value of this
+ *     class today is that its return-type annotations are validated by
+ *     {@link org.subclass.processor.TheoremProcessor} at compile time, not
+ *     that the methods execute. Real proof construction is tracked on the
+ *     roadmap in the top-level {@code README.md}.
  */
 @TheoremFamily(
     name = "LEM",

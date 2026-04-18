@@ -41,7 +41,7 @@ The library provides:
 - Mechanized proofs of the main independence and non-interpretability results
 - A library of bi-constructive first-order theories with non-Boolean semantics
 - Decision procedures and undecidability witnesses for the new theory classes
-- An executable test suite demonstrating undecidability witnesses on concrete theory instances
+- Example witness classes demonstrating the tetragram API on concrete case studies (LEM, LNC). A JUnit 5 test suite asserting these witnesses is still to be written — see the "Project Status and Roadmap" section.
 
 ---
 
@@ -172,12 +172,12 @@ subclass/
     │   │   │   │       └── capabilities/# Structural-rule capability markers
     │   │   │   ├── rules/               # InferenceRules (sequent calculus)
     │   │   │   ├── signature/           # LogicalSignature, Connective, InferenceRule, StructuralRule
-    │   │   │   └── tetragram/           # Tetragram, TetragamNode, TheoremStatus
+    │   │   │   └── tetragram/           # Tetragram, TetragramNode, TheoremStatus
     │   │   └── processor/               # TheoremProcessor (annotation processor)
     │   └── resources/META-INF/services/ # javax.annotation.processing.Processor registration
     └── test/
         └── java/org/subclass/examples/
-            ├── LEMTetragam.java
+            ├── LEMTetragram.java
             ├── LNCTetragram.java
             ├── SignatureDefinitions.java
             └── executable/              # LEMProofs, LNCProofs (typed witnesses)
