@@ -8,3 +8,11 @@ org.subclass.logic.rules.descriptors.ImpliesLeftDescriptor
 org.subclass.logic.rules.descriptors.ImpliesRightDescriptor
 org.subclass.logic.rules.descriptors.NotLeftDescriptor
 org.subclass.logic.rules.descriptors.NotRightDescriptor
+org.subclass.logic.rules.descriptors.AdjacentExchangeLeftDescriptor
+org.subclass.logic.rules.descriptors.AdjacentExchangeRightDescriptor
+org.subclass.logic.rules.descriptors.ClassicalExchangeLeftDescriptor
+org.subclass.logic.rules.descriptors.ClassicalExchangeRightDescriptor
+org.subclass.logic.rules.descriptors.WeakeningLeftDescriptor
+org.subclass.logic.rules.descriptors.WeakeningRightDescriptor
+org.subclass.logic.rules.descriptors.ContractionLeftDescriptor
+org.subclass.logic.rules.descriptors.ContractionRightDescriptor

@@ -32,6 +32,13 @@ public record Sequent<L extends Cardinality, R extends Cardinality>(
     public Sequent {
         Objects.requireNonNull(antecedent, "Antecedent cannot be null");
         Objects.requireNonNull(succedent, "Succedent cannot be null");
+        if (antecedent.isEmpty() && succedent.isEmpty()) {
+            throw new IllegalArgumentException(
+                "The empty sequent ⊢ is excluded: it is the model of "
+                + "inconsistency and triviality, not a well-formed sequent. "
+                + "At least one of antecedent or succedent must be non-empty."
+            );
+        }
         // Make lists immutable to preserve cardinality invariant at runtime
         antecedent = List.copyOf(antecedent);
         succedent = List.copyOf(succedent);
@@ -57,6 +64,36 @@ public record Sequent<L extends Cardinality, R extends Cardinality>(
         assert sequent.succedent.size() == 1 : "Common logic sequent must have exactly one succedent formula";
 
         return sequent;
+    }
+
+    /**
+     * Factory for an initial-object anti-theorem shape: a single antecedent
+     * formula and an empty succedent.
+     *
+     * <p>The sequent {@code A ⊢} asserts that {@code A} derives a refutation
+     * (the empty succedent). Combined with {@link #common(Formula, Formula)}
+     * and {@link #refutationalTheorem(Formula)}, these three shapes exhaust
+     * the sequents of the initial object in the sub-classical category.
+     *
+     * @param left the single antecedent formula (non-null)
+     * @return a sequent {@code A ⊢} with the cardinality of the initial object
+     */
+    public static Sequent<One, One> antiTheorem(Formula left) {
+        Objects.requireNonNull(left, "Left formula cannot be null");
+        return new Sequent<>(List.of(left), List.of());
+    }
+
+    /**
+     * Factory for an initial-object theorem shape: empty antecedent and a
+     * single succedent formula. The sequent {@code ⊢ A} asserts that {@code A}
+     * is derivable from no premises — i.e. a refutational theorem.
+     *
+     * @param right the single succedent formula (non-null)
+     * @return a sequent {@code ⊢ A} with the cardinality of the initial object
+     */
+    public static Sequent<One, One> refutationalTheorem(Formula right) {
+        Objects.requireNonNull(right, "Right formula cannot be null");
+        return new Sequent<>(List.of(), List.of(right));
     }
 
     /**
