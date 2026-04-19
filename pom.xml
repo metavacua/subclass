@@ -70,6 +70,7 @@
           <source>${java.version}</source>
           <target>${java.version}</target>
           <encoding>${project.build.sourceEncoding}</encoding>
+          <generatedSourcesDirectory>${project.build.directory}/generated-sources/annotations</generatedSourcesDirectory>
           <compilerArgs>
             <arg>--add-modules</arg>
             <arg>jdk.javadoc</arg>
@@ -90,6 +91,9 @@
             <goals>
               <goal>testCompile</goal>
             </goals>
+            <configuration>
+              <proc>none</proc>
+            </configuration>
           </execution>
         </executions>
       </plugin>

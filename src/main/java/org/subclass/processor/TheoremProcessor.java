@@ -5,6 +5,7 @@ import org.subclass.annotation.TheoremFamily;
 import org.subclass.annotation.Theorem;
 
 import javax.annotation.processing.AbstractProcessor;
+import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
@@ -15,7 +16,14 @@ import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic;
+import javax.tools.FileObject;
+import javax.tools.StandardLocation;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Annotation processor for compile-time validation of theorem families and proof signatures.
@@ -66,11 +74,21 @@ public class TheoremProcessor extends AbstractProcessor {
             }
         }
 
-        // Process @RuleSpec annotations
+        // Process @RuleSpec annotations: generate descriptors and collect for service file
+        List<String> generatedDescriptors = new ArrayList<>();
         for (Element element : roundEnv.getElementsAnnotatedWith(RuleSpec.class)) {
             if (element instanceof TypeElement type) {
                 validateRuleSpec(type);
+                String generatedClassName = generateRuleDescriptor(type);
+                if (generatedClassName != null) {
+                    generatedDescriptors.add(generatedClassName);
+                }
             }
+        }
+
+        // Register generated descriptors in META-INF/services if any were generated
+        if (!generatedDescriptors.isEmpty() && roundEnv.processingOver()) {
+            registerDescriptorService(generatedDescriptors);
         }
 
         // Note: We don't claim the annotations to allow other processors to handle them
@@ -273,5 +291,147 @@ public class TheoremProcessor extends AbstractProcessor {
         }
 
         return processingEnv.getTypeUtils().getDeclaredType(proofElem, leftElem.asType(), rightElem.asType());
+    }
+
+    /**
+     * Generate a RuleDescriptor class for a @RuleSpec-annotated ProofNode.
+     *
+     * @param ruleClass The @RuleSpec-annotated class (e.g., Axiom, AndLeft)
+     * @return The fully qualified class name of the generated descriptor, or null if generation failed
+     */
+    private String generateRuleDescriptor(TypeElement ruleClass) {
+        try {
+            RuleSpec spec = ruleClass.getAnnotation(RuleSpec.class);
+            String ruleName = ruleClass.getSimpleName().toString();
+            String descriptorName = ruleName + "Descriptor";
+            String packageName = processingEnv.getElementUtils()
+                .getPackageOf(ruleClass).getQualifiedName().toString();
+            String descriptorPackage = packageName.replace(".rules.", ".rules.descriptors.");
+            String descriptorQualifiedName = descriptorPackage + "." + descriptorName;
+
+            // Generate descriptor source code
+            String descriptorSource = generateDescriptorCode(ruleClass, ruleName, descriptorName, descriptorPackage);
+
+            // Write to source output directory
+            Filer filer = processingEnv.getFiler();
+            javax.tools.JavaFileObject sourceFile = filer.createSourceFile(descriptorQualifiedName, ruleClass);
+            try (Writer writer = sourceFile.openWriter()) {
+                writer.write(descriptorSource);
+            }
+
+            processingEnv.getMessager().printMessage(
+                Diagnostic.Kind.NOTE,
+                "Generated RuleDescriptor: " + descriptorQualifiedName
+            );
+
+            return descriptorQualifiedName;
+        } catch (IOException e) {
+            processingEnv.getMessager().printMessage(
+                Diagnostic.Kind.ERROR,
+                "Failed to generate RuleDescriptor for " + ruleClass.getQualifiedName() + ": " + e.getMessage()
+            );
+            return null;
+        }
+    }
+
+    /**
+     * Generate the source code for a RuleDescriptor class.
+     *
+     * @param ruleClass The @RuleSpec-annotated rule class
+     * @param ruleName Simple name of the rule (e.g., "Axiom")
+     * @param descriptorName Simple name of the descriptor (e.g., "AxiomDescriptor")
+     * @param packageName Package for the descriptor
+     * @return Java source code as a String
+     */
+    private String generateDescriptorCode(TypeElement ruleClass, String ruleName, String descriptorName, String packageName) {
+        String ruleQualifiedName = ruleClass.getQualifiedName().toString();
+        String rulePackage = processingEnv.getElementUtils()
+            .getPackageOf(ruleClass).getQualifiedName().toString();
+
+        // Import or use fully qualified name for the rule class
+        String ruleRef;
+        if (rulePackage.equals(packageName)) {
+            // Same package, can use simple name
+            ruleRef = ruleName + ".class";
+        } else {
+            // Different package, use fully qualified name
+            ruleRef = ruleQualifiedName + ".class";
+        }
+
+        return "package " + packageName + ";\n" +
+            "\n" +
+            "import org.subclass.logic.proof.typed.ProofNode;\n" +
+            "import org.subclass.logic.rules.RuleDescriptor;\n" +
+            "\n" +
+            "/**\n" +
+            " * Auto-generated RuleDescriptor for {@link " + ruleQualifiedName + "}.\n" +
+            " * Generated by TheoremProcessor annotation processor.\n" +
+            " * DO NOT EDIT: delete the corresponding @RuleSpec annotation to remove this class.\n" +
+            " */\n" +
+            "public final class " + descriptorName + " implements RuleDescriptor {\n" +
+            "    @Override\n" +
+            "    @SuppressWarnings({\"unchecked\", \"rawtypes\"})\n" +
+            "    public Class<? extends ProofNode<?, ?>> ruleClass() {\n" +
+            "        return (Class) " + ruleRef + ";\n" +
+            "    }\n" +
+            "}\n";
+    }
+
+    /**
+     * Register generated RuleDescriptor classes in META-INF/services/RuleDescriptor.
+     *
+     * @param generatedDescriptors List of fully qualified descriptor class names
+     */
+    private void registerDescriptorService(List<String> generatedDescriptors) {
+        try {
+            Filer filer = processingEnv.getFiler();
+            String serviceName = "org.subclass.logic.rules.RuleDescriptor";
+
+            // Read existing descriptors (if any)
+            Set<String> allDescriptors = new TreeSet<>(generatedDescriptors);
+            try {
+                FileObject existing = filer.getResource(
+                    StandardLocation.CLASS_OUTPUT,
+                    "",
+                    "META-INF/services/" + serviceName
+                );
+                if (existing != null) {
+                    String existingContent = existing.getCharContent(true).toString();
+                    for (String line : existingContent.split("\n")) {
+                        line = line.trim();
+                        if (!line.isEmpty() && !line.startsWith("#")) {
+                            allDescriptors.add(line);
+                        }
+                    }
+                }
+            } catch (IOException ignored) {
+                // File doesn't exist yet, which is fine
+            }
+
+            // Write service file
+            FileObject serviceFile = filer.createResource(
+                StandardLocation.CLASS_OUTPUT,
+                "",
+                "META-INF/services/" + serviceName
+            );
+            try (Writer writer = serviceFile.openWriter()) {
+                writer.write("# Auto-generated RuleDescriptor service file\n");
+                writer.write("# Generated by TheoremProcessor\n");
+                for (String descriptor : allDescriptors) {
+                    writer.write(descriptor);
+                    writer.write("\n");
+                }
+            }
+
+            processingEnv.getMessager().printMessage(
+                Diagnostic.Kind.NOTE,
+                "Registered " + generatedDescriptors.size() + " RuleDescriptors in META-INF/services"
+            );
+        } catch (IOException e) {
+            processingEnv.getMessager().printMessage(
+                Diagnostic.Kind.ERROR,
+                "Failed to register RuleDescriptors in service file: " + e.getMessage()
+            );
+        }
     }
 }

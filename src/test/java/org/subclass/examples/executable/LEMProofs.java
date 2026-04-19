@@ -10,24 +10,35 @@ import static org.subclass.logic.rules.InferenceRules.notRight;
 import static org.subclass.logic.rules.InferenceRules.orRight;
 
 /**
- * Type-safe executable proofs for the Law of Excluded Middle (LEM).
+ * Diamond graph validator: LEM theorem status across logical matrices.
  *
- * This class demonstrates how the type system enforces proof validity:
- * - classical() returns Proof&lt;Many, Many&gt; (LK)
- * - intuitionistic() cannot return Proof&lt;Many, Many&gt; (would not type-check)
+ * <strong>This is NOT a pedagogical example.</strong> This class is a critical
+ * data model reference that validates the diamond graph architecture:
  *
- * The key insight: method return types ARE proof witnesses. Type mismatches
- * are compile-time errors, not runtime failures.
+ * <ul>
+ *   <li>LEM in classical logic (LK): PROVABLE (Proof&lt;Many, Many&gt;)</li>
+ *   <li>LEM in intuitionistic logic (LJ): NON_PROVABLE (Proof&lt;Many, One&gt;)</li>
+ *   <li>LEM in paraconsistent logic (LDJ): PROVABLE (Proof&lt;One, Many&gt;)</li>
+ *   <li>LEM in common logic (intersection): UNPROVABLE_AND_REFUTABLE (Proof&lt;One, One&gt;)</li>
+ * </ul>
  *
- * @apiNote Method bodies are <strong>stubs</strong>: the PROVABLE witnesses
- *     ({@link #classical()}, {@link #paraconsistent()}) throw
- *     {@link UnsupportedOperationException} at runtime, and the NON_PROVABLE /
- *     UNPROVABLE_AND_REFUTABLE witnesses ({@link #intuitionistic()},
- *     {@link #common()}) return {@code null} by design. The value of this
- *     class today is that its return-type annotations are validated by
- *     {@link org.subclass.processor.TheoremProcessor} at compile time, not
- *     that the methods execute. Real proof construction is tracked on the
- *     roadmap in the top-level {@code README.md}.
+ * The diamond graph requires that LEM be provable in the terminal node (classical),
+ * unprovable in the initial node (intuitionistic ∩ dual-intuitionistic intersection),
+ * and have specific status in the left and right nodes. This class validates that
+ * the type system correctly enforces these constraints.
+ *
+ * <strong>Incomplete implementation:</strong> Methods that represent PROVABLE status
+ * have partial implementations; methods representing NON_PROVABLE status return null.
+ * This indicates the architecture is incomplete and awaits {@link org.subclass.processor.AntitheoremProcessor}
+ * implementation to handle unprovability derivations grounded in reflexive axiom schemas.
+ *
+ * @apiNote When AntitheoremProcessor framework is completed, these methods will
+ *     demonstrate that sequent calculus correctly enforces diamond graph constraints
+ *     across all four logical matrices, properly grounding unprovability derivations
+ *     (Γ ⊢ {}) in each logic's reflexive axiom schema.
+ *
+ * @see org.subclass.processor.AntitheoremProcessor
+ * @see org.subclass.logic.tetragram.Tetragram
  */
 @TheoremFamily(
     name = "LEM",

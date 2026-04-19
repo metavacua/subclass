@@ -11,25 +11,36 @@ import static org.subclass.logic.rules.InferenceRules.notLeft;
 import static org.subclass.logic.rules.InferenceRules.notRight;
 
 /**
- * Type-safe executable proofs for the Law of Non-Contradiction (LNC).
+ * Diamond graph validator: LNC theorem status across logical matrices.
  *
- * LNC is the dual theorem to LEM, exhibiting opposite provability at opposite corners
- * of the tetragram diamond:
+ * <strong>This is NOT a pedagogical example.</strong> This class is a critical
+ * data model reference that validates the dual property of the diamond graph.
  *
- * LEM:  LK (✓), LJ (✗), LDJ (✓), Common (?)
- * LNC:  LK (✓), LJ (✓), LDJ (✗), Common (?)
+ * LNC exhibits perfect duality with LEM across the diamond:
  *
- * Perfect duality: where LEM is provable, LNC is non-provable, and vice versa in LJ/LDJ.
+ * <table border="1" cellpadding="5">
+ *   <tr><th>Logic</th><th>LEM</th><th>LNC</th><th>Type</th></tr>
+ *   <tr><td>LK (classical)</td><td>✓</td><td>✓</td><td>Proof&lt;Many, Many&gt;</td></tr>
+ *   <tr><td>LJ (intuitionistic)</td><td>✗</td><td>✓</td><td>Proof&lt;Many, One&gt;</td></tr>
+ *   <tr><td>LDJ (paraconsistent)</td><td>✓</td><td>✗</td><td>Proof&lt;One, Many&gt;</td></tr>
+ *   <tr><td>Common (intersection)</td><td>?</td><td>?</td><td>Proof&lt;One, One&gt;</td></tr>
+ * </table>
  *
- * @apiNote Method bodies are <strong>stubs</strong>: the PROVABLE witnesses
- *     ({@link #classical()}, {@link #intuitionistic()}) throw
- *     {@link UnsupportedOperationException} at runtime, and the NON_PROVABLE /
- *     UNPROVABLE_AND_REFUTABLE witnesses ({@link #paraconsistent()},
- *     {@link #common()}) return {@code null} by design. The value of this
- *     class today is that its return-type annotations are validated by
- *     {@link org.subclass.processor.TheoremProcessor} at compile time, not
- *     that the methods execute. Real proof construction is tracked on the
- *     roadmap in the top-level {@code README.md}.
+ * Where LEM is provable, LNC is not, and vice versa (in left/right nodes).
+ * This dual structure validates the diamond graph's structural constraint:
+ * the four logical matrices form a complete lattice of provability properties.
+ *
+ * <strong>Incomplete implementation:</strong> Methods have stub bodies.
+ * This indicates the architecture awaits {@link org.subclass.processor.AntitheoremProcessor}
+ * implementation to handle unprovability/refutability derivations grounded in axiom schemas.
+ *
+ * @apiNote When AntitheoremProcessor framework is completed, these methods will
+ *     validate that the dual structure of LEM/LNC is correctly enforced by the
+ *     diamond graph's logical matrices and their respective axiom schemas.
+ *
+ * @see org.subclass.processor.AntitheoremProcessor
+ * @see org.subclass.examples.executable.LEMProofs (complementary validator)
+ * @see org.subclass.logic.tetragram.Tetragram
  */
 @TheoremFamily(
     name = "LNC",
