@@ -235,12 +235,12 @@ public class LEMTetragram {
             commonLogicNode
         );
 
-        // Register the theorem with its status in each node (corrected)
+        // Register the theorem with its status in each node (2D model)
         tetragram.registerTheorem("LEM",
-            TheoremStatus.PROVABLE,                    // LK: provable
-            TheoremStatus.NON_PROVABLE,                // LJ: not provable
-            TheoremStatus.PROVABLE,                    // LDJ: provable (CORRECTED from NON_PROVABLE)
-            TheoremStatus.UNPROVABLE_AND_REFUTABLE     // Common: undetermined
+            TheoremStatus.PROVABLE_UNREFUTABLE,        // LK (classical): ⊢ A∨¬A provable
+            TheoremStatus.NON_PROVABLE_UNREFUTABLE,    // LJ (intuitionistic): neither provable nor refutable
+            TheoremStatus.PROVABLE_REFUTABLE,          // LDJ (paraconsistent): provable + allows contradictions
+            TheoremStatus.NON_PROVABLE_UNREFUTABLE     // Common: most restrictive, neither provable nor refutable
         );
 
         return tetragram;

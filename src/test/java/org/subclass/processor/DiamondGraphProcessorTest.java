@@ -1,6 +1,7 @@
 package org.subclass.processor;
 
 import org.junit.jupiter.api.Test;
+import org.subclass.logic.tetragram.TheoremStatus;
 import org.subclass.processor.metadata.DiamondGraphInfo;
 import org.subclass.processor.metadata.DiamondGraphNodeInfo;
 import org.subclass.processor.metadata.TheoremStatusExpectation;
@@ -92,11 +93,11 @@ public class DiamondGraphProcessorTest {
             new HashMap<>()
         );
 
-        // Derive LEM status for each node
-        assertEquals("PROVABLE", deriver.deriveStatus("LEM", classicalNode, graphInfo));
-        assertEquals("NON_PROVABLE", deriver.deriveStatus("LEM", intuitionisticNode, graphInfo));
-        assertEquals("PROVABLE", deriver.deriveStatus("LEM", paraconsistentNode, graphInfo));
-        assertEquals("NON_PROVABLE", deriver.deriveStatus("LEM", commonNode, graphInfo));
+        // Derive LEM status for each node using 2D model
+        assertEquals(TheoremStatus.PROVABLE_UNREFUTABLE, deriver.deriveStatus("LEM", classicalNode, graphInfo));
+        assertEquals(TheoremStatus.NON_PROVABLE_UNREFUTABLE, deriver.deriveStatus("LEM", intuitionisticNode, graphInfo));
+        assertEquals(TheoremStatus.PROVABLE_REFUTABLE, deriver.deriveStatus("LEM", paraconsistentNode, graphInfo));
+        assertEquals(TheoremStatus.NON_PROVABLE_UNREFUTABLE, deriver.deriveStatus("LEM", commonNode, graphInfo));
     }
 
     @Test
@@ -122,11 +123,11 @@ public class DiamondGraphProcessorTest {
             new HashMap<>()
         );
 
-        // Derive LNC status for each node (should be dual to LEM pattern)
-        assertEquals("PROVABLE", deriver.deriveStatus("LNC", classicalNode, graphInfo));
-        assertEquals("PROVABLE", deriver.deriveStatus("LNC", intuitionisticNode, graphInfo));
-        assertEquals("NON_PROVABLE", deriver.deriveStatus("LNC", paraconsistentNode, graphInfo));
-        assertEquals("NON_PROVABLE", deriver.deriveStatus("LNC", commonNode, graphInfo));
+        // Derive LNC status for each node (provability duals of LEM)
+        assertEquals(TheoremStatus.PROVABLE_UNREFUTABLE, deriver.deriveStatus("LNC", classicalNode, graphInfo));
+        assertEquals(TheoremStatus.PROVABLE_UNREFUTABLE, deriver.deriveStatus("LNC", intuitionisticNode, graphInfo));
+        assertEquals(TheoremStatus.NON_PROVABLE_REFUTABLE, deriver.deriveStatus("LNC", paraconsistentNode, graphInfo));
+        assertEquals(TheoremStatus.NON_PROVABLE_UNREFUTABLE, deriver.deriveStatus("LNC", commonNode, graphInfo));
     }
 
     @Test
@@ -152,30 +153,36 @@ public class DiamondGraphProcessorTest {
             new HashMap<>()
         );
 
-        // Verify duality: where LEM is PROVABLE, LNC tends to be PROVABLE (classical)
-        // But in intuitionistic: LEM NON_PROVABLE, LNC PROVABLE (opposite)
-        // In paraconsistent: LEM PROVABLE, LNC NON_PROVABLE (opposite)
-        // In common: both NON_PROVABLE (intersection)
+        // Verify 2D duality: provability dimension swaps between LEM and LNC
+        // Classical: both PROVABLE_UNREFUTABLE
+        TheoremStatus lemClassical = deriver.deriveStatus("LEM", classicalNode, graphInfo);
+        TheoremStatus lncClassical = deriver.deriveStatus("LNC", classicalNode, graphInfo);
+        assertEquals(TheoremStatus.PROVABLE_UNREFUTABLE, lemClassical);
+        assertEquals(TheoremStatus.PROVABLE_UNREFUTABLE, lncClassical);
 
-        String lemClassical = deriver.deriveStatus("LEM", classicalNode, graphInfo);
-        String lncClassical = deriver.deriveStatus("LNC", classicalNode, graphInfo);
-        assertEquals("PROVABLE", lemClassical);
-        assertEquals("PROVABLE", lncClassical);
+        // Intuitionistic: LEM=NON_PROVABLE_UNREFUTABLE, LNC=PROVABLE_UNREFUTABLE (provability opposite)
+        TheoremStatus lemIntuitionistic = deriver.deriveStatus("LEM", intuitionisticNode, graphInfo);
+        TheoremStatus lncIntuitionistic = deriver.deriveStatus("LNC", intuitionisticNode, graphInfo);
+        assertEquals(TheoremStatus.NON_PROVABLE_UNREFUTABLE, lemIntuitionistic);
+        assertEquals(TheoremStatus.PROVABLE_UNREFUTABLE, lncIntuitionistic);
+        // Note: these are provability duals (opposite in provability dimension)
+        assertTrue(lemIntuitionistic.isNonProvable());
+        assertTrue(lncIntuitionistic.isProvable());
 
-        String lemIntuitionistic = deriver.deriveStatus("LEM", intuitionisticNode, graphInfo);
-        String lncIntuitionistic = deriver.deriveStatus("LNC", intuitionisticNode, graphInfo);
-        assertEquals("NON_PROVABLE", lemIntuitionistic);
-        assertEquals("PROVABLE", lncIntuitionistic);
+        // Paraconsistent: LEM=PROVABLE_REFUTABLE, LNC=NON_PROVABLE_REFUTABLE (provability opposite)
+        TheoremStatus lemParaconsistent = deriver.deriveStatus("LEM", paraconsistentNode, graphInfo);
+        TheoremStatus lncParaconsistent = deriver.deriveStatus("LNC", paraconsistentNode, graphInfo);
+        assertEquals(TheoremStatus.PROVABLE_REFUTABLE, lemParaconsistent);
+        assertEquals(TheoremStatus.NON_PROVABLE_REFUTABLE, lncParaconsistent);
+        // Both refutable, but provability opposite
+        assertTrue(lemParaconsistent.isProvable());
+        assertTrue(lncParaconsistent.isNonProvable());
 
-        String lemParaconsistent = deriver.deriveStatus("LEM", paraconsistentNode, graphInfo);
-        String lncParaconsistent = deriver.deriveStatus("LNC", paraconsistentNode, graphInfo);
-        assertEquals("PROVABLE", lemParaconsistent);
-        assertEquals("NON_PROVABLE", lncParaconsistent);
-
-        String lemCommon = deriver.deriveStatus("LEM", commonNode, graphInfo);
-        String lncCommon = deriver.deriveStatus("LNC", commonNode, graphInfo);
-        assertEquals("NON_PROVABLE", lemCommon);
-        assertEquals("NON_PROVABLE", lncCommon);
+        // Common: both NON_PROVABLE_UNREFUTABLE (intersection, most restrictive)
+        TheoremStatus lemCommon = deriver.deriveStatus("LEM", commonNode, graphInfo);
+        TheoremStatus lncCommon = deriver.deriveStatus("LNC", commonNode, graphInfo);
+        assertEquals(TheoremStatus.NON_PROVABLE_UNREFUTABLE, lemCommon);
+        assertEquals(TheoremStatus.NON_PROVABLE_UNREFUTABLE, lncCommon);
     }
 
     @Test
@@ -201,11 +208,11 @@ public class DiamondGraphProcessorTest {
             new HashMap<>()
         );
 
-        // Double negation introduction should be provable in all logics
-        assertEquals("PROVABLE", deriver.deriveStatus("DoubleNegationIntroduction", classicalNode, graphInfo));
-        assertEquals("PROVABLE", deriver.deriveStatus("DoubleNegationIntroduction", intuitionisticNode, graphInfo));
-        assertEquals("PROVABLE", deriver.deriveStatus("DoubleNegationIntroduction", paraconsistentNode, graphInfo));
-        assertEquals("PROVABLE", deriver.deriveStatus("DoubleNegationIntroduction", commonNode, graphInfo));
+        // Double negation introduction should be provable in all logics (constructive)
+        assertEquals(TheoremStatus.PROVABLE_UNREFUTABLE, deriver.deriveStatus("DoubleNegationIntroduction", classicalNode, graphInfo));
+        assertEquals(TheoremStatus.PROVABLE_UNREFUTABLE, deriver.deriveStatus("DoubleNegationIntroduction", intuitionisticNode, graphInfo));
+        assertEquals(TheoremStatus.PROVABLE_UNREFUTABLE, deriver.deriveStatus("DoubleNegationIntroduction", paraconsistentNode, graphInfo));
+        assertEquals(TheoremStatus.PROVABLE_UNREFUTABLE, deriver.deriveStatus("DoubleNegationIntroduction", commonNode, graphInfo));
     }
 
     // Helper to create a node

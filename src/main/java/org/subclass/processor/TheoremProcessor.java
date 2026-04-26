@@ -349,12 +349,14 @@ public class TheoremProcessor extends AbstractProcessor {
             .getPackageOf(ruleClass).getQualifiedName().toString();
 
         // Import or use fully qualified name for the rule class
+        // For inner classes, always use fully qualified name (includes enclosing class)
         String ruleRef;
-        if (rulePackage.equals(packageName)) {
-            // Same package, can use simple name
+        boolean isInnerClass = ruleClass.getEnclosingElement().getKind().isDeclaredType();
+        if (rulePackage.equals(packageName) && !isInnerClass) {
+            // Same package and not inner class, can use simple name
             ruleRef = ruleName + ".class";
         } else {
-            // Different package, use fully qualified name
+            // Different package or inner class, use fully qualified name
             ruleRef = ruleQualifiedName + ".class";
         }
 

@@ -3,6 +3,7 @@ package org.subclass.processor;
 import org.subclass.annotation.DiamondGraph;
 import org.subclass.annotation.DiamondGraphNode;
 import org.subclass.annotation.TheoremStatusDerivation;
+import org.subclass.logic.tetragram.TheoremStatus;
 import org.subclass.processor.metadata.DiamondGraphInfo;
 import org.subclass.processor.metadata.DiamondGraphNodeInfo;
 import org.subclass.processor.metadata.TheoremStatusExpectation;
@@ -79,10 +80,10 @@ public class DiamondGraphProcessor extends AbstractProcessor {
             // If validation fails, an exception is thrown
 
             // Phase 3: Auto-derive theorem statuses
-            Map<String, Map<String, String>> derivedStatuses = new HashMap<>();
+            Map<String, Map<String, TheoremStatus>> derivedStatuses = new HashMap<>();
             for (TheoremStatusDerivation expectedDerivation : annotation.theoremDerivations()) {
                 String theoremName = expectedDerivation.theoremName();
-                Map<String, String> derived = deriveTheoremStatuses(theoremName, graphInfo);
+                Map<String, TheoremStatus> derived = deriveTheoremStatuses(theoremName, graphInfo);
                 derivedStatuses.put(theoremName, derived);
 
                 // Phase 4: Compare derived against expected
@@ -164,13 +165,13 @@ public class DiamondGraphProcessor extends AbstractProcessor {
         );
     }
 
-    private Map<String, String> deriveTheoremStatuses(String theoremName, DiamondGraphInfo graphInfo) {
-        Map<String, String> statuses = new HashMap<>();
+    private Map<String, TheoremStatus> deriveTheoremStatuses(String theoremName, DiamondGraphInfo graphInfo) {
+        Map<String, TheoremStatus> statuses = new HashMap<>();
 
-        // Derive status for each node
+        // Derive status for each node using 2D model
         for (String position : NODE_POSITIONS) {
             DiamondGraphNodeInfo node = graphInfo.getNodeByPosition(position);
-            String status = deriver.deriveStatus(theoremName, node, graphInfo);
+            TheoremStatus status = deriver.deriveStatus(theoremName, node, graphInfo);
             statuses.put(position, status);
         }
 
@@ -180,18 +181,33 @@ public class DiamondGraphProcessor extends AbstractProcessor {
     private void validateTheoremStatusesMatch(
         String theoremName,
         TheoremStatusExpectation expected,
-        Map<String, String> derived,
+        Map<String, TheoremStatus> derived,
         TypeElement typeElement
     ) {
-        for (String position : new String[]{"classical", "intuitionistic", "paraconsistent", "common"}) {
-            String expectedStatus = expected.getStatusForPosition(position);
-            String derivedStatus = derived.get(position);
+        for (String position : NODE_POSITIONS) {
+            String expectedStatusStr = expected.getStatusForPosition(position);
+            TheoremStatus derivedStatus = derived.get(position);
+
+            // Parse expected status string to TheoremStatus
+            TheoremStatus expectedStatus;
+            try {
+                expectedStatus = TheoremStatus.valueOf(expectedStatusStr);
+            } catch (IllegalArgumentException e) {
+                processingEnv.getMessager().printMessage(
+                    javax.tools.Diagnostic.Kind.ERROR,
+                    "Invalid expected status '" + expectedStatusStr + "' for theorem '" + theoremName +
+                    "' in " + position + " logic: " + e.getMessage(),
+                    typeElement
+                );
+                continue;
+            }
 
             if (!expectedStatus.equals(derivedStatus)) {
                 processingEnv.getMessager().printMessage(
                     javax.tools.Diagnostic.Kind.WARNING,
                     "Theorem '" + theoremName + "' in " + position + " logic: " +
-                    "expected status " + expectedStatus + " but derivation produces " + derivedStatus,
+                    "expected status " + expectedStatus.getDisplayName() +
+                    " but derivation produces " + derivedStatus.getDisplayName(),
                     typeElement
                 );
             }

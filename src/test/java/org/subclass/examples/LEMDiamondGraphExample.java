@@ -81,27 +81,28 @@ import org.subclass.annotation.TheoremStatusDerivation;
 
     // Theorem status derivations: specify expected statuses for validation
     // The processor will auto-derive these and warn if mismatches occur
+    // Using 2D status model: (Provable/NonProvable) × (Refutable/Unrefutable)
     theoremDerivations = {
         @TheoremStatusDerivation(
             theoremName = "LEM",
-            classicalStatus = "PROVABLE",
-            classicalReasoning = "Axiom schema Γ,A⊢A,Δ with right disjunction enables closure",
+            classicalStatus = "PROVABLE_UNREFUTABLE",
+            classicalReasoning = "⊢ A∨¬A derivable; ⊢ ¬(A∨¬A) not derivable",
 
-            intuitionisticStatus = "NON_PROVABLE",
-            intuitionisticReasoning = "Succedent restricted to one; cannot close ⊢A∨¬A",
+            intuitionisticStatus = "NON_PROVABLE_UNREFUTABLE",
+            intuitionisticReasoning = "Neither ⊢ A∨¬A nor ⊢ ¬(A∨¬A) derivable with single-element succedent",
 
-            paraconsistentStatus = "PROVABLE",
-            paraconsistentReasoning = "Dual of intuitionistic; A∨¬A⊢ derivable",
+            paraconsistentStatus = "PROVABLE_REFUTABLE",
+            paraconsistentReasoning = "⊢ A∨¬A provable; also ⊢ ¬(A∨¬A) may be provable (allows contradictions)",
 
-            commonLogicStatus = "NON_PROVABLE",
-            commonLogicReasoning = "Intersection too restrictive; axiom schema A⊢A only"
+            commonLogicStatus = "NON_PROVABLE_UNREFUTABLE",
+            commonLogicReasoning = "Most restrictive: intersection of intuitionistic and paraconsistent"
         ),
         @TheoremStatusDerivation(
             theoremName = "LNC",
-            classicalStatus = "PROVABLE",
-            intuitionisticStatus = "PROVABLE",
-            paraconsistentStatus = "NON_PROVABLE",
-            commonLogicStatus = "NON_PROVABLE"
+            classicalStatus = "PROVABLE_UNREFUTABLE",
+            intuitionisticStatus = "PROVABLE_UNREFUTABLE",
+            paraconsistentStatus = "NON_PROVABLE_REFUTABLE",
+            commonLogicStatus = "NON_PROVABLE_UNREFUTABLE"
         )
     }
 )

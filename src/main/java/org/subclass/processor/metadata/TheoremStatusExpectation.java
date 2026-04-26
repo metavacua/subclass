@@ -74,10 +74,17 @@ public final class TheoremStatusExpectation {
     private void validateStatuses() {
         String[] allStatuses = {classicalStatus, intuitionisticStatus, paraconsistentStatus, commonLogicStatus};
         for (String status : allStatuses) {
-            if (!status.equals("PROVABLE") && !status.equals("NON_PROVABLE") && !status.equals("REFUTABLE")) {
+            if (!isValidStatus(status)) {
                 throw new IllegalArgumentException("Invalid status: " + status);
             }
         }
+    }
+
+    private boolean isValidStatus(String status) {
+        return status.equals("PROVABLE_UNREFUTABLE") ||
+               status.equals("PROVABLE_REFUTABLE") ||
+               status.equals("NON_PROVABLE_REFUTABLE") ||
+               status.equals("NON_PROVABLE_UNREFUTABLE");
     }
 
     @Override

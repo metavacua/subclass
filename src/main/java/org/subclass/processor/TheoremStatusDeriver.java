@@ -1,35 +1,41 @@
 package org.subclass.processor;
 
+import org.subclass.logic.tetragram.TheoremStatus;
 import org.subclass.processor.metadata.DiamondGraphInfo;
 import org.subclass.processor.metadata.DiamondGraphNodeInfo;
 
 /**
  * Derives theorem statuses algorithmically for each logic node.
  *
- * Implements decision procedures that map theorem name + node configuration
- * to a definite status: PROVABLE | NON_PROVABLE | REFUTABLE.
+ * Implements a 2-dimensional decision procedure:
+ * Status = (Provable/NonProvable) × (Refutable/Unrefutable)
  *
- * Core theorems:
- * - LEM (⊢ A∨¬A): provable in classical and paraconsistent; not provable elsewhere
- * - LNC (⊢ ¬(A∧¬A)): provable in classical and intuitionistic; not provable in paraconsistent
- * - DoubleNegation elimination: provable in classical only
- * - DoubleNegation introduction: provable in all (⊢ A → ¬¬A)
+ * For each theorem T in logic L, independently determine:
+ * 1. Is ⊢ T derivable in L? (provability dimension)
+ * 2. Is ⊢ ¬T derivable in L? (refutability dimension)
  *
- * The metalinguistic semantics: "NON_PROVABLE in logic L" means the theorem
- * has no closed proof tree using L's axiom schema and structural rules.
+ * This yields four metalinguistically meaningful statuses:
+ * - PROVABLE_UNREFUTABLE: ⊢ T derivable; ⊢ ¬T not derivable (classical case)
+ * - PROVABLE_REFUTABLE: Both ⊢ T and ⊢ ¬T derivable (paraconsistent)
+ * - NON_PROVABLE_REFUTABLE: ⊢ T not derivable; ⊢ ¬T derivable (dual to classical)
+ * - NON_PROVABLE_UNREFUTABLE: Neither ⊢ T nor ⊢ ¬T derivable (incompleteness)
+ *
+ * Core theorems and their duality:
+ * - LEM (⊢ A∨¬A) and LNC (⊢ ¬(A∧¬A)) exhibit provability duality
+ * - LEM proves/refutes in different logics than LNC due to negation duality
  */
 public final class TheoremStatusDeriver {
 
     /**
-     * Derives the status of a theorem in a specific logic node.
+     * Derives the 2D status of a theorem in a specific logic node.
      *
      * @param theoremName name of the theorem (e.g., "LEM", "LNC")
      * @param node the diamond graph node (contains axiom schema and cardinality)
      * @param graphInfo the full diamond graph (for context and validation)
-     * @return status: "PROVABLE", "NON_PROVABLE", or "REFUTABLE"
+     * @return TheoremStatus encoding both provability and refutability dimensions
      * @throws IllegalArgumentException if node position is unrecognized
      */
-    public String deriveStatus(String theoremName, DiamondGraphNodeInfo node, DiamondGraphInfo graphInfo) {
+    public TheoremStatus deriveStatus(String theoremName, DiamondGraphNodeInfo node, DiamondGraphInfo graphInfo) {
         // Dispatch based on theorem name
         return switch (theoremName) {
             case "LEM" -> deriveLEMStatus(node);
@@ -43,28 +49,33 @@ public final class TheoremStatusDeriver {
     /**
      * Derives status for Law of Excluded Middle: ⊢ A∨¬A
      *
-     * Classical (Many,Many): PROVABLE
-     *   Axiom schema Γ,A⊢A,Δ allows right-context, enabling ∨-intro to close branches.
-     *   A⊢A,¬A and ¬A⊢A,¬A → ⊢A∨¬A
+     * 2D analysis for each logic:
      *
-     * Intuitionistic (Many,One): NON_PROVABLE
+     * Classical (Many,Many): PROVABLE_UNREFUTABLE
+     *   Axiom schema Γ,A⊢A,Δ allows right-context, enabling ∨-intro.
+     *   ⊢ A∨¬A provable; ⊢ ¬(A∨¬A) not derivable
+     *
+     * Intuitionistic (Many,One): NON_PROVABLE_UNREFUTABLE
      *   Axiom schema Γ,A⊢A restricts right to single formula.
-     *   Cannot close ⊢A∨¬A (neither A nor ¬A provable from empty antecedent).
+     *   Cannot derive ⊢ A∨¬A; cannot derive ⊢ ¬(A∨¬A)
+     *   (neither A nor ¬A provable from empty antecedent)
      *
-     * Paraconsistent (One,Many): PROVABLE
-     *   Axiom schema A⊢A,Δ allows left-context, enabling ∨-elim on left.
-     *   A∨¬A⊢ follows from axiom schema; thus ⊢A∨¬A is dual-provable.
+     * Paraconsistent (One,Many): PROVABLE_REFUTABLE
+     *   Axiom schema A⊢A,Δ dual to intuitionistic; allows left-context.
+     *   ⊢ A∨¬A provable; also ⊢ ¬(A∨¬A) may be provable
+     *   (allows contradictions in some subsystems)
      *
-     * Common (One,One): NON_PROVABLE
+     * Common (One,One): NON_PROVABLE_UNREFUTABLE
      *   Most restrictive: axiom schema A⊢A only.
-     *   Intersection of intuitionistic and paraconsistent: too restrictive.
+     *   Neither ⊢ A∨¬A nor ⊢ ¬(A∨¬A) derivable
+     *   (intersection of intuitionistic and paraconsistent restrictions)
      */
-    private String deriveLEMStatus(DiamondGraphNodeInfo node) {
+    private TheoremStatus deriveLEMStatus(DiamondGraphNodeInfo node) {
         return switch (node.position()) {
-            case "classical" -> "PROVABLE";
-            case "intuitionistic" -> "NON_PROVABLE";
-            case "paraconsistent" -> "PROVABLE";
-            case "common" -> "NON_PROVABLE";
+            case "classical" -> TheoremStatus.PROVABLE_UNREFUTABLE;
+            case "intuitionistic" -> TheoremStatus.NON_PROVABLE_UNREFUTABLE;
+            case "paraconsistent" -> TheoremStatus.PROVABLE_REFUTABLE;
+            case "common" -> TheoremStatus.NON_PROVABLE_UNREFUTABLE;
             default -> throw new IllegalArgumentException("Unknown position: " + node.position());
         };
     }
@@ -72,27 +83,31 @@ public final class TheoremStatusDeriver {
     /**
      * Derives status for Law of Non-Contradiction: ⊢ ¬(A∧¬A)
      *
-     * Classical (Many,Many): PROVABLE
-     *   Universal law in classical logic with full structural rules.
+     * 2D analysis for each logic (provability/refutability duals of LEM):
      *
-     * Intuitionistic (Many,One): PROVABLE
-     *   Constructive negation works: ¬(A∧¬A) = ¬A ∨ ¬¬A.
+     * Classical (Many,Many): PROVABLE_UNREFUTABLE
+     *   ⊢ ¬(A∧¬A) provable; ⊢ ¬¬(A∧¬A) not derivable
+     *
+     * Intuitionistic (Many,One): PROVABLE_UNREFUTABLE
+     *   Constructive negation works: ¬(A∧¬A) is provable in intuitionistic logic.
      *   Can be derived from axiom schema Γ,A⊢A with negation rules.
+     *   Note: Dual of LEM's NON_PROVABLE_UNREFUTABLE in intuitionistic.
      *
-     * Paraconsistent (One,Many): NON_PROVABLE
+     * Paraconsistent (One,Many): NON_PROVABLE_REFUTABLE
      *   Allows contradictions (A∧¬A can be true).
-     *   Therefore ¬(A∧¬A) cannot be derived.
-     *   Dual opposite of intuitionistic.
+     *   ⊢ ¬(A∧¬A) not provable; ⊢ ¬¬(A∧¬A) provable
+     *   Dual opposite of intuitionistic: where intuitionistic proves LNC,
+     *   paraconsistent refutes it.
      *
-     * Common (One,One): NON_PROVABLE
-     *   Intersection: too restrictive to derive.
+     * Common (One,One): NON_PROVABLE_UNREFUTABLE
+     *   Most restrictive: neither ⊢ ¬(A∧¬A) nor ⊢ ¬¬(A∧¬A) derivable.
      */
-    private String deriveLNCStatus(DiamondGraphNodeInfo node) {
+    private TheoremStatus deriveLNCStatus(DiamondGraphNodeInfo node) {
         return switch (node.position()) {
-            case "classical" -> "PROVABLE";
-            case "intuitionistic" -> "PROVABLE";
-            case "paraconsistent" -> "NON_PROVABLE";
-            case "common" -> "NON_PROVABLE";
+            case "classical" -> TheoremStatus.PROVABLE_UNREFUTABLE;
+            case "intuitionistic" -> TheoremStatus.PROVABLE_UNREFUTABLE;
+            case "paraconsistent" -> TheoremStatus.NON_PROVABLE_REFUTABLE;
+            case "common" -> TheoremStatus.NON_PROVABLE_UNREFUTABLE;
             default -> throw new IllegalArgumentException("Unknown position: " + node.position());
         };
     }
@@ -101,29 +116,33 @@ public final class TheoremStatusDeriver {
      * Double Negation Elimination: ⊢ ¬¬A → A
      * Only provable in classical logic (law of double negation).
      */
-    private String deriveDoubleNegationEliminationStatus(DiamondGraphNodeInfo node) {
+    private TheoremStatus deriveDoubleNegationEliminationStatus(DiamondGraphNodeInfo node) {
         return switch (node.position()) {
-            case "classical" -> "PROVABLE";
-            case "intuitionistic", "paraconsistent", "common" -> "NON_PROVABLE";
+            case "classical" -> TheoremStatus.PROVABLE_UNREFUTABLE;
+            case "intuitionistic" -> TheoremStatus.NON_PROVABLE_UNREFUTABLE;
+            case "paraconsistent" -> TheoremStatus.NON_PROVABLE_UNREFUTABLE;
+            case "common" -> TheoremStatus.NON_PROVABLE_UNREFUTABLE;
             default -> throw new IllegalArgumentException("Unknown position: " + node.position());
         };
     }
 
     /**
      * Double Negation Introduction: ⊢ A → ¬¬A
-     * Provable in all logics (constructive).
+     * Provable in all logics (constructive theorem).
      */
-    private String deriveDoubleNegationIntroductionStatus(DiamondGraphNodeInfo node) {
+    private TheoremStatus deriveDoubleNegationIntroductionStatus(DiamondGraphNodeInfo node) {
         // Provable everywhere: A → ¬¬A is derivable in all four logics
-        return "PROVABLE";
+        // Classical and intuitionistic: PROVABLE_UNREFUTABLE
+        // Paraconsistent and common: also PROVABLE_UNREFUTABLE (constructively sound)
+        return TheoremStatus.PROVABLE_UNREFUTABLE;
     }
 
     /**
      * Generic fallback for unknown theorems.
-     * Without explicit knowledge, conservatively assume NON_PROVABLE.
+     * Without explicit knowledge, conservatively assume NON_PROVABLE_UNREFUTABLE.
      * Developers should add case statements for domain-specific theorems.
      */
-    private String deriveGenericStatus(String theoremName, DiamondGraphNodeInfo node) {
-        return "NON_PROVABLE";
+    private TheoremStatus deriveGenericStatus(String theoremName, DiamondGraphNodeInfo node) {
+        return TheoremStatus.NON_PROVABLE_UNREFUTABLE;
     }
 }

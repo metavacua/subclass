@@ -1,49 +1,64 @@
 package org.subclass.logic.tetragram;
 
 /**
- * Enum representing the status of a theorem in a logical system.
+ * Two-dimensional theorem status model for proof and refutation calculi.
  *
- * In classical logic, a statement is either provable or its negation is provable.
- * However, in non-classical logics (paraconsistent, paracomplete), we have four
- * possible states:
+ * Status is the Cartesian product of two independent dimensions:
+ * - Provability: whether ⊢ T is derivable (PROVABLE vs NON_PROVABLE)
+ * - Refutability: whether ⊢ ¬T is derivable (REFUTABLE vs UNREFUTABLE)
  *
- * - PROVABLE: The theorem can be derived from the axioms and rules of the logic
- * - NON_PROVABLE: The theorem cannot be derived, but its negation may or may not be derivable
- * - REFUTABLE: The negation of the theorem can be derived
- * - UNPROVABLE_AND_REFUTABLE: Neither the theorem nor its negation can be derived
- *   (This occurs in paracomplete logics where neither A nor ¬A is derivable)
+ * This gives four metalinguistically meaningful states:
  *
- * Note: In complete logics (classical, some paraconsistent), UNPROVABLE_AND_REFUTABLE
- * should not occur - if not provable, then refutable or vice versa.
- * In paraconsistent logics, both PROVABLE and REFUTABLE can occur simultaneously.
- * In paracomplete logics, neither PROVABLE nor REFUTABLE can occur.
+ * 1. PROVABLE_UNREFUTABLE: ⊢ T derivable; ⊢ ¬T not derivable
+ *    - Classical logic, intuitionistic logic (most theorems)
+ *    - Pure proof calculi
+ *
+ * 2. PROVABLE_REFUTABLE: Both ⊢ T and ⊢ ¬T derivable
+ *    - Paraconsistent logics (allow contradictions)
+ *    - Inconsistent but coherent subsystems
+ *
+ * 3. NON_PROVABLE_REFUTABLE: ⊢ T not derivable; ⊢ ¬T derivable
+ *    - Dual to state 1; appears in refutation-primary calculi
+ *    - Pure refutation calculi
+ *
+ * 4. NON_PROVABLE_UNREFUTABLE: Neither ⊢ T nor ⊢ ¬T derivable
+ *    - Paracomplete logics (reject both T and ¬T)
+ *    - Metalinguistic signature of incompleteness/undecidability
+ *    - Formal condition for Gödel incompleteness, consistency dilemmas
+ *
+ * In the object language of a specific logic L:
+ * - States 1 & 3 represent definite closure (classical completeness)
+ * - State 2 represents paraconsistent collapse (both provable)
+ * - State 4 represents genuine undecidability (neither provable nor refutable)
  */
 public enum TheoremStatus {
     /**
-     * The theorem is provable in this logic.
-     * There exists a proof tree from axioms to the theorem.
+     * Provable and unrefutable: ⊢ T derivable; ⊢ ¬T not derivable.
+     * Valid in classical and intuitionistic proof calculi.
      */
-    PROVABLE("Provable"),
+    PROVABLE_UNREFUTABLE("Provable and unrefutable"),
 
     /**
-     * The theorem is not provable in this logic.
-     * No proof exists (but the negation may or may not be provable).
+     * Provable and refutable: Both ⊢ T and ⊢ ¬T derivable.
+     * Valid in paraconsistent logics that allow contradictions.
+     * Signature of logical explosion containment.
      */
-    NON_PROVABLE("Non-provable"),
+    PROVABLE_REFUTABLE("Provable and refutable"),
 
     /**
-     * The theorem is refutable in this logic.
-     * The negation of the theorem can be derived.
-     * In paraconsistent logics, a theorem can be both PROVABLE and REFUTABLE.
+     * Non-provable and refutable: ⊢ T not derivable; ⊢ ¬T derivable.
+     * Dual to PROVABLE_UNREFUTABLE.
+     * Valid in refutation-primary calculi and some paracomplete systems.
      */
-    REFUTABLE("Refutable"),
+    NON_PROVABLE_REFUTABLE("Non-provable and refutable"),
 
     /**
-     * The theorem is neither provable nor refutable in this logic.
-     * This occurs in paracomplete logics where the logic lacks the law of excluded middle
-     * or similar completeness properties.
+     * Non-provable and unrefutable: Neither ⊢ T nor ⊢ ¬T derivable.
+     * Metalinguistic signature of genuine incompleteness/undecidability.
+     * Formal condition for Gödel incompleteness, consistency dilemmas.
+     * Valid in paracomplete logics where both A and ¬A may be unprovable.
      */
-    UNPROVABLE_AND_REFUTABLE("Unprovable and refutable");
+    NON_PROVABLE_UNREFUTABLE("Non-provable and unrefutable");
 
     private final String displayName;
 
@@ -56,17 +71,86 @@ public enum TheoremStatus {
     }
 
     /**
-     * Check if this status represents a provable state.
+     * Check if this status represents a provable state (dimension 1).
      */
     public boolean isProvable() {
-        return this == PROVABLE;
+        return this == PROVABLE_UNREFUTABLE || this == PROVABLE_REFUTABLE;
     }
 
     /**
-     * Check if this status represents a determined state (either provable or refutable).
-     * In paracomplete logics, a theorem may be undetermined.
+     * Check if this status represents a non-provable state (dimension 1).
+     */
+    public boolean isNonProvable() {
+        return this == NON_PROVABLE_REFUTABLE || this == NON_PROVABLE_UNREFUTABLE;
+    }
+
+    /**
+     * Check if this status represents a refutable state (dimension 2).
+     */
+    public boolean isRefutable() {
+        return this == PROVABLE_REFUTABLE || this == NON_PROVABLE_REFUTABLE;
+    }
+
+    /**
+     * Check if this status represents an unrefutable state (dimension 2).
+     */
+    public boolean isUnrefutable() {
+        return this == PROVABLE_UNREFUTABLE || this == NON_PROVABLE_UNREFUTABLE;
+    }
+
+    /**
+     * Check if this status represents determined closure (classical sense):
+     * either provable unrefutable OR non-provable refutable (not both, not neither).
      */
     public boolean isDetermined() {
-        return this == PROVABLE || this == REFUTABLE;
+        return (this == PROVABLE_UNREFUTABLE) || (this == NON_PROVABLE_REFUTABLE);
+    }
+
+    /**
+     * Check if this status represents undecidability/incompleteness:
+     * neither provable nor refutable in the metalanguage.
+     */
+    public boolean isUndecidable() {
+        return this == NON_PROVABLE_UNREFUTABLE;
+    }
+
+    /**
+     * Check if this status represents contradiction in the object language:
+     * both provable and refutable (paraconsistent collapse).
+     */
+    public boolean isContradictory() {
+        return this == PROVABLE_REFUTABLE;
+    }
+
+    /**
+     * Get the refutational dual of this status.
+     * Swaps the refutability dimension.
+     *
+     * PROVABLE_UNREFUTABLE ↔ PROVABLE_REFUTABLE
+     * NON_PROVABLE_REFUTABLE ↔ NON_PROVABLE_UNREFUTABLE
+     */
+    public TheoremStatus refutationalDual() {
+        return switch (this) {
+            case PROVABLE_UNREFUTABLE -> PROVABLE_REFUTABLE;
+            case PROVABLE_REFUTABLE -> PROVABLE_UNREFUTABLE;
+            case NON_PROVABLE_REFUTABLE -> NON_PROVABLE_UNREFUTABLE;
+            case NON_PROVABLE_UNREFUTABLE -> NON_PROVABLE_REFUTABLE;
+        };
+    }
+
+    /**
+     * Get the provability dual of this status.
+     * Swaps the provability dimension (used for negation duality).
+     *
+     * PROVABLE_UNREFUTABLE ↔ NON_PROVABLE_REFUTABLE
+     * PROVABLE_REFUTABLE ↔ NON_PROVABLE_UNREFUTABLE
+     */
+    public TheoremStatus provabilityDual() {
+        return switch (this) {
+            case PROVABLE_UNREFUTABLE -> NON_PROVABLE_REFUTABLE;
+            case PROVABLE_REFUTABLE -> NON_PROVABLE_UNREFUTABLE;
+            case NON_PROVABLE_REFUTABLE -> PROVABLE_UNREFUTABLE;
+            case NON_PROVABLE_UNREFUTABLE -> PROVABLE_REFUTABLE;
+        };
     }
 }
