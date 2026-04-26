@@ -66,8 +66,8 @@ class ProofWalkerTest {
     @org.subclass.annotation.RuleSpec(
         name = "LyingNode", connective = "", side = "right", premiseCount = 42
     )
-    private record LyingNode<L extends org.subclass.logic.proof.typed.Cardinality,
-                             R extends org.subclass.logic.proof.typed.Cardinality>(
+    public static record LyingNode<L extends org.subclass.logic.proof.typed.Cardinality,
+                                    R extends org.subclass.logic.proof.typed.Cardinality>(
             Proof<L, R> premise)
         implements ProofNode<L, R> {
 

@@ -181,10 +181,10 @@ public class LNCTetragram {
 
         // Register theorem statuses (DUAL to LEM)
         tetragram.registerTheorem("LNC",
-            TheoremStatus.PROVABLE,                    // LK: provable
-            TheoremStatus.PROVABLE,                    // LJ: provable (OPPOSITE of LEM)
-            TheoremStatus.NON_PROVABLE,                // LDJ: not provable (OPPOSITE of LEM)
-            TheoremStatus.UNPROVABLE_AND_REFUTABLE     // Common: undetermined
+            TheoremStatus.PROVABLE_UNREFUTABLE,    // LK: provable
+            TheoremStatus.PROVABLE_UNREFUTABLE,    // LJ: provable (OPPOSITE of LEM)
+            TheoremStatus.NON_PROVABLE_REFUTABLE,  // LDJ: not provable (OPPOSITE of LEM)
+            TheoremStatus.NON_PROVABLE_UNREFUTABLE // Common: undetermined
         );
 
         return tetragram;
