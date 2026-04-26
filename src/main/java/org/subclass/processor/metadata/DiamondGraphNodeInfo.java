@@ -10,6 +10,10 @@ import java.util.Set;
  * Encodes position, cardinality constraints, axiom schema, and structural rules.
  */
 public final class DiamondGraphNodeInfo {
+    private static final Set<String> VALID_POSITIONS = Set.of("classical", "intuitionistic", "paraconsistent", "common");
+    private static final Set<String> VALID_AXIOM_SCHEMAS = Set.of("A⊢A", "Γ,A⊢A", "A⊢A,Δ", "Γ,A⊢A,Δ");
+    private static final Set<String> VALID_STRUCTURAL_RULES = Set.of("W", "C", "E", "Cut");
+
     private final String position;
     private final String antecedentCardinality;
     private final String succedentCardinality;
@@ -68,40 +72,26 @@ public final class DiamondGraphNodeInfo {
 
     /**
      * Derives which structural rules are valid for this node's axiom schema.
-     * Validates that configured rules match the axiom schema requirements.
+     * Returns the set of rules that should be available based on the axiom schema.
+     *
+     * @return set of rule names (short form: W, C, E, Cut) that are valid for this node
      */
     public Set<String> derivedStructuralRules() {
         Set<String> derived = new HashSet<>();
 
-        // All logics allow cut and axiom
-        derived.add("Axiom");
-        derived.add("Cut");
-
         // Rules depend on axiom schema
         if (axiomSchema.startsWith("Γ")) {
             // Intuitionistic or classical: left-side rules allowed
-            derived.add("WeakeningLeft");
-            derived.add("ContractionLeft");
-            derived.add("ExchangeLeft");
+            derived.add("W");  // Weakening left
+            derived.add("C");  // Contraction left
+            derived.add("E");  // Exchange left
         }
 
         if (axiomSchema.endsWith("Δ")) {
             // Paraconsistent or classical: right-side rules allowed
-            derived.add("WeakeningRight");
-            derived.add("ContractionRight");
-            derived.add("ExchangeRight");
-        }
-
-        // Validate against configured rules (configuration should match derived)
-        for (String rule : structuralRules) {
-            if (!derived.contains(rule) && !derived.contains(rule + "Left") && !derived.contains(rule + "Right")) {
-                // Allow short names (W, C, E) and map them
-                if (!(rule.equals("W") || rule.equals("C") || rule.equals("E"))) {
-                    throw new IllegalArgumentException(
-                        "Structural rule " + rule + " not valid for axiom schema " + axiomSchema
-                    );
-                }
-            }
+            derived.add("W");  // Weakening right
+            derived.add("C");  // Contraction right
+            derived.add("E");  // Exchange right
         }
 
         return derived;
@@ -117,22 +107,39 @@ public final class DiamondGraphNodeInfo {
         }
 
         // Validate position
-        Set<String> validPositions = Set.of("classical", "intuitionistic", "paraconsistent", "common");
-        if (!validPositions.contains(position)) {
+        if (!VALID_POSITIONS.contains(position)) {
             throw new IllegalArgumentException("Invalid position: " + position);
         }
 
         // Validate axiom schema
-        Set<String> validSchemas = Set.of("A⊢A", "Γ,A⊢A", "A⊢A,Δ", "Γ,A⊢A,Δ");
-        if (!validSchemas.contains(axiomSchema)) {
+        if (!VALID_AXIOM_SCHEMAS.contains(axiomSchema)) {
             throw new IllegalArgumentException("Invalid axiomSchema: " + axiomSchema);
         }
 
-        // Validate structural rules
+        // Validate structural rules and ensure they match axiom schema requirements
+        validateStructuralRulesForAxiomSchema();
+    }
+
+    /**
+     * Validates that configured structural rules are valid and consistent with the axiom schema.
+     * Rules must be a subset of rules allowed by the axiom schema.
+     */
+    private void validateStructuralRulesForAxiomSchema() {
+        // Validate that each rule is valid
         for (String rule : structuralRules) {
-            Set<String> validRules = Set.of("W", "C", "E", "Cut");
-            if (!validRules.contains(rule)) {
+            if (!VALID_STRUCTURAL_RULES.contains(rule)) {
                 throw new IllegalArgumentException("Invalid structural rule: " + rule);
+            }
+        }
+
+        // Validate that configured rules are consistent with axiom schema
+        Set<String> allowedRules = derivedStructuralRules();
+        for (String rule : structuralRules) {
+            if (!allowedRules.contains(rule)) {
+                throw new IllegalArgumentException(
+                    "Structural rule '" + rule + "' not allowed by axiom schema '" + axiomSchema + "'; " +
+                    "allowed rules for this schema: " + allowedRules
+                );
             }
         }
     }

@@ -33,8 +33,9 @@ import java.util.Set;
 @SupportedAnnotationTypes("org.subclass.annotation.DiamondGraph")
 public class DiamondGraphProcessor extends AbstractProcessor {
 
+    private static final String[] NODE_POSITIONS = {"classical", "intuitionistic", "paraconsistent", "common"};
+
     private final TheoremStatusDeriver deriver = new TheoremStatusDeriver();
-    private boolean hasProcessedGraphs = false;
 
     @Override
     public SourceVersion getSupportedSourceVersion() {
@@ -47,12 +48,9 @@ public class DiamondGraphProcessor extends AbstractProcessor {
             return false;
         }
 
-        // Only process in first round to avoid duplicate work
-        if (hasProcessedGraphs) {
-            return false;
-        }
-        hasProcessedGraphs = true;
-
+        // Process all @DiamondGraph elements from the current round.
+        // roundEnv.getElementsAnnotatedWith() only returns elements from the current round,
+        // allowing the processor to naturally handle multiple rounds without state flags.
         Set<? extends Element> graphElements = roundEnv.getElementsAnnotatedWith(DiamondGraph.class);
         if (graphElements.isEmpty()) {
             return false;
@@ -170,7 +168,7 @@ public class DiamondGraphProcessor extends AbstractProcessor {
         Map<String, String> statuses = new HashMap<>();
 
         // Derive status for each node
-        for (String position : new String[]{"classical", "intuitionistic", "paraconsistent", "common"}) {
+        for (String position : NODE_POSITIONS) {
             DiamondGraphNodeInfo node = graphInfo.getNodeByPosition(position);
             String status = deriver.deriveStatus(theoremName, node, graphInfo);
             statuses.put(position, status);

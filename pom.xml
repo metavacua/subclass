@@ -83,6 +83,8 @@
               <goal>compile</goal>
             </goals>
             <configuration>
+              <!-- Disable annotation processing for main compilation to avoid SPI loading issues
+                   during initial compilation. Processors are compiled as regular classes. -->
               <proc>none</proc>
             </configuration>
           </execution>
@@ -92,7 +94,8 @@
               <goal>testCompile</goal>
             </goals>
             <configuration>
-              <proc>none</proc>
+              <!-- Enable annotation processing for test compilation.
+                   Both @Theorem and @DiamondGraph will be processed. -->
             </configuration>
           </execution>
         </executions>

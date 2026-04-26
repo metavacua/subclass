@@ -83,49 +83,67 @@ public final class DiamondGraphInfo {
     }
 
     /**
-     * Validates the cardinality hierarchy.
+     * Validates the cardinality hierarchy and position consistency.
      * Common (One,One) ⊂ {Intuitionistic(Many,One), Paraconsistent(One,Many)} ⊂ Classical(Many,Many)
      */
     private void validate() {
-        // Validate cardinality constraints
-        if (!classicalNode.antecedentCardinality().equals("Many") ||
-            !classicalNode.succedentCardinality().equals("Many")) {
-            throw new IllegalArgumentException(
-                "Classical node must have cardinality (Many, Many), got (" +
-                classicalNode.antecedentCardinality() + ", " +
-                classicalNode.succedentCardinality() + ")"
-            );
-        }
+        // Validate that position fields match their slots
+        validateNodePositionConsistency();
 
-        if (!intuitionisticNode.antecedentCardinality().equals("Many") ||
-            !intuitionisticNode.succedentCardinality().equals("One")) {
-            throw new IllegalArgumentException(
-                "Intuitionistic node must have cardinality (Many, One), got (" +
-                intuitionisticNode.antecedentCardinality() + ", " +
-                intuitionisticNode.succedentCardinality() + ")"
-            );
-        }
-
-        if (!paraconsistentNode.antecedentCardinality().equals("One") ||
-            !paraconsistentNode.succedentCardinality().equals("Many")) {
-            throw new IllegalArgumentException(
-                "Paraconsistent node must have cardinality (One, Many), got (" +
-                paraconsistentNode.antecedentCardinality() + ", " +
-                paraconsistentNode.succedentCardinality() + ")"
-            );
-        }
-
-        if (!commonLogicNode.antecedentCardinality().equals("One") ||
-            !commonLogicNode.succedentCardinality().equals("One")) {
-            throw new IllegalArgumentException(
-                "Common node must have cardinality (One, One), got (" +
-                commonLogicNode.antecedentCardinality() + ", " +
-                commonLogicNode.succedentCardinality() + ")"
-            );
-        }
+        // Validate cardinality constraints and positions
+        validateNodeConfiguration(classicalNode, "classical", "Many", "Many");
+        validateNodeConfiguration(intuitionisticNode, "intuitionistic", "Many", "One");
+        validateNodeConfiguration(paraconsistentNode, "paraconsistent", "One", "Many");
+        validateNodeConfiguration(commonLogicNode, "common", "One", "One");
 
         // Validate axiom schemas
         validateAxiomSchemaConsistency();
+    }
+
+    /**
+     * Ensures each node's position() string matches its slot in the graph.
+     * This prevents silent bugs where a node is placed in the wrong slot.
+     */
+    private void validateNodePositionConsistency() {
+        if (!classicalNode.position().equals("classical")) {
+            throw new IllegalArgumentException(
+                "Classical node slot contains node with position '" + classicalNode.position() +
+                "'; node position must match its slot"
+            );
+        }
+        if (!intuitionisticNode.position().equals("intuitionistic")) {
+            throw new IllegalArgumentException(
+                "Intuitionistic node slot contains node with position '" + intuitionisticNode.position() +
+                "'; node position must match its slot"
+            );
+        }
+        if (!paraconsistentNode.position().equals("paraconsistent")) {
+            throw new IllegalArgumentException(
+                "Paraconsistent node slot contains node with position '" + paraconsistentNode.position() +
+                "'; node position must match its slot"
+            );
+        }
+        if (!commonLogicNode.position().equals("common")) {
+            throw new IllegalArgumentException(
+                "Common node slot contains node with position '" + commonLogicNode.position() +
+                "'; node position must match its slot"
+            );
+        }
+    }
+
+    private void validateNodeConfiguration(
+        DiamondGraphNodeInfo node,
+        String expectedPosition,
+        String expectedAntecedent,
+        String expectedSuccedent
+    ) {
+        if (!node.antecedentCardinality().equals(expectedAntecedent) ||
+            !node.succedentCardinality().equals(expectedSuccedent)) {
+            throw new IllegalArgumentException(
+                node.position() + " node must have cardinality (" + expectedAntecedent + ", " + expectedSuccedent +
+                "), got (" + node.antecedentCardinality() + ", " + node.succedentCardinality() + ")"
+            );
+        }
     }
 
     private void validateAxiomSchemaConsistency() {

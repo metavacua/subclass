@@ -27,6 +27,7 @@ public final class TheoremStatusDeriver {
      * @param node the diamond graph node (contains axiom schema and cardinality)
      * @param graphInfo the full diamond graph (for context and validation)
      * @return status: "PROVABLE", "NON_PROVABLE", or "REFUTABLE"
+     * @throws IllegalArgumentException if node position is unrecognized
      */
     public String deriveStatus(String theoremName, DiamondGraphNodeInfo node, DiamondGraphInfo graphInfo) {
         // Dispatch based on theorem name
